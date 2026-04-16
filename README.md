@@ -1,74 +1,117 @@
-# Life Design System Tokens
+# Life Design System
 
-本仓库提供 Life Design System 的核心 Design Tokens (CSS Variables)。通过本 npm 包，前端研发可以将同一套设计规范（色值、圆角、字号等）轻松集成到各自的 Web 项目中，并与 Figma 的设计产物保持一致。
+Life Design System 是一套高保真的 Web 设计系统。为了满足不同业务方灵活接入的需求，本项目采用 Monorepo 架构进行管理，由以下三个独立 NPM 包组成：
 
-## 📦 接入方：如何一键引入
-
-本包已发布在公共的 npm 仓库中，无需任何额外配置，直接安装即可。
-
-### 1. 安装依赖
-
-使用 npm、yarn 或 pnpm 安装该 Token 包：
-
-```bash
-npm install life-design-system-tokens
-# 或
-yarn add life-design-system-tokens
-# 或
-pnpm add life-design-system-tokens
-```
-
-### 2. 在项目中引入
-
-在您的入口文件（如 `main.js`, `App.vue` 或全局 CSS）中引入 tokens：
-
-```javascript
-// JavaScript / TypeScript (Webpack/Vite/Vite等现代构建工具) 引入
-import 'life-design-system-tokens';
-
-// 如果需要显式引入具体的 css 文件：
-import 'life-design-system-tokens/tokens.css';
-```
-
-如果在纯 CSS 中引入：
-```css
-@import 'life-design-system-tokens';
-```
-
-之后，您就可以在任意组件的样式中直接使用定义好的 CSS 变量（如 `var(--primary-color-normal)`、`var(--radius-m)` 等）来实现业务 UI 了。
+- 🎨 **[@life-ds/tokens](./packages/tokens)**: 提供设计系统所有的色彩、字体、阴影等底层 CSS 变量。
+- 🖼️ **[@life-ds/icons](./packages/icons)**: 提供标准化的高质量 SVG Sprite 图标库。
+- 🧱 **[@life-ds/components-web](./packages/components-web)**: 提供核心组件的样式及一键自动化接入工具（CLI）。
 
 ---
 
-## 🚀 维护方：如何更新与发布
+## 🚀 快速开始 (推荐方式)
 
-当 Figma 中的设计规范发生变更，本仓库通过 `npm run sync-tokens` 更新了 `life-design-system-tokens.css` 后，您可以按照以下简单的步骤将新版本发布给其他团队成员使用：
+如果您希望在您的项目中**完整接入** Life Design System（包含组件、Token 和图标），我们强烈推荐使用 `@life-ds/components-web` 包提供的自动化初始化脚本。
 
-### 1. 登录 npm
+### 1. 安装组件库
 
-首次发布前，确保您已在终端中登录了 npm 账号：
+在您的项目根目录中运行以下命令：
+
 ```bash
-npm login
+npm install @life-ds/components-web
+```
+*(注意：npm 会自动为您下载底层的 `@life-ds/tokens` 和 `@life-ds/icons` 依赖)*
+
+### 2. 执行初始化脚本
+
+安装完成后，运行 CLI 工具：
+
+```bash
+npx life-ds init
 ```
 
-### 2. 更新版本号
+**发生了什么？**
+该脚本会自动探测您的项目目录结构（如是否存在 `src/` 或 `public/`），并将所需的所有核心资产自动提取并复制到您的项目中：
+- `styles/life-design-system-tokens.css`
+- `styles/base.css`
+- `styles/components.css`
+- `assets/sprite.svg`
 
-根据改动的内容，通过 npm 内置命令更新版本号（该命令会自动修改 `package.json` 中的 `version` 字段，并创建一个 Git Tag）：
-```bash
-npm version patch # 用于修复 bug、微调色值（例如：1.0.0 -> 1.0.1）
-npm version minor # 用于新增 Token（例如：1.0.1 -> 1.1.0）
-npm version major # 用于破坏性更新，如删除 Token 或大规模重命名（例如：1.1.0 -> 2.0.0）
+### 3. 在项目中引入
+
+在您的 HTML 入口文件（如 `index.html`）中引入生成的 CSS 文件即可使用：
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./styles/life-design-system-tokens.css">
+  <link rel="stylesheet" href="./styles/base.css">
+  <link rel="stylesheet" href="./styles/components.css">
+</head>
+<body>
+  <!-- 尽情使用 Life Design System 组件吧！ -->
+</body>
+</html>
 ```
 
-### 3. 一键发布
+图标的使用方式请参考 [Icon 使用指南](./docs/icons-usage-guide.md)。
 
-运行发布命令即可推送到 npmjs.com：
+---
+
+## 📦 按需接入指南
+
+如果您的项目不需要完整的组件库，只需使用色彩变量或图标，您可以单独安装它们。
+
+### 单独接入 Token
+
+如果您只想要使用统一的设计变量：
+
 ```bash
-npm publish
+npm install @life-ds/tokens
+```
+然后在您的 CSS 或入口文件中引入：
+```css
+@import '@life-ds/tokens/life-design-system-tokens.css';
 ```
 
-发布成功后，将代码推送到 GitHub 保存源码即可：
+### 单独接入 Icon
+
+如果您只想要图标资源：
+
 ```bash
-git push --follow-tags
+npm install @life-ds/icons
+```
+在您的 HTML 文件中，您可以通过绝对路径或者配置构建工具来引用：
+```html
+<svg class="lds-icon">
+  <use href="node_modules/@life-ds/icons/assets/sprite.svg#icon-name"></use>
+</svg>
 ```
 
-其他研发同学只需在其项目中执行 `npm update life-design-system-tokens`，即可无缝获取最新的样式规范。
+---
+
+## 🛠️ 开发者指南 (针对维护者)
+
+本仓库采用 `npm workspaces` 进行管理。
+
+### 安装依赖
+在根目录执行即可为所有 package 安装依赖：
+```bash
+npm install
+```
+
+### 同步 Figma 设计资源
+设计系统由 Figma 驱动。如果您修改了 Figma 源文件，可以通过以下命令同步最新资产（需在 `.env.local` 配置 Figma Token）：
+
+```bash
+# 同步最新 Design Tokens (变量、排版、阴影)
+npm run sync-tokens
+
+# 同步最新的 SVG 图标
+npm run sync-icons
+```
+
+### 发布新版本
+本项目已配置 GitHub Actions 自动化发布工作流。
+当您将代码合入 `main` 分支并在 GitHub 上 **创建一个新的 Release** 时，CI 会自动将三个包发布到 NPM。

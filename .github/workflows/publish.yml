@@ -1,0 +1,43 @@
+name: Publish to NPM
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish @life-ds/tokens
+        run: npm publish --access public
+        working-directory: packages/tokens
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @life-ds/icons
+        run: npm publish --access public
+        working-directory: packages/icons
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @life-ds/components-web
+        run: npm publish --access public
+        working-directory: packages/components-web
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,1012 @@
+/* styles/components.css */
+
+/* Base Button */
+.lds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  outline: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Button Sizes */
+.lds-btn--large {
+  height: var(--spacing-12x, 48px);
+  padding: 0 var(--spacing-5x, 20px);
+  font: var(--subtitle-medium);
+  border-radius: var(--radius-m, 12px);
+}
+
+.lds-btn--default-size {
+  height: var(--spacing-10x, 40px);
+  padding: 0 var(--spacing-4x, 16px);
+  font: var(--body-medium);
+  border-radius: var(--radius-m, 12px);
+}
+
+.lds-btn--small {
+  height: var(--spacing-9x, 36px);
+  padding: 0 var(--spacing-4x, 16px);
+  font: var(--body-medium);
+  border-radius: 10px;
+}
+
+.lds-btn--mini {
+  height: var(--spacing-7x, 28px);
+  padding: 0 var(--spacing-3x, 12px);
+  font: var(--caption-medium);
+  border-radius: 8px;
+}
+
+/* 1. 主按钮 Primary */
+.lds-btn--primary {
+  color: var(--color-text-white);
+  background-color: var(--color-primary-normal);
+  border-color: var(--color-primary-normal);
+}
+.lds-btn--primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+.lds-btn--primary:active {
+  background-color: var(--color-primary-active);
+  border-color: var(--color-primary-active);
+}
+.lds-btn--primary:disabled,
+.lds-btn--primary.is-disabled {
+  color: var(--color-text-white);
+  background-color: var(--color-primary-disable);
+  border-color: var(--color-primary-disable);
+  cursor: not-allowed;
+}
+
+/* 2. 普通按钮 Default */
+.lds-btn--default {
+  color: var(--color-text-primary);
+  background-color: var(--color-fill-normal);
+  border-color: var(--color-border-normal);
+}
+.lds-btn--default:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-fill-hover);
+  border-color: var(--color-border-normal);
+}
+.lds-btn--default:active {
+  color: var(--color-primary-normal);
+  background-color: var(--color-fill-primary);
+  border-color: var(--color-primary-normal);
+}
+.lds-btn--default:disabled,
+.lds-btn--default.is-disabled {
+  color: var(--color-text-disable);
+  background-color: var(--color-fill-disable);
+  border-color: var(--color-border-disable);
+  cursor: not-allowed;
+}
+
+/* 3. 次级按钮 Secondary */
+.lds-btn--secondary {
+  color: var(--color-primary-normal);
+  background-color: var(--color-bg-normal);
+  border-color: var(--color-primary-normal);
+}
+.lds-btn--secondary:hover {
+  background-color: var(--color-primary-light-normal);
+  border-color: var(--color-primary-normal);
+}
+.lds-btn--secondary:active {
+  background-color: var(--color-fill-primary);
+  border-color: var(--color-primary-normal);
+}
+.lds-btn--secondary:disabled,
+.lds-btn--secondary.is-disabled {
+  color: var(--color-text-disable);
+  background-color: var(--color-fill-disable);
+  border-color: var(--color-border-disable);
+  cursor: not-allowed;
+}
+
+/* 4. 文字按钮 Text */
+.lds-btn--text {
+  color: var(--color-text-primary);
+  background-color: transparent;
+  border-color: transparent;
+  /* padding 会继承相应尺寸的 padding，此处移除固定的 padding: 0 4px */
+}
+.lds-btn--text:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-fill-hover);
+}
+.lds-btn--text:active {
+  color: var(--color-text-primary);
+  background-color: var(--color-fill-active);
+}
+.lds-btn--text:disabled,
+.lds-btn--text.is-disabled {
+  color: var(--color-text-disable);
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+/* 通用图标样式 */
+.icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  vertical-align: -0.15em;
+}
+
+/* 5. 图标按钮 Icon (Square) */
+.lds-btn--icon {
+  padding: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 覆盖不同尺寸下的宽度，使其成为正方形 */
+.lds-btn--large.lds-btn--icon {
+  width: var(--spacing-12x, 48px);
+}
+.lds-btn--large.lds-btn--icon .icon {
+  width: 28px;
+  height: 28px;
+}
+
+.lds-btn--default-size.lds-btn--icon {
+  width: var(--spacing-10x, 40px);
+}
+.lds-btn--default-size.lds-btn--icon .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.lds-btn--small.lds-btn--icon {
+  width: var(--spacing-9x, 36px);
+}
+.lds-btn--small.lds-btn--icon .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.lds-btn--mini.lds-btn--icon {
+  width: var(--spacing-7x, 28px);
+}
+.lds-btn--mini.lds-btn--icon .icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* 6. 胶囊选项 (Capsule Radio Option) */
+.lds-capsule-wrapper {
+  display: inline-flex;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+}
+
+/* Hide the actual radio input visually but keep it accessible */
+.lds-capsule-wrapper input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+.lds-capsule {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--color-bg-normal);
+  /* 使用内阴影模拟边框，防止边框宽度改变导致的抖动 */
+  box-shadow: inset 0 0 0 1px var(--color-border-normal);
+  border-radius: 999px; /* Pill shape */
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  color: var(--color-text-primary);
+}
+
+/* Capsule Sizes */
+.lds-capsule--large {
+  height: var(--spacing-12x, 48px);
+  padding: 0 var(--spacing-5x, 20px);
+  font: var(--subtitle-regular);
+}
+
+.lds-capsule--default-size {
+  height: var(--spacing-10x, 40px);
+  padding: 0 var(--spacing-5x, 20px);
+  font: var(--body-regular);
+}
+
+.lds-capsule--small {
+  height: var(--spacing-9x, 36px);
+  padding: 0 var(--spacing-4x, 16px);
+  font: var(--body-regular);
+}
+
+.lds-capsule--mini {
+  height: var(--spacing-7x, 28px);
+  padding: 0 var(--spacing-3x, 12px);
+  font: var(--caption-regular);
+}
+
+/* Capsule States (controlled by input state) */
+.lds-capsule-wrapper:hover .lds-capsule {
+  background-color: var(--color-fill-hover);
+  box-shadow: inset 0 0 0 1px var(--color-border-normal);
+}
+
+.lds-capsule-wrapper input[type="radio"]:checked + .lds-capsule {
+  color: var(--color-primary-normal);
+  box-shadow: inset 0 0 0 1.5px var(--color-primary-normal);
+  background-color: var(--color-bg-normal);
+  font-weight: 500; /* medium */
+}
+
+/* Disabled States */
+.lds-capsule-wrapper input[type="radio"]:disabled ~ .lds-capsule {
+  color: var(--color-text-disable);
+  background-color: var(--color-fill-disable);
+  box-shadow: inset 0 0 0 1px var(--color-border-disable);
+  font-weight: 400; /* revert to regular */
+}
+
+.lds-capsule-wrapper input[type="radio"]:disabled {
+  cursor: not-allowed;
+}
+
+.lds-capsule-wrapper:has(input[type="radio"]:disabled) {
+  cursor: not-allowed;
+}
+
+/* Checked + Disabled */
+.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule {
+  color: var(--color-primary-disable);
+  box-shadow: inset 0 0 0 1.5px var(--color-primary-disable);
+  background-color: var(--color-bg-normal);
+  font-weight: 500;
+}
+
+/* Apply padding offset for checked disabled state */
+.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule--large { padding: 0 calc(var(--spacing-5x, 20px) - 0.5px); }
+.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule--default-size { padding: 0 calc(var(--spacing-5x, 20px) - 0.5px); }
+.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule--small { padding: 0 calc(var(--spacing-4x, 16px) - 0.5px); }
+.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule--mini { padding: 0 calc(var(--spacing-3x, 12px) - 0.5px); }
+
+/* 7. 输入框 (Input) */
+.lds-input-wrapper {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: var(--color-fill-normal);
+  box-shadow: inset 0 0 0 1px var(--color-border-normal);
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  position: relative;
+  width: 100%;
+}
+
+.lds-input {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+.lds-input::placeholder {
+  color: var(--color-text-caption);
+  opacity: 1; /* 确保部分浏览器(如 Firefox)下 opacity 不被改变 */
+}
+
+/* Input Sizes */
+.lds-input-wrapper--large {
+  height: var(--spacing-12x, 48px);
+  padding: 0 var(--spacing-4x, 16px);
+  border-radius: 16px;
+}
+.lds-input-wrapper--large .lds-input {
+  font: var(--subtitle-regular);
+}
+
+.lds-input-wrapper--default-size {
+  height: var(--spacing-10x, 40px);
+  padding: 0 var(--spacing-4x, 16px);
+  border-radius: 12px;
+}
+.lds-input-wrapper--default-size .lds-input {
+  font: var(--body-regular);
+}
+
+.lds-input-wrapper--small {
+  height: var(--spacing-9x, 36px);
+  padding: 0 var(--spacing-3x, 12px);
+  border-radius: 10px;
+}
+.lds-input-wrapper--small .lds-input {
+  font: var(--body-regular);
+}
+
+.lds-input-wrapper--mini {
+  height: var(--spacing-7x, 28px);
+  padding: 0 var(--spacing-3x, 12px);
+  border-radius: 8px;
+}
+.lds-input-wrapper--mini .lds-input {
+  font: var(--caption-regular);
+}
+
+/* Input States */
+.lds-input-wrapper:hover {
+  box-shadow: inset 0 0 0 1px var(--color-primary-hover);
+}
+
+.lds-input-wrapper.is-focused,
+.lds-input-wrapper:focus-within {
+  box-shadow: inset 0 0 0 1.5px var(--color-primary-normal);
+}
+
+.lds-input-wrapper.is-disabled {
+  background-color: var(--color-fill-disable);
+  box-shadow: inset 0 0 0 1px var(--color-border-disable);
+  cursor: not-allowed;
+}
+
+.lds-input-wrapper.is-disabled .lds-input {
+  color: var(--color-text-disable);
+  cursor: not-allowed;
+}
+
+/* Clear Icon */
+.lds-input__clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-placeholder);
+  cursor: pointer;
+  margin-left: 8px;
+  transition: color 0.2s;
+}
+
+.lds-input__clear:hover {
+  color: var(--color-text-secondary);
+}
+
+/* 8. 标签页 (Tabs) */
+.lds-tabs {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
+}
+
+.lds-tab {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  position: relative;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.lds-tab.is-disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disable) !important;
+}
+
+/* ================== Primary Tabs (一级) ================== */
+.lds-tabs--primary {
+  gap: var(--spacing-10x, 40px);
+}
+
+.lds-tabs--primary .lds-tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--color-text-secondary);
+  padding: 4px 0 11px 0; /* Space for text padding (4px) + gap to line (7px) */
+}
+
+/* Hover background for primary tabs */
+.lds-tabs--primary .lds-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 7px;
+  left: -12px;
+  right: -12px;
+  background-color: transparent;
+  transition: background-color 0.2s;
+  z-index: -1;
+}
+
+.lds-tabs--primary .lds-tab:hover:not(.is-disabled)::before {
+  background-color: var(--color-fill-hover);
+}
+
+.lds-tabs--primary .lds-tab.is-active {
+  color: var(--color-text-primary);
+}
+
+/* Active Indicator Line */
+.lds-tabs--primary .lds-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  border-radius: 999px;
+  background-color: transparent;
+  transition: background-color 0.2s;
+}
+
+.lds-tabs--primary .lds-tab.is-active::after {
+  background-color: var(--color-text-primary);
+}
+
+.lds-tabs--primary .lds-tab.is-disabled::after {
+  background-color: var(--color-text-disable);
+}
+
+/* Primary Sizes */
+.lds-tabs--primary.lds-tabs--large .lds-tab {
+  font: var(--title-regular);
+}
+.lds-tabs--primary.lds-tabs--large .lds-tab.is-active {
+  font: var(--title-medium);
+}
+.lds-tabs--primary.lds-tabs--large .lds-tab::after {
+  width: 40px;
+}
+.lds-tabs--primary.lds-tabs--large .lds-tab::before {
+  border-radius: 12px;
+}
+
+.lds-tabs--primary.lds-tabs--small .lds-tab {
+  font: var(--subtitle-regular);
+}
+.lds-tabs--primary.lds-tabs--small .lds-tab.is-active {
+  font: var(--subtitle-medium);
+}
+.lds-tabs--primary.lds-tabs--small .lds-tab::after {
+  width: 30px;
+}
+.lds-tabs--primary.lds-tabs--small .lds-tab::before {
+  border-radius: 10px;
+}
+
+
+/* ================== Capsule Tabs (胶囊) ================== */
+.lds-tabs--capsule {
+  display: inline-flex;
+  background-color: var(--color-fill-gray);
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+}
+
+.lds-tabs--capsule .lds-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  border-radius: 8px;
+  background-color: transparent;
+}
+
+.lds-tabs--capsule .lds-tab.is-active {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-normal);
+  box-shadow: var(--shadow-small);
+}
+
+/* Capsule Sizes */
+.lds-tabs--capsule.lds-tabs--large .lds-tab {
+  padding: 6px 12px;
+  font: var(--subtitle-regular);
+}
+.lds-tabs--capsule.lds-tabs--large .lds-tab.is-active {
+  font: var(--subtitle-medium);
+}
+
+.lds-tabs--capsule.lds-tabs--small .lds-tab {
+  padding: 4px 12px;
+  font: var(--body-regular);
+}
+.lds-tabs--capsule.lds-tabs--small .lds-tab.is-active {
+  font: var(--body-medium);
+}
+
+
+/* ================== Filter Tabs (快筛) ================== */
+.lds-tabs--filter {
+  gap: var(--spacing-4x, 16px);
+}
+
+.lds-tabs--filter .lds-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  background-color: transparent;
+}
+
+.lds-tabs--filter .lds-tab:hover:not(.is-disabled) {
+  background-color: var(--color-fill-hover);
+}
+
+.lds-tabs--filter .lds-tab.is-active {
+  color: var(--color-text-primary);
+  background-color: var(--color-fill-hover);
+}
+
+/* Filter Sizes */
+.lds-tabs--filter.lds-tabs--large .lds-tab {
+  padding: 9px 12px;
+  border-radius: 12px;
+  font: var(--body-medium); /* Figma specifies medium for both active and inactive */
+}
+
+.lds-tabs--filter.lds-tabs--small .lds-tab {
+  padding: 5px 12px;
+  border-radius: 10px;
+  font: var(--body-medium);
+}
+
+/* 9. 顶部导航栏 (Navbar) */
+.lds-navbar {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-8x, 32px) 0 0;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1000;
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
+}
+
+.lds-navbar__left {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.lds-navbar__logo {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 水平居中 */
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.lds-navbar__logo img,
+.lds-navbar__logo svg {
+  height: 32px; /* 根据设计稿调整 */
+  width: auto;
+}
+
+.lds-navbar__middle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6x, 24px); /* 减小间距以适应内容 */
+  overflow: hidden; /* 防止溢出 */
+}
+
+.lds-navbar__search {
+  flex: 0 1 360px; /* 允许收缩，最大 360px */
+  min-width: 200px; /* 最小宽度保证可用性 */
+}
+
+.lds-navbar__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x, 8px);
+}
+
+.lds-navbar__nav-item {
+  padding: 8px 16px;
+  border-radius: var(--radius-m, 12px);
+  color: var(--color-text-primary);
+  font: var(--body-regular);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lds-navbar__nav-item:hover {
+  background-color: var(--color-fill-hover);
+}
+
+.lds-navbar__nav-item.is-active {
+  background-color: var(--color-fill-hover);
+  font-weight: 500;
+}
+
+.lds-navbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4x, 16px);
+  flex-shrink: 0; /* 确保右侧内容不收缩以保证可读性 */
+}
+
+.lds-navbar__action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-text-secondary);
+  font: var(--caption-regular);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-s, 6px);
+  transition: all 0.2s;
+}
+
+.lds-navbar__action:hover {
+  background-color: var(--color-fill-hover);
+  color: var(--color-text-primary);
+}
+
+.lds-navbar__divider {
+  width: 1px;
+  height: 16px;
+  background-color: var(--color-divider-normal);
+}
+
+.lds-navbar__user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: var(--radius-m, 12px);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lds-navbar__user:hover {
+  background-color: var(--color-fill-hover);
+}
+
+.lds-navbar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-fill-gray);
+  border: 0.5px solid var(--color-border-normal);
+  object-fit: cover;
+}
+
+.lds-navbar__user-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lds-navbar__username {
+  color: var(--color-text-primary);
+  font: var(--body-regular);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lds-navbar__user .icon {
+  width: 12px;
+  height: 12px;
+  color: var(--color-text-caption);
+}
+
+/* 10. 菜单组件 (Menu) */
+.lds-menu {
+  width: 200px;
+  background-color: var(--color-bg-normal);
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2x, 8px);
+}
+
+.lds-menu-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.lds-menu-group__header {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-4x, 16px);
+  cursor: pointer;
+  gap: 8px;
+  color: var(--color-text-primary);
+  transition: all 0.2s;
+}
+
+.lds-menu-group__header:hover {
+  background-color: var(--color-fill-hover);
+}
+
+.lds-menu-group__header .icon:first-child {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-primary);
+}
+
+.lds-menu-group__title {
+  flex: 1;
+  font: var(--body-medium);
+  color: var(--color-text-primary);
+}
+
+.lds-menu-group__action {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-caption);
+  transition: transform 0.2s;
+}
+
+.lds-menu-group.is-collapsed .lds-menu-group__action {
+  transform: rotate(180deg);
+}
+
+.lds-menu-group__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px var(--spacing-2x, 8px) var(--spacing-2x, 8px);
+  gap: 4px;
+  overflow: hidden;
+  max-height: 500px; /* 足够容纳内容的高度 */
+  opacity: 1;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.2s linear,
+              padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lds-menu-group.is-collapsed .lds-menu-group__content {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lds-menu-item {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font: var(--caption-regular);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lds-menu-item:hover {
+  background-color: var(--color-fill-hover);
+  color: var(--color-text-primary);
+}
+
+.lds-menu-item.is-active {
+  color: var(--color-primary-normal);
+  font-weight: 500;
+}
+
+/* 11. 页面标题栏 (PageHeader) */
+.lds-page-header {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-8x, 32px) var(--spacing-8x, 32px) var(--spacing-6x, 24px);
+  gap: var(--spacing-4x, 16px);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.lds-page-header__title {
+  font: var(--headline-medium);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.lds-page-header__tabs {
+  margin-top: 0;
+}
+
+/* PageHeader with tabs may adjust padding slightly to match Figma's visual weight if needed, 
+   but based on layout_G7MAWW, it's 32-32-24. */
+
+/* 12. 表格组件 (Table) */
+.lds-table-wrapper {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-normal);
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: var(--color-bg-normal);
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
+}
+
+.lds-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-align: left;
+}
+
+.lds-table__thead {
+  background-color: transparent;
+}
+
+.lds-table__th {
+  padding: var(--spacing-3x, 12px) var(--spacing-4x, 16px);
+  font: var(--body-medium);
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-divider-normal);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.lds-table__row {
+  background-color: var(--color-bg-normal);
+  transition: background-color 0.2s;
+}
+
+.lds-table__row:hover {
+  background-color: var(--color-fill-hover);
+}
+
+.lds-table__row:last-child .lds-table__td {
+  border-bottom: none;
+}
+
+.lds-table__td {
+  padding: var(--spacing-4x, 16px);
+  font: var(--body-regular);
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-divider-normal);
+  vertical-align: middle;
+}
+
+/* 商品列样式 */
+.lds-table-cell--product {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3x, 12px);
+}
+
+.lds-table-cell__product-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background-color: var(--color-fill-gray);
+  border: 0.5px solid var(--color-border-normal);
+  flex-shrink: 0;
+}
+
+.lds-table-cell__product-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base, 4px);
+}
+
+.lds-table-cell__product-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x, 8px);
+}
+
+.lds-table-cell__product-title {
+  font: var(--body-medium);
+  color: var(--color-text-primary);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lds-table-cell__product-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x, 8px);
+}
+
+.lds-table-cell__product-id {
+  font: var(--body-regular);
+  color: var(--color-text-caption);
+}
+
+/* 标签组件 (Tags) - 用于表格中 */
+.lds-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 var(--spacing-base, 4px);
+  border-radius: 4px;
+  font: var(--caption-regular);
+  box-sizing: border-box;
+}
+
+.lds-tag--default {
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-normal);
+  background-color: transparent;
+}
+
+.lds-tag--red {
+  color: var(--color-danger-normal);
+  border: 1px solid var(--color-danger-normal);
+  background-color: var(--color-danger-light-normal);
+}
+
+.lds-tag--orange {
+  color: var(--color-warning-normal);
+  border: 1px solid var(--color-warning-normal);
+  background-color: var(--color-warning-light-normal);
+}
+
+/* 金额列样式 */
+.lds-table-cell--amount {
+  font: var(--subtitle-medium);
+  color: var(--color-text-primary);
+}
+
+/* 操作列样式 */
+.lds-table-cell--operation {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x, 8px);
+}
+
+.lds-table-cell__action {
+  color: var(--color-primary-normal);
+  cursor: pointer;
+  text-decoration: none;
+  font: var(--body-regular);
+  transition: color 0.2s;
+}
+
+.lds-table-cell__action:hover {
+  color: var(--color-primary-hover);
+}
+
+.lds-table-cell__action.is-danger {
+  color: var(--color-danger-normal);
+}
+
+.lds-table-cell__action.is-danger:hover {
+  color: var(--color-danger-hover);
+}

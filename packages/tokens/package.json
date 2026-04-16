@@ -1,0 +1,27 @@
+{
+  "name": "@life-ds/tokens",
+  "version": "1.0.0",
+  "description": "Life Design System Tokens",
+  "main": "life-design-system-tokens.css",
+  "style": "life-design-system-tokens.css",
+  "exports": {
+    ".": "./life-design-system-tokens.css",
+    "./tokens.css": "./life-design-system-tokens.css"
+  },
+  "files": [
+    "life-design-system-tokens.css"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "sync-tokens": "node scripts/generate-design-tokens.mjs && node scripts/generate-text-styles.mjs && node scripts/generate-effect-styles.mjs"
+  },
+  "keywords": [
+    "design-system",
+    "tokens",
+    "css-variables"
+  ],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "life-design-system-root",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Life Design System Monorepo",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "sync-tokens": "npm run sync-tokens --workspace=@life-ds/tokens",
+    "sync-icons": "npm run sync-icons --workspace=@life-ds/icons"
+  },
+  "devDependencies": {
+    "life-design-system-icons": "^1.0.0"
+  },
+  "dependencies": {
+    "@life-ds/icons": "^1.0.0",
+    "@life-ds/tokens": "^1.0.0"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@life-ds/components-web",
+  "version": "1.0.0",
+  "description": "Life Design System Web Components",
+  "main": "styles/components.css",
+  "bin": {
+    "life-ds": "./bin/cli.mjs"
+  },
+  "files": [
+    "styles/",
+    "bin/"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@life-ds/tokens": "^1.0.0",
+    "@life-ds/icons": "^1.0.0"
+  },
+  "keywords": [
+    "design-system",
+    "components"
+  ],
+  "author": "",
+  "license": "ISC"
+}

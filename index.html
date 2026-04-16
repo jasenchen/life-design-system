@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life Design System - Components</title>
+  
+  <link rel="stylesheet" href="./life-design-system-tokens.css">
+  <link rel="stylesheet" href="./styles/base.css">
+  <link rel="stylesheet" href="./styles/components.css">
+  
+  <style>
+    /* ---------------------------------------------------
+       Doc Site Styles (Matching Reference UI)
+       --------------------------------------------------- */
+    :root {
+      --doc-bg: var(--color-bg-normal);
+      --doc-sidebar-bg: var(--color-bg-sub);
+      --doc-border: var(--color-border-normal);
+      --doc-text-main: var(--color-text-primary);
+      --doc-text-muted: var(--color-text-secondary);
+      --doc-text-light: var(--color-text-caption);
+      --doc-brand: var(--color-primary-normal);
+    }
+    
+    /* We can remove the hardcoded [data-theme="dark"] block here 
+       because the tokens handle dark mode automatically in tokens.css */
+    
+    body {
+      margin: 0;
+      background-color: var(--doc-bg);
+      color: var(--doc-text-main);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar Navigation */
+    .doc-sidebar {
+      width: 200px;
+      background-color: var(--doc-sidebar-bg);
+      border-right: 1px solid var(--doc-border);
+      padding: 32px 0;
+      flex-shrink: 0;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    .doc-logo {
+      padding: 0 20px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 40px;
+      color: var(--doc-text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .theme-toggle {
+      cursor: pointer;
+      font-size: 16px;
+      background: none;
+      border: none;
+      color: inherit;
+      padding: 0;
+    }
+    .nav-group {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--doc-text-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 20px;
+      margin-bottom: 12px;
+    }
+    .nav-item {
+      display: block;
+      padding: 10px 20px;
+      color: var(--doc-text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover {
+      color: var(--doc-text-main);
+      background-color: rgba(0,0,0,0.03);
+    }
+    [data-theme="dark"] .nav-item:hover { background-color: rgba(255,255,255,0.03); }
+    .nav-item.active {
+      color: var(--color-primary-normal);
+      background-color: rgba(57, 100, 255, 0.05);
+      border-left-color: var(--color-primary-normal);
+      font-weight: 600;
+    }
+
+    /* Main Content Area */
+    .doc-main {
+      flex: 1;
+      margin-left: 200px;
+      padding: 64px 80px;
+      max-width: 1200px;
+      box-sizing: border-box;
+    }
+    .breadcrumb {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--doc-text-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 32px;
+    }
+    .breadcrumb strong {
+      color: var(--doc-text-main);
+    }
+    
+    .component-header {
+      margin-bottom: 80px;
+      position: relative;
+    }
+    .component-title {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin: 0 0 16px 0;
+      color: var(--doc-text-main);
+    }
+    .component-desc {
+      font-size: 16px;
+      color: var(--doc-text-muted);
+      line-height: 1.6;
+      max-width: 500px;
+      margin: 0;
+    }
+    .component-stats {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      gap: 40px;
+    }
+    .stat {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .stat-num {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--doc-brand);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--doc-text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Variant Section */
+    .variant-section {
+      margin-bottom: 80px;
+    }
+    .variant-header {
+      display: flex;
+      align-items: baseline;
+      border-bottom: 1px solid var(--doc-border);
+      padding-bottom: 16px;
+      margin-bottom: 40px;
+    }
+    .variant-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 16px 0 0;
+      letter-spacing: -0.5px;
+    }
+    .variant-desc {
+      font-size: 14px;
+      color: var(--doc-text-muted);
+      flex: 1;
+    }
+    .variant-count {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--doc-text-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Matrix Layout Grid */
+    .matrix {
+      display: grid;
+      grid-template-columns: 140px repeat(4, minmax(140px, 1fr));
+      gap: 32px 16px;
+      align-items: center;
+    }
+    .matrix-row {
+      display: contents;
+    }
+    .matrix-cell {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--doc-border);
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+    .matrix-head .matrix-cell {
+      border-bottom: none;
+      padding-bottom: 8px;
+      align-items: flex-end;
+    }
+    .size-head {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .size-head strong {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--doc-text-main);
+    }
+    .size-head span {
+      font-size: 11px;
+      color: var(--doc-text-light);
+    }
+    .state-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--doc-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .dot-normal { background-color: #10B981; }
+    .dot-hover { background-color: #3B82F6; }
+    .dot-active { background-color: #8B5CF6; }
+    .dot-disabled { background-color: #9CA3AF; }
+
+    /* ---------------------------------------------------
+       Force States for Documentation ONLY
+       --------------------------------------------------- */
+    /* Primary */
+    .lds-btn--primary.is-hover { background-color: var(--color-primary-hover); border-color: var(--color-primary-hover); }
+    .lds-btn--primary.is-active { background-color: var(--color-primary-active); border-color: var(--color-primary-active); }
+    /* Default */
+    .lds-btn--default.is-hover { color: var(--color-text-primary); background-color: var(--color-fill-hover); border-color: var(--color-border-normal); }
+    .lds-btn--default.is-active { color: var(--color-primary-normal); background-color: var(--color-fill-primary); border-color: var(--color-primary-normal); }
+    /* Secondary */
+    .lds-btn--secondary.is-hover { background-color: var(--color-primary-light-normal); border-color: var(--color-primary-normal); }
+    .lds-btn--secondary.is-active { background-color: var(--color-fill-primary); border-color: var(--color-primary-normal); }
+    /* Text */
+    .lds-btn--text.is-hover { background-color: var(--color-fill-hover); }
+    .lds-btn--text.is-active { background-color: var(--color-fill-active); }
+
+    /* Capsule forced wrapper states */
+    .lds-capsule-wrapper.is-hover .lds-capsule { background-color: var(--color-fill-hover); box-shadow: inset 0 0 0 1px var(--color-border-normal); }
+    
+    /* Input forced wrapper states */
+    .lds-input-wrapper.is-hover { box-shadow: inset 0 0 0 1px var(--color-primary-hover); }
+
+    /* Tab forced hover states for preview */
+    .lds-tabs--primary .lds-tab.is-hover::before { background-color: var(--color-fill-hover); }
+    .lds-tabs--filter .lds-tab.is-hover { background-color: var(--color-fill-hover); }
+  </style>
+</head>
+<body>
+
+<div class="doc-layout">
+  <!-- Sidebar Navigation -->
+  <aside class="doc-sidebar">
+    <div class="doc-logo">
+      LIFE DESIGN
+      <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">🌙</button>
+    </div>
+    <div class="nav-group">COMPONENTS</div>
+    <a href="#button" class="nav-item active" data-target="button">Button</a>
+    <a href="#capsule" class="nav-item" data-target="capsule">Capsule</a>
+    <a href="#input" class="nav-item" data-target="input">Input</a>
+    <a href="#tabs" class="nav-item" data-target="tabs">Tabs</a>
+    <a href="#navbar" class="nav-item" data-target="navbar">Navbar</a>
+    <a href="#menu" class="nav-item" data-target="menu">Menu</a>
+    <a href="#pageheader" class="nav-item" data-target="pageheader">PageHeader</a>
+    <a href="#table" class="nav-item" data-target="table">Table</a>
+  </aside>
+
+  <!-- Main Content Rendered via JS -->
+  <main class="doc-main" id="doc-main">
+    <!-- View injected here -->
+  </main>
+</div>
+
+<!-- Icon sprite script -->
+<script type="module" src="./node_modules/life-design-system-icons/index.js"></script>
+
+<!-- JS Logic for Dynamic Matrix Rendering -->
+<script>
+  // 1. Data Definitions
+  const COMMON_SIZES = [
+    { id: 'mini', label: 'SM', meta: '12px · 4/12px · h28' },
+    { id: 'small', label: 'MD', meta: '14px · 6/16px · h36' },
+    { id: 'default-size', label: 'LG', meta: '14px · 8/16px · h40' },
+    { id: 'large', label: 'XL', meta: '16px · 12/20px · h48' }
+  ];
+
+  const TAB_SIZES = [
+    { id: 'small', label: '小号 (Small)', meta: 'Body Medium · 14px' },
+    { id: 'large', label: '默认 (Default)', meta: 'Title Regular · 20px' }
+  ];
+
+  const STATES = [
+    { id: 'normal', label: 'Default', dot: 'dot-normal', props: '' },
+    { id: 'hover', label: 'Hover', dot: 'dot-hover', props: 'class="is-hover"' },
+    { id: 'active', label: 'Focus / Active', dot: 'dot-active', props: 'class="is-active"' },
+    { id: 'disabled', label: 'Disabled', dot: 'dot-disabled', props: 'disabled' }
+  ];
+
+  const COMPONENTS = {
+    button: {
+      title: 'Button',
+      sizes: COMMON_SIZES,
+      desc: 'Triggers an action or event. Available in multiple visual variants — each with interaction states and size options.',
+      variants: [
+        { title: 'Primary', desc: 'Solid fill — highest emphasis', render: (size, state) => `<button class="lds-btn lds-btn--primary lds-btn--${size.id} ${state.id==='hover'?'is-hover':''} ${state.id==='active'?'is-active':''}" ${state.props.includes('disabled')?'disabled':''}>Button</button>` },
+        { title: 'Default', desc: 'Outlined — medium emphasis', render: (size, state) => `<button class="lds-btn lds-btn--default lds-btn--${size.id} ${state.id==='hover'?'is-hover':''} ${state.id==='active'?'is-active':''}" ${state.props.includes('disabled')?'disabled':''}>Button</button>` },
+        { title: 'Secondary', desc: 'Subtle fill — low emphasis', render: (size, state) => `<button class="lds-btn lds-btn--secondary lds-btn--${size.id} ${state.id==='hover'?'is-hover':''} ${state.id==='active'?'is-active':''}" ${state.props.includes('disabled')?'disabled':''}>Button</button>` },
+        { title: 'Text', desc: 'No fill — lowest emphasis', render: (size, state) => `<button class="lds-btn lds-btn--text lds-btn--${size.id} ${state.id==='hover'?'is-hover':''} ${state.id==='active'?'is-active':''}" ${state.props.includes('disabled')?'disabled':''}>Button</button>` },
+        { title: 'Icon', desc: 'Icon only variant', render: (size, state) => `<button class="lds-btn lds-btn--default lds-btn--icon lds-btn--${size.id} ${state.id==='hover'?'is-hover':''} ${state.id==='active'?'is-active':''}" ${state.props.includes('disabled')?'disabled':''} aria-label="Add"><svg class="icon"><use href="#ic-add-round-line"></use></svg></button>` }
+      ]
+    },
+    capsule: {
+      title: 'Capsule',
+      sizes: COMMON_SIZES,
+      desc: 'A pill-shaped radio toggle component for mutually exclusive selections within a group.',
+      variants: [
+        { title: 'Standard', desc: 'Radio option', render: (size, state) => {
+            const isHover = state.id === 'hover' ? 'is-hover' : '';
+            const isChecked = state.id === 'active' ? 'checked' : '';
+            const isDisabled = state.props.includes('disabled') ? 'disabled' : '';
+            const name = `cap-${size.id}-${state.id}`;
+            return `
+              <label class="lds-capsule-wrapper ${isHover}">
+                <input type="radio" name="${name}" ${isChecked} ${isDisabled}>
+                <span class="lds-capsule lds-capsule--${size.id}">Option</span>
+              </label>
+            `;
+          }
+        }
+      ]
+    },
+    input: {
+      title: 'Input',
+      sizes: COMMON_SIZES,
+      desc: 'A field for users to enter text or data, supporting various states and suffix icons.',
+      variants: [
+        { title: 'Standard', desc: 'Text input field', render: (size, state) => {
+            const isHover = state.id === 'hover' ? 'is-hover' : '';
+            const isFocus = state.id === 'active' ? 'is-focused' : '';
+            const isDisable = state.props.includes('disabled') ? 'is-disabled' : '';
+            const disabledProp = state.props.includes('disabled') ? 'disabled' : '';
+            const val = state.id === 'active' ? 'value="输入中..."' : '';
+            const showClear = state.id === 'active' ? `<span class="lds-input__clear"><svg class="icon" style="width:16px;height:16px;"><use href="#ic-error-round"></use></svg></span>` : '';
+            return `
+              <div class="lds-input-wrapper lds-input-wrapper--${size.id} ${isHover} ${isFocus} ${isDisable}">
+                <input type="text" class="lds-input" placeholder="Placeholder" ${val} ${disabledProp}>
+                ${showClear}
+              </div>
+            `;
+          }
+        }
+      ]
+    },
+    tabs: {
+      title: 'Tabs',
+      sizes: TAB_SIZES,
+      desc: 'Organizes content into separate views where only one view can be visible at a time.',
+      variants: [
+        { title: 'Primary', desc: 'Underlined — for main navigation', render: (size, state) => {
+            const tab2Hover = state.id === 'hover' ? 'is-hover' : '';
+            const tab3Disabled = state.id === 'disabled' ? 'is-disabled' : '';
+            return `
+              <div class="lds-tabs lds-tabs--primary lds-tabs--${size.id}">
+                <a href="#" class="lds-tab is-active" onclick="handleTabClick(event, this)">标签名称</a>
+                <a href="#" class="lds-tab ${tab2Hover}" onclick="handleTabClick(event, this)">标签名称</a>
+                <a href="#" class="lds-tab ${tab3Disabled}" onclick="handleTabClick(event, this)">${tab3Disabled ? '禁用标签' : '标签名称'}</a>
+              </div>
+            `;
+          }
+        },
+        { title: 'Capsule', desc: 'Segmented control style', render: (size, state) => {
+            const tab2Hover = state.id === 'hover' ? 'is-hover' : '';
+            const tab3Disabled = state.id === 'disabled' ? 'is-disabled' : '';
+            return `
+              <div class="lds-tabs lds-tabs--capsule lds-tabs--${size.id}">
+                <a href="#" class="lds-tab is-active" onclick="handleTabClick(event, this)">标签名称</a>
+                <a href="#" class="lds-tab ${tab2Hover}" onclick="handleTabClick(event, this)">标签名称</a>
+                <a href="#" class="lds-tab ${tab3Disabled}" onclick="handleTabClick(event, this)">${tab3Disabled ? '禁用标签' : '标签名称'}</a>
+              </div>
+            `;
+          }
+        },
+        { title: 'Filter', desc: 'Tag-like tabs for quick filtering', render: (size, state) => {
+            const tab2Hover = state.id === 'hover' ? 'is-hover' : '';
+            const tab3Disabled = state.id === 'disabled' ? 'is-disabled' : '';
+            return `
+              <div class="lds-tabs lds-tabs--filter lds-tabs--${size.id}">
+                <a href="#" class="lds-tab is-active" onclick="handleTabClick(event, this)">标签名称</a>
+                <a href="#" class="lds-tab ${tab2Hover}" onclick="handleTabClick(event, this)">标签名称</a>
+                <a href="#" class="lds-tab ${tab3Disabled}" onclick="handleTabClick(event, this)">${tab3Disabled ? '禁用标签' : '标签名称'}</a>
+              </div>
+            `;
+          }
+        }
+      ]
+    },
+    navbar: {
+      title: 'Navbar',
+      layout: 'full',
+      sizes: [{ id: 'default', label: 'Default', meta: 'Height: 72px' }],
+      desc: 'Top navigation bar for the application, including logo, search, navigation links, and user profile.',
+      variants: [
+        { 
+          title: 'Standard', 
+          desc: 'The standard horizontal navigation bar.', 
+          render: (size, state) => `
+            <div class="lds-navbar" style="width: 100%; border: 1px solid var(--doc-border);">
+              <div class="lds-navbar__left">
+                <div class="lds-navbar__logo">
+                  <img src="./assets/logo-laike.svg" alt="Logo">
+                </div>
+              </div>
+              <div class="lds-navbar__middle">
+                <div class="lds-navbar__search">
+                  <div class="lds-input-wrapper lds-input-wrapper--default-size">
+                    <span class="lds-input__prefix" style="margin-right: 8px; color: var(--color-text-caption); display: flex; align-items: center;">
+                      <svg class="icon" style="width:16px;height:16px;"><use href="#ic-search-line"></use></svg>
+                    </span>
+                    <input type="text" class="lds-input" placeholder="你可以问：在哪里修改官方抖音号">
+                  </div>
+                </div>
+                <nav class="lds-navbar__nav">
+                  <a href="#" class="lds-navbar__nav-item is-active">首页</a>
+                  <a href="#" class="lds-navbar__nav-item">生意经</a>
+                  <a href="#" class="lds-navbar__nav-item">本地推</a>
+                  <a href="#" class="lds-navbar__nav-item">学习中心</a>
+                </nav>
+              </div>
+              <div class="lds-navbar__right">
+                <div class="lds-navbar__action">
+                  <svg class="icon" style="width:16px;height:16px;"><use href="#ic-reset-line"></use></svg>
+                  <span>返回旧版</span>
+                </div>
+                <div class="lds-navbar__divider"></div>
+                <div class="lds-navbar__action">
+                  <svg class="icon" style="width:16px;height:16px;"><use href="#ic-mobile-line"></use></svg>
+                  <span>App下载</span>
+                </div>
+                <div class="lds-navbar__divider"></div>
+                <div class="lds-navbar__user">
+                  <img src="./assets/avatar.png" class="lds-navbar__avatar" alt="Avatar">
+                  <div class="lds-navbar__user-info">
+                    <span class="lds-navbar__username">北京八十五度...</span>
+                    <svg class="icon"><use href="#ic-arrow-down-line"></use></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+        }
+      ]
+    },
+    menu: {
+      title: 'Menu',
+      layout: 'full',
+      sizes: [{ id: 'default', label: 'Default', meta: 'Width: 200px' }],
+      desc: 'Sidebar navigation with grouped items, supporting expand/collapse and selection states.',
+      variants: [
+        { 
+          title: 'Standard Sidebar', 
+          desc: 'Grouped menu with icons and status indicators.', 
+          render: (size, state) => `
+            <div class="lds-menu" style="border: 1px solid var(--doc-border); padding: 8px 0;">
+              <!-- Group 1: 常用 -->
+              <div class="lds-menu-group">
+                <div class="lds-menu-group__header" onclick="handleMenuHeaderClick(this)">
+                  <svg class="icon"><use href="#ic-all-line"></use></svg>
+                  <span class="lds-menu-group__title">常用</span>
+                  <svg class="icon lds-menu-group__action"><use href="#ic-setting-line"></use></svg>
+                </div>
+                <div class="lds-menu-group__content">
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">门店管理</div>
+                  <div class="lds-menu-item is-active" onclick="handleMenuItemClick(this)">团购商品管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">店铺装修</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">评价管理</div>
+                </div>
+              </div>
+              
+              <!-- Group 2: 店铺 -->
+              <div class="lds-menu-group">
+                <div class="lds-menu-group__header" onclick="handleMenuHeaderClick(this)">
+                  <svg class="icon"><use href="#ic-store-line"></use></svg>
+                  <span class="lds-menu-group__title">店铺</span>
+                  <svg class="icon lds-menu-group__action"><use href="#ic-arrow-up-line"></use></svg>
+                </div>
+                <div class="lds-menu-group__content">
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">商家信息</div>
+                  <div class="lds-menu-item is-active" onclick="handleMenuItemClick(this)">门店管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">区域管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">授权管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">资质中心</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">店铺装修</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">合作管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">业务中心</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">评价管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">审批中心</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">服务应用授权</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">职人管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">官方抖音号</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">公益项目</div>
+                </div>
+              </div>
+
+              <!-- Group 3: 订单 -->
+              <div class="lds-menu-group">
+                <div class="lds-menu-group__header" onclick="handleMenuHeaderClick(this)">
+                  <svg class="icon"><use href="#ic-menu-trade-line"></use></svg>
+                  <span class="lds-menu-group__title">订单</span>
+                  <svg class="icon lds-menu-group__action"><use href="#ic-arrow-up-line"></use></svg>
+                </div>
+                <div class="lds-menu-group__content">
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">团购券处理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">售后处理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">交易查询</div>
+                </div>
+              </div>
+
+              <!-- Group 4: 财务 -->
+              <div class="lds-menu-group">
+                <div class="lds-menu-group__header" onclick="handleMenuHeaderClick(this)">
+                  <svg class="icon"><use href="#ic-wallet-line"></use></svg>
+                  <span class="lds-menu-group__title">财务</span>
+                  <svg class="icon lds-menu-group__action"><use href="#ic-arrow-up-line"></use></svg>
+                </div>
+                <div class="lds-menu-group__content">
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">每日收益</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">每日到账</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">提现记录</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">服务费返还</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">收款账户</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">保证金</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">放心借</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">营销账户</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">自助开票</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">商家交票</div>
+                </div>
+              </div>
+
+              <!-- Group 5: 达人带货 -->
+              <div class="lds-menu-group">
+                <div class="lds-menu-group__header" onclick="handleMenuHeaderClick(this)">
+                  <svg class="icon"><use href="#ic-commoditynew-line"></use></svg>
+                  <span class="lds-menu-group__title">达人带货</span>
+                  <svg class="icon lds-menu-group__action"><use href="#ic-arrow-up-line"></use></svg>
+                </div>
+                <div class="lds-menu-group__content">
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">全店推广</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">计划管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">达人广场</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">巨量星图</div>
+                </div>
+              </div>
+
+              <!-- Group 6: 内容推广 -->
+              <div class="lds-menu-group">
+                <div class="lds-menu-group__header" onclick="handleMenuHeaderClick(this)">
+                  <svg class="icon"><use href="#ic-trumpet-line"></use></svg>
+                  <span class="lds-menu-group__title">内容推广</span>
+                  <svg class="icon lds-menu-group__action"><use href="#ic-arrow-up-line"></use></svg>
+                </div>
+                <div class="lds-menu-group__content">
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">获客卡</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">视频管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">直播管理</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">直播专业版</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">直播助手</div>
+                  <div class="lds-menu-item" onclick="handleMenuItemClick(this)">现金钱包</div>
+                </div>
+              </div>
+            </div>
+          `
+        }
+      ]
+    },
+    pageheader: {
+      title: 'PageHeader',
+      layout: 'full',
+      sizes: [{ id: 'default', label: 'Default', meta: 'Height: Hug, Padding: 32/32/24' }],
+      desc: 'Top section of a page that contains a title and optional primary navigation tabs.',
+      variants: [
+        { 
+          title: 'Standard', 
+          desc: 'PageHeader with title only.', 
+          render: (size, state) => `
+            <div class="lds-page-header" style="border: 1px solid var(--doc-border);">
+              <h1 class="lds-page-header__title">一级页面标题</h1>
+            </div>
+          `
+        },
+        { 
+          title: 'With Tabs', 
+          desc: 'PageHeader with a primary tab component below the title.', 
+          render: (size, state) => `
+            <div class="lds-page-header" style="border: 1px solid var(--doc-border);">
+              <h1 class="lds-page-header__title">一级页面标题</h1>
+              <div class="lds-page-header__tabs">
+                <div class="lds-tabs lds-tabs--primary lds-tabs--small">
+                  <a href="#" class="lds-tab is-active" onclick="handleTabClick(event, this)">标签名称</a>
+                  <a href="#" class="lds-tab" onclick="handleTabClick(event, this)">标签名称</a>
+                  <a href="#" class="lds-tab" onclick="handleTabClick(event, this)">标签名称</a>
+                </div>
+              </div>
+            </div>
+          `
+        }
+      ]
+    },
+    table: {
+      title: 'Table',
+      layout: 'full',
+      sizes: [{ id: 'default', label: 'Default', meta: 'Width: 100%' }],
+      desc: 'A flexible table component with built-in styles for product, text, operations, and amounts.',
+      variants: [
+        { 
+          title: 'Standard Table', 
+          desc: 'A table with striped rows and default column types based on the design specs.', 
+          render: (size, state) => `
+            <div class="lds-table-wrapper">
+              <table class="lds-table">
+                <thead class="lds-table__thead">
+                  <tr>
+                    <th class="lds-table__th">商品信息</th>
+                    <th class="lds-table__th">价格（元）</th>
+                    <th class="lds-table__th">售卖时间</th>
+                    <th class="lds-table__th">剩余库存</th>
+                    <th class="lds-table__th">待核销</th>
+                    <th class="lds-table__th">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="lds-table__row">
+                    <td class="lds-table__td">
+                      <div class="lds-table-cell--product">
+                        <img src="./assets/shangpin.png" alt="商品图" class="lds-table-cell__product-img">
+                        <div class="lds-table-cell__product-info">
+                          <div class="lds-table-cell__product-title-wrap">
+                            <h4 class="lds-table-cell__product-title">【节假日通用】资生堂烫染护理</h4>
+                            <span class="lds-tag lds-tag--default">团购</span>
+                          </div>
+                          <div class="lds-table-cell__product-meta">
+                            <span class="lds-table-cell__product-id">商品ID：23468723648223</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="lds-table__td">
+                      <div class="lds-table-cell--amount">￥508.00</div>
+                    </td>
+                    <td class="lds-table__td">2023.08.01 12:00</td>
+                    <td class="lds-table__td">10,000</td>
+                    <td class="lds-table__td">500</td>
+                    <td class="lds-table__td">
+                      <div class="lds-table-cell--operation">
+                        <a href="#" class="lds-table-cell__action">上架</a>
+                        <a href="#" class="lds-table-cell__action">编辑</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="lds-table__row">
+                    <td class="lds-table__td">
+                      <div class="lds-table-cell--product">
+                        <img src="./assets/shangpin.png" alt="商品图" class="lds-table-cell__product-img">
+                        <div class="lds-table-cell__product-info">
+                          <div class="lds-table-cell__product-title-wrap">
+                            <h4 class="lds-table-cell__product-title">【工作日可用】高级洗剪吹套餐</h4>
+                            <span class="lds-tag lds-tag--orange">热销</span>
+                          </div>
+                          <div class="lds-table-cell__product-meta">
+                            <span class="lds-table-cell__product-id">商品ID：89345723648224</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="lds-table__td">
+                      <div class="lds-table-cell--amount">￥128.00</div>
+                    </td>
+                    <td class="lds-table__td">2023.08.02 14:30</td>
+                    <td class="lds-table__td">8,500</td>
+                    <td class="lds-table__td">240</td>
+                    <td class="lds-table__td">
+                      <div class="lds-table-cell--operation">
+                        <a href="#" class="lds-table-cell__action">下架</a>
+                        <a href="#" class="lds-table-cell__action is-danger">删除</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="lds-table__row">
+                    <td class="lds-table__td">
+                      <div class="lds-table-cell--product">
+                        <img src="./assets/shangpin.png" alt="商品图" class="lds-table-cell__product-img">
+                        <div class="lds-table-cell__product-info">
+                          <div class="lds-table-cell__product-title-wrap">
+                            <h4 class="lds-table-cell__product-title">【周末通用】深层头皮清洁护理</h4>
+                            <span class="lds-tag lds-tag--red">特价</span>
+                          </div>
+                          <div class="lds-table-cell__product-meta">
+                            <span class="lds-table-cell__product-id">商品ID：55668723648225</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="lds-table__td">
+                      <div class="lds-table-cell--amount">￥299.00</div>
+                    </td>
+                    <td class="lds-table__td">2023.08.03 09:15</td>
+                    <td class="lds-table__td">5,000</td>
+                    <td class="lds-table__td">120</td>
+                    <td class="lds-table__td">
+                      <div class="lds-table-cell--operation">
+                        <a href="#" class="lds-table-cell__action">上架</a>
+                        <a href="#" class="lds-table-cell__action">编辑</a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          `
+        }
+      ]
+    }
+  };
+
+  // Tab switching logic for preview
+  window.handleTabClick = function(event, el) {
+    event.preventDefault();
+    if (el.classList.contains('is-disabled')) return;
+    
+    // Find parent tab container
+    const tabsContainer = el.closest('.lds-tabs');
+    if (!tabsContainer) return;
+    
+    // Remove active class from all tabs in this container
+    const allTabs = tabsContainer.querySelectorAll('.lds-tab');
+    allTabs.forEach(tab => tab.classList.remove('is-active', 'is-hover'));
+    
+    // Add active class to clicked tab
+    el.classList.add('is-active');
+  };
+
+  // Menu interaction logic
+  window.handleMenuHeaderClick = function(el) {
+    const group = el.closest('.lds-menu-group');
+    if (group) {
+      group.classList.toggle('is-collapsed');
+    }
+  };
+
+  window.handleMenuItemClick = function(el) {
+    // Selection logic within the same menu
+    const menu = el.closest('.lds-menu');
+    if (menu) {
+      menu.querySelectorAll('.lds-menu-item').forEach(item => {
+        item.classList.remove('is-active');
+      });
+      el.classList.add('is-active');
+    }
+  };
+
+  // 2. Renderer Function
+  const mainEl = document.getElementById('doc-main');
+
+  function renderView(compId) {
+    const comp = COMPONENTS[compId];
+    if (!comp) return;
+
+    let html = `
+      <div class="component-header">
+        <div class="breadcrumb">DESIGN SYSTEM &rsaquo; COMPONENTS &rsaquo; <strong>${comp.title}</strong></div>
+        <h1 class="component-title">${comp.title}</h1>
+        <p class="component-desc">${comp.desc}</p>
+        <div class="component-stats">
+          <div class="stat"><div class="stat-num">${comp.variants.length}</div><div class="stat-label">Variants</div></div>
+          ${compId === 'tabs' ? '' : `<div class="stat"><div class="stat-num">${STATES.length}</div><div class="stat-label">States</div></div>`}
+          <div class="stat"><div class="stat-num">${comp.sizes.length}</div><div class="stat-label">Sizes</div></div>
+        </div>
+      </div>
+    `;
+
+    comp.variants.forEach((variant, vIdx) => {
+      const isTabs = compId === 'tabs';
+      const isFull = comp.layout === 'full';
+      const renderStates = isTabs || isFull ? [STATES[0]] : STATES;
+
+      html += `
+        <div class="variant-section">
+          <div class="variant-header">
+            <h2 class="variant-title">${variant.title}</h2>
+            <span class="variant-desc">${variant.desc}</span>
+            <span class="variant-count">VARIANT ${vIdx + 1} / ${comp.variants.length}</span>
+          </div>
+      `;
+
+      if (isFull) {
+        html += `
+          <div class="full-preview" style="display: flex; flex-direction: column; gap: 24px;">
+            ${comp.sizes.map(size => `
+              <div class="size-example">
+                <div class="size-head" style="margin-bottom: 12px;"><strong>${size.label}</strong> <span>${size.meta}</span></div>
+                <div class="example-content">${variant.render(size, renderStates[0])}</div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="matrix" style="grid-template-columns: 140px repeat(${comp.sizes.length}, minmax(200px, 1fr));">
+            <div class="matrix-row matrix-head">
+              <div class="matrix-cell"></div>
+              ${comp.sizes.map(s => `<div class="matrix-cell size-head"><strong>${s.label}</strong><span>${s.meta}</span></div>`).join('')}
+            </div>
+        `;
+
+        renderStates.forEach(state => {
+          html += `
+              <div class="matrix-row">
+                <div class="matrix-cell state-label">
+                  ${isTabs ? '' : `<span class="dot ${state.dot}"></span> ${state.label}`}
+                </div>
+                ${comp.sizes.map(size => `<div class="matrix-cell" style="width: 100%; max-width: 600px;">${variant.render(size, state)}</div>`).join('')}
+              </div>
+          `;
+        });
+
+        html += `</div>`;
+      }
+
+      html += `</div>`;
+    });
+
+    mainEl.innerHTML = html;
+  }
+
+  // 3. Initialization and Event Listeners
+  const navItems = document.querySelectorAll('.nav-item');
+  
+  function handleNavClick(e) {
+    e.preventDefault();
+    navItems.forEach(n => n.classList.remove('active'));
+    this.classList.add('active');
+    const target = this.getAttribute('data-target');
+    renderView(target);
+    window.location.hash = target;
+  }
+
+  navItems.forEach(item => item.addEventListener('click', handleNavClick));
+
+  // Theme toggle
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle.addEventListener('click', () => {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  });
+
+  // Handle URL hash on load
+  const hash = window.location.hash.replace('#', '') || 'button';
+  const initNav = document.querySelector(`.nav-item[data-target="${hash}"]`);
+  if (initNav) {
+    initNav.click();
+  } else {
+    renderView('button');
+  }
+</script>
+
+</body>
+</html>

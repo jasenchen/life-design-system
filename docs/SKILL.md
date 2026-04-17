@@ -1,44 +1,65 @@
 ***
 
 name: life-design-system
-description: 使用 @byted-tiktok/tux-web 构建或优化 抖音来客原生风格的 React Web 界面。当需要根据截图、设计稿、文本提示或现有代码实现抖音来客风格 UI 时（尤其是期望在 Web 端高度还原原生来客页面模式时）使用。
------------------------------------------------------------------------------------------------------------------------------------
+description: 使用 @life-ds 构建或优化 抖音来客原生风格的 React Web 界面。当需要根据截图、设计稿、文本提示或现有代码实现抖音来客风格 UI 时（尤其是期望在 Web 端高度还原原生来客页面模式时）使用。
+----------------------------------------------------------------------------------------------------------------------
 
 # 强制性规则
 
 以下规则适用于所有任务。没有任何例外。
 
-1. **优先使用 LD 组件。** 在构建自定义 UI 之前，务必优先使用 `@byted-tiktok/tux-web` 组件。当存在等效的 TUX 组件时，禁止创建自定义组件。
-2. **所有视觉样式均使用语义化 Tokens。** 颜色、排版、圆角和阴影必须使用 design tokens。严禁在 UI 中硬编码色值、字号或圆角大小。
+1. **优先使用** `life-ds` **组件。** 在构建自定义 UI 之前，务必优先使用 `@life-ds/components-web` 组件。当存在等效的 `life-ds` 组件时，禁止创建自定义组件。
+2. **所有视觉样式均使用语义化 Tokens。** 颜色、排版、圆角和阴影必须使用 design tokens。原则上严禁在 UI 中硬编码色值、字号或圆角大小，除非由设计师提供设计稿中的圆角和间距在token中不存在时可采用硬编码，但需要告知。
 3. **所有文本必须使用 TUXText 或 TUX CSS 类。** 例如：`<TUXText typographyPreset='H1-Bold'>` 或 `<div className='H1-Bold'>`。严禁直接设置原始的 `font-size` 或 `font-weight` 值。
-4. **使用 LD 图标。** 从 `life-design-system-icons`导入。不要捏造图标名称 —— 务必核实存在完全一致的导出项。
-5. **不要凭空猜测 TUX APIs。** 将 `node_modules/@byted-tiktok/tux-web` 和项目中现有的用法作为事实依据进行检查。
-6. **在能提升清晰度的地方考虑使用动效。** 对于交互状态变化（展开/收起、切换、焦点滑动、错误反馈），优先使用 LD 组件内置的动效。仅对非组件元素使用自定义动效，并遵循 [references/motion.md](references/motion.md) 的预设以保持一致性。
-7. **遵循现有项目模式。** 如果仓库中已经使用了 LD 组件或本地封装组件，请在其基础上进行扩展，而不是创建平行的结构。
-8. 每个项目的页面，需要增加字体平滑的代码：`-webkit-font-smoothing: antialiased`
+4. **使用** `@life-ds/icons` **图标。** 在引入组件时，脚本会自动引入 `@life-ds/icons`，如果没有引入，请手动引入。不要捏造图标名称 —— 务必核实存在完全一致的导出项。
+5. **在能提升清晰度的地方考虑使用动效。** 对于交互状态变化（展开/收起、切换、焦点滑动、错误反馈），优先使用 life-ds 组件内置的动效。仅对非组件元素使用自定义动效，并遵循 [references/motion.md](references/motion.md) 的预设以保持一致性。
+6. **遵循现有项目模式。** 如果仓库中已经使用了 life-ds 组件或本地封装组件，请在其基础上进行扩展，而不是创建平行的结构。
+7. 每个项目的页面，需要增加字体平滑的代码：`-webkit-font-smoothing: antialiased`
 
 ***
 
 # 核心工作流
 
-## 1. 优先检查 life design system
+## 1. 优先检查 Life Design System (life-ds) 的引入情况
 
-检查是否已安装组件库`LD-web`、icon库`life-design-system-icons`、样式库`life-design-system-tokens`
+在开始任何 UI 开发之前，AI 必须首先检查当前项目是否已经正确接入了 Life Design System。
+
+### 1.1 检查方法
+
+1. **检查 `package.json`**：查看 `dependencies` 或 `devDependencies` 中是否包含 `@life-ds/components-web`。
+2. **检查本地资产**：查看项目中是否存在 `styles/life-design-system-tokens.css`、`styles/components.css` 以及 `assets/sprite.svg` 等文件。
 
 <br />
 
-如果未安装，在从头开始设计或实现之前，请遵循以下顺序：
+### 1.2 如果未引入，请按照以下自动化步骤执行接入：
 
-1. \*\*首先安装样式库：\*\*运行 `npm install life-design-system-tokens`。它会安装样式库到项目中，并在项目中引入该样式库。
-2. **安装icon库：运行**`npm install life-design-system-tokens`
+由于 Life Design System 提供了极其便捷的一键接入 CLI 工具，当检测到项目未接入时，AI 必须**严格按照以下 2 步**在终端执行操作，**禁止手动新建 CSS 文件或手动复制粘贴代码**：
 
-注意事项：
+1. **安装组件库包**：
+   在项目的根目录下执行命令：
+   ```bash
+   npm install @life-ds/components-web
+   ```
+   *(该操作会自动将 `@life-ds/tokens` 和 `@life-ds/icons` 作为依赖项一并下载)*
 
-- 脚本存放在 skill 文件夹中，而不是你当前的工作区根目录。如果你的 skill 目录不同，请相应更新路径。
-- 如果上述路径不存在，请定位到已安装的 skill 目录并在那里运行，例如：`ls "$HOME/.trae-cn/skills/tiktok-design-system/scripts"` 或 `find "$HOME/.trae-cn/skills" -maxdepth 3 -path "*/tiktok-design-system/scripts/setup-env.sh" -print`。
-- 请在真实的本地开发环境（而不是受限的沙盒环境）中运行上述命令。如果 clone/镜像源 访问被阻断，请停止并报告阻断原因。
-- 如果镜像源配置错误，请运行 `npm config set registry https://bnpm.byted.org/` 然后重试。
-- 当有现成的模板初始化方案可用时，不要手动构建新的项目结构。
+2. **运行初始化脚本提取本地资产**：
+   安装完成后，紧接着执行：
+   ```bash
+   npx life-ds init
+   ```
+   *(该 CLI 脚本会自动将必须的 Tokens CSS、基础组件 CSS 以及 Icon SVG 精准复制到项目对应的 `styles/` 和 `assets/` 目录中。)*
+
+3. **指导用户在入口引入**：
+   脚本执行成功后，AI 需检查项目的入口 HTML 文件（如 `index.html`），并确保 `<head>` 标签内包含以下引入代码：
+   ```html
+   <link rel="stylesheet" href="./styles/life-design-system-tokens.css">
+   <link rel="stylesheet" href="./styles/base.css">
+   <link rel="stylesheet" href="./styles/components.css">
+   ```
+
+**注意事项：**
+- 绝对不要试图通过 CDN 或手动编写变量的方式来模拟 Life Design System，必须走正规的 `npm install` + `npx life-ds init` 流程。
+- 如果在执行 `npx life-ds init` 时遇到权限问题，请使用 `chmod +x node_modules/@life-ds/components-web/bin/cli.mjs` 赋予执行权限后重试。
 
 ***
 

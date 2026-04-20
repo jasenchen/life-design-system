@@ -1,6 +1,6 @@
 # 图标参考文档
 
-当任务需要使用 `@byted-tiktok/tux-icons` 选择或实现图标时，请参考此文件。
+当任务需要使用 `@life-ds/icons` 选择或实现图标时，请参考此文件。
 
 ## 引入模式
 
@@ -10,7 +10,7 @@
 ```html
 <!-- 假设 sprite.svg 位于当前目录的 assets 文件夹下 -->
 <svg class="lds-icon">
-  <use href="./assets/sprite.svg#Chevron_Right_Slim_LTR" />
+  <use href="./assets/sprite.svg#ic-arrow-right-line" />
 </svg>
 ```
 
@@ -20,55 +20,37 @@
 • 在同一层级区域内保持图标尺寸一致。
 • 常用尺寸：24, 16
 • 纯图标控件必须始终具备可访问名称。
-• 不要凭记忆捏造图标组件名称，请核实确切的导出名称。
-• 优先使用 **常规的 'TUXIcon'** 而非 'TUXIcon3pt' / 'TUXIconColor' 变体。
+• 不要凭记忆捏造图标的 ID 名称，请核实 `sprite.svg` 中确切的图标 ID。
+• 优先使用标准的 `lds-icon` 类名来控制图标的样式和尺寸。
 
 ## 常用图标名称
-| 名称                           | 建议组件                       | 用途                    |
-| ------------------------------ | ------------------------------ | ----------------------- |
-| Chevron_Left_Offset_LTR        | TUXIconChevronLeftOffsetLTR    | 返回、标题栏返回按钮    |
-| Chevron_Right_Offset_Small_LTR | TUXIconChevronRightOffsetSmallLTR | 展开、下一步        |
-| Chevron_Right_Slim_LTR         | TUXIconChevronRightSlimLTR     | 细条展开、下一步        |
-| X_Mark                         | TUXIconXMark                   | 关闭、清除、取消        |
-| Magnifying_Glass               | TUXIconMagnifyingGlass         | 搜索                    |
-| Camera                         | TUXIconCamera                  | 相机                    |
-| Play                           | TUXIconPlay                    | 播放视频                |
-| Pause_Fill                     | TUXIconPauseFill               | 暂停                    |
-| Music_Note_S_Alt               | TUXIconMusicNoteSAlt           | 音乐                    |
-| Speaker_2_LTR                  | TUXIconSpeaker2LTR             | 音量、扬声器            |
-| Speaker_X_Mark_LTR             | TUXIconSpeakerXMarkLTR         | 静音                    |
-| Shopping_Cart_LTR              | TUXIconShoppingCartLTR         | 购物车                  |
-| Wallet                         | TUXIconWallet                  | 钱包、支付              |
-| Eye                            | TUXIconEye                     | 可见、浏览量            |
-| Eye_Slash                      | TUXIconEyeSlash                | 隐藏                    |
-| Clock                          | TUXIconClock                   | 时间、历史              |
-| Calendar                       | TUXIconCalendar                | 日期、事件              |
-| Info_Circle                    | TUXIconInfoCircle              | 信息                    |
-| Exclamation_Mark_Triangle      | TUXIconExclamationMarkTriangle | 警告、提示              |
-| Question_Mark_Circle_LTR       | TUXIconQuestionMarkCircleLTR   | 帮助                    |
-| QR_Code                        | TUXIconQRCode                  | 二维码、扫码            |
-| Link                           | TUXIconLink                    | 链接、URL               |
-| Number                         | TUXIconNumber                  | 井号、标签              |
-| At                             | TUXIconAt                      | 提及                    |
-| Sun                            | TUXIconSun                     | 浅色模式                |
-| Moon                           | TUXIconMoon                    | 深色模式                |
-| Pin                            | TUXIconPin                     | 固定、标记              |
-| Gift                           | TUXIconGift                    | 礼物、奖品              |
-| Fire                           | TUXIconFire                    | 热门、 trending         |
-| Scan                           | TUXIconScan                    | 扫描                    |
+| 图标 ID | 用途 |
+| --- | --- |
+| ic-arrow-left-line | 返回、上一页 |
+| ic-arrow-right-line | 下一步、进入详情 |
+| ic-arrow-up-line | 向上、收起 |
+| ic-arrow-down-line | 向下、展开 |
+| ic-add-line | 新增、添加 |
+| ic-reduce-line | 删除、减少、移除 |
+| ic-search-line | 搜索 |
+| ic-menu-line | 菜单、导航 |
+| ic-more-h-line | 更多（横向） |
+| ic-more-v-line | 更多（纵向） |
+| ic-copy-line | 复制 |
+| ic-delete-line | 删除（危险操作） |
+| ic-share-line | 分享 |
+| ic-link-line | 链接、跳转 |
+| ic-user-line | 用户、个人 |
+| ic-usergroup-line | 成员、团队 |
+| ic-info-round-line | 信息提示 |
+| ic-warning-round-line | 警告提示 |
+| ic-error-round-line | 错误提示 |
+| ic-time-round-line | 时间、历史 |
 
 ## 选择指南
 
 优先根据意图选择图标：
-• 导航类：chevrons（箭头）
-• 关闭或清除类：`X_Mark`
-• 搜索类：`Magnifying_Glass`
-• 媒体播放类：`Play`、`Pause_Fill`
-• 音频状态类：`Speaker_2_LTR`、`Speaker_X_Mark_LTR`
-• 电商类：`Shopping_Cart_LTR`、`Wallet`
-• 可见性类：`Eye`、`Eye_Slash`
-• 系统或工具类：`Info_Circle`、`Question_Mark_Circle_LTR`、`Link`、`QR_Code`
-• 主题类：`Sun`、`Moon`
+• 导航类：`ic-arrow-left-line`、`ic-arrow-right-line`、`ic-arrow-up-line`、`ic-arrow-down-line`\n+• 操作类：`ic-add-line`、`ic-reduce-line`、`ic-copy-line`、`ic-delete-line`\n+• 搜索类：`ic-search-line`\n+• 菜单/更多：`ic-menu-line`、`ic-more-h-line`、`ic-more-v-line`\n+• 用户/团队：`ic-user-line`、`ic-usergroup-line`\n+• 状态提示：`ic-info-round-line`、`ic-warning-round-line`、`ic-error-round-line`\n+• 工具类：`ic-link-line`、`ic-share-line`\n+• 时间：`ic-time-round-line`
 
 当有多个图标可用时，请优先选择：
 1. 仓库其他地方已在使用的图标

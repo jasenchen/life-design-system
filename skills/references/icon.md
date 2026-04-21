@@ -7,6 +7,7 @@
 在使用 `life-ds` 时，通过 SVG Sprite 的方式引入图标。确保您的项目中已经通过 `npx life-ds init` 将 `sprite.svg` 复制到了 `assets/` 目录。
 
 示例 HTML 用法：
+
 ```html
 <!-- 假设 sprite.svg 位于当前目录的 assets 文件夹下 -->
 <svg class="lds-icon">
@@ -17,42 +18,95 @@
 在支持组件化的项目中（如 React/Vue），您可以封装一个通用的 Icon 组件来简化调用，或者直接在模版中使用 `<svg>` 标签。
 
 ## 使用规则
+
 • 在同一层级区域内保持图标尺寸一致。
-• 常用尺寸：24, 16
+
+• 常用尺寸：24,、20、16、12等
 • 纯图标控件必须始终具备可访问名称。
 • 不要凭记忆捏造图标的 ID 名称，请核实 `sprite.svg` 中确切的图标 ID。
 • 优先使用标准的 `lds-icon` 类名来控制图标的样式和尺寸。
 
+• 常规情况下，均使用线性图标，只有当图标尺寸很小的时候，才会使用对应的面性图标，若线性图标没有对应的面性图标，则使用线性图标
+
+## 命名规则
+
+典型命名方式：ic-xxx-line/ic-xxx-fill。其中ic为前缀，xxx为图标的英文含义，可以是多个词语，-line代表线性图标、-fill代表面性图标。
+
+<br />
+
 ## 常用图标名称
+
+| 图标 ID                 | 用途       |
+| --------------------- | -------- |
+| ic-arrow-left-line    | 返回、上一页   |
+| ic-arrow-right-line   | 下一步、进入详情 |
+| ic-arrow-up-line      | 向上、收起    |
+| ic-arrow-down-line    | 向下、展开    |
+| ic-add-line           | 新增、添加    |
+| ic-reduce-line        | 删除、减少、移除 |
+| ic-search-line        | 搜索       |
+| ic-menu-line          | 菜单、导航    |
+| ic-more-h-line        | 更多（横向）   |
+| ic-more-v-line        | 更多（纵向）   |
+| ic-copy-line          | 复制       |
+| ic-delete-line        | 删除（危险操作） |
+| ic-share-line         | 分享       |
+| ic-link-line          | 链接、跳转    |
+| ic-user-line          | 用户、个人    |
+| ic-usergroup-line     | 成员、团队    |
+| ic-info-round-line    | 信息提示     |
+| ic-warning-round-line | 警告提示     |
+| ic-error-round-line   | 错误提示     |
+| ic-time-round-line    | 时间、历史    |
+
+<br />
+
+## 常用AI类图标
+
 | 图标 ID | 用途 |
 | --- | --- |
-| ic-arrow-left-line | 返回、上一页 |
-| ic-arrow-right-line | 下一步、进入详情 |
-| ic-arrow-up-line | 向上、收起 |
-| ic-arrow-down-line | 向下、展开 |
-| ic-add-line | 新增、添加 |
-| ic-reduce-line | 删除、减少、移除 |
-| ic-search-line | 搜索 |
-| ic-menu-line | 菜单、导航 |
-| ic-more-h-line | 更多（横向） |
-| ic-more-v-line | 更多（纵向） |
-| ic-copy-line | 复制 |
-| ic-delete-line | 删除（危险操作） |
-| ic-share-line | 分享 |
-| ic-link-line | 链接、跳转 |
-| ic-user-line | 用户、个人 |
-| ic-usergroup-line | 成员、团队 |
-| ic-info-round-line | 信息提示 |
-| ic-warning-round-line | 警告提示 |
-| ic-error-round-line | 错误提示 |
-| ic-time-round-line | 时间、历史 |
+| ic-ai-spark-line | AI/智能（通用入口、灵感） |
+| ic-ai-spark-fill | AI/智能（通用入口、灵感，填充） |
+| ic-ai-tag-line | AI 标签、AI 分类 |
+| ic-ai-tag-fill | AI 标签、AI 分类（填充） |
+| ic-ai-select-line | AI 智能选区/抠图 |
+| ic-ai-select-fill | AI 智能选区/抠图（填充） |
+| ic-ai-text-line | AI 文本（识别/处理/生成） |
+| ic-ai-text-fill | AI 文本（识别/处理/生成，填充） |
+| ic-ai-image-line | AI 图像（处理/生成） |
+| ic-ai-image-fill | AI 图像（处理/生成，填充） |
+| ic-ai-outpainting-line | AI 扩图/外延（Outpainting） |
+| ic-ai-outpainting-fill | AI 扩图/外延（填充） |
+| ic-ai-eliminate-line | AI 消除/去除（对象移除） |
+| ic-ai-eliminate-fill | AI 消除/去除（填充） |
+| ic-ai-juxtapose-line | AI 对比/并排（前后对比） |
+| ic-ai-juxtapose-fill | AI 对比/并排（填充） |
+| ic-ai-change-bg-类型2 | AI 换背景 |
+| ic-ai-camera-line | AI 相机/拍照（智能拍照） |
+| ic-ai-camera-fill | AI 相机/拍照（填充） |
+| ic-ai-improve-text-line | AI 文本优化/润色 |
+| ic-ai-improve-text-fill | AI 文本优化/润色（填充） |
+| ic-ai-generate-text-line | AI 文本生成 |
+| ic-ai-generate-text-fill | AI 文本生成（填充） |
+| ic-ai-hd-line | AI 高清/增强（HD） |
+| ic-ai-hd-fill | AI 高清/增强（HD，填充） |
+
+<br />
 
 ## 选择指南
 
 优先根据意图选择图标：
-• 导航类：`ic-arrow-left-line`、`ic-arrow-right-line`、`ic-arrow-up-line`、`ic-arrow-down-line`\n+• 操作类：`ic-add-line`、`ic-reduce-line`、`ic-copy-line`、`ic-delete-line`\n+• 搜索类：`ic-search-line`\n+• 菜单/更多：`ic-menu-line`、`ic-more-h-line`、`ic-more-v-line`\n+• 用户/团队：`ic-user-line`、`ic-usergroup-line`\n+• 状态提示：`ic-info-round-line`、`ic-warning-round-line`、`ic-error-round-line`\n+• 工具类：`ic-link-line`、`ic-share-line`\n+• 时间：`ic-time-round-line`
+• 导航类：`ic-arrow-left-line`、`ic-arrow-right-line`、`ic-arrow-up-line`、`ic-arrow-down-line`
+• 操作类：`ic-add-line`、`ic-reduce-line`、`ic-copy-line`、`ic-delete-line`
+• 搜索类：`ic-search-line`
+• 菜单/更多：`ic-menu-line`、`ic-more-h-line`、`ic-more-v-line`
+• 用户/团队：`ic-user-line`、`ic-usergroup-line`
+• 状态提示：`ic-info-round-line`、`ic-warning-round-line`、`ic-error-round-line`
+• 工具类：`ic-link-line`、`ic-share-line`
+• 时间：`ic-time-round-line`
 
 当有多个图标可用时，请优先选择：
+
 1. 仓库其他地方已在使用的图标
 2. 功能语义更清晰的图标
 3. 视觉上更简洁的图标

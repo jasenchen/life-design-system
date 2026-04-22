@@ -1456,9 +1456,9 @@ function injectIcons() {
   if (typeof document === 'undefined') return;
   
   const inject = () => {
-    if (document.getElementById('life-design-system-icons-sprite')) return;
+    if (document.getElementById('life-ds-icons-sprite')) return;
     const div = document.createElement('div');
-    div.id = 'life-design-system-icons-sprite';
+    div.id = 'life-ds-icons-sprite';
     div.style.display = 'none';
     div.innerHTML = spriteSvg;
     document.body.insertBefore(div, document.body.firstChild);

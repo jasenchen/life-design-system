@@ -39,7 +39,7 @@ function resolvePackagePath(packageName, relativePath) {
 }
 
 async function installMissingDependencies() {
-  const tokensPath = resolvePackagePath('@life-ds/tokens', 'life-design-system-tokens.css');
+  const tokensPath = resolvePackagePath('@life-ds/tokens', 'life-ds-tokens.css');
   const iconsPath = resolvePackagePath('@life-ds/icons', 'assets/sprite.svg');
 
   if (!tokensPath || !iconsPath) {
@@ -56,11 +56,11 @@ async function main() {
   await installMissingDependencies();
 
   // 首先尝试通过 require.resolve 查找，如果找不到，尝试相对路径 (用于本地调试或被直接复制时)
-  let tokensSrc = resolvePackagePath('@life-ds/tokens', 'life-design-system-tokens.css');
+  let tokensSrc = resolvePackagePath('@life-ds/tokens', 'life-ds-tokens.css');
   let iconsSrc = resolvePackagePath('@life-ds/icons', 'assets/sprite.svg');
   
   if (!tokensSrc) {
-    tokensSrc = path.join(__dirname, '../../tokens/life-design-system-tokens.css');
+    tokensSrc = path.join(__dirname, '../../tokens/life-ds-tokens.css');
   }
   if (!iconsSrc) {
     iconsSrc = path.join(__dirname, '../../icons/assets/sprite.svg');
@@ -87,8 +87,8 @@ async function main() {
   // 拷贝文件
   console.log('📂 正在提取设计系统资产到本地...');
   
-  await fs.copyFile(tokensSrc, path.join(stylesDestDir, 'life-design-system-tokens.css'));
-  console.log(`   ✅ 提取: ${path.relative(cwd, path.join(stylesDestDir, 'life-design-system-tokens.css'))}`);
+  await fs.copyFile(tokensSrc, path.join(stylesDestDir, 'life-ds-tokens.css'));
+  console.log(`   ✅ 提取: ${path.relative(cwd, path.join(stylesDestDir, 'life-ds-tokens.css'))}`);
 
   await fs.copyFile(baseSrc, path.join(stylesDestDir, 'base.css'));
   console.log(`   ✅ 提取: ${path.relative(cwd, path.join(stylesDestDir, 'base.css'))}`);
@@ -100,9 +100,9 @@ async function main() {
   console.log(`   ✅ 提取: ${path.relative(cwd, path.join(assetsDestDir, 'sprite.svg'))}`);
 
   console.log('\n🎉 Life Design System 初始化完成！');
-  console.log('\n接下来，请在您的 HTML 或入口文件中引入这些文件：');
+  console.log('\n接下来，请在您的 HTML 或入口文件中引入 these 文件：');
   console.log(`
-  <link rel="stylesheet" href="./${path.relative(cwd, path.join(stylesDestDir, 'life-design-system-tokens.css'))}">
+  <link rel="stylesheet" href="./${path.relative(cwd, path.join(stylesDestDir, 'life-ds-tokens.css'))}">
   <link rel="stylesheet" href="./${path.relative(cwd, path.join(stylesDestDir, 'base.css'))}">
   <link rel="stylesheet" href="./${path.relative(cwd, path.join(stylesDestDir, 'components.css'))}">
   `);

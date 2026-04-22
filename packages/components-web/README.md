@@ -1,10 +1,10 @@
-# Life Design System
+# @life-ds/components-web
 
-Life Design System 是一套高保真的 Web 设计系统。为了满足不同业务方灵活接入的需求，本项目采用 Monorepo 架构进行管理，由以下三个独立 NPM 包组成：
+Life Design System 是一套高保真的 Web 设计系统。为了满足不同业务方灵活接入的需求，本项目采用 Monorepo 架构进行管理，由以下独立 NPM 包组成：
 
-- 🎨 **[@life-ds/tokens](./packages/tokens)**: 提供设计系统所有的色彩、字体、阴影等底层 CSS 变量。
-- 🖼️ **[@life-ds/icons](./packages/icons)**: 提供标准化的高质量 SVG Sprite 图标库。
-- 🧱 **[@life-ds/components-web](./packages/components-web)**: 提供核心组件的样式及一键自动化接入工具（CLI）。
+- 🎨 **[@life-ds/tokens](../tokens)**: 提供设计系统所有的色彩、字体、阴影等底层 CSS 变量。
+- 🖼️ **[@life-ds/icons](../icons)**: 提供标准化的高质量 SVG Sprite 图标库。
+- 🧱 **[@life-ds/components-web](./)**: 提供核心组件的样式及一键自动化接入工具（CLI）。
 
 ---
 
@@ -31,7 +31,7 @@ npx life-ds init
 
 **发生了什么？**
 该脚本会自动探测您的项目目录结构（如是否存在 `src/` 或 `public/`），并将所需的所有核心资产自动提取并复制到您的项目中：
-- `styles/life-design-system-tokens.css`
+- `styles/life-ds-tokens.css`
 - `styles/base.css`
 - `styles/components.css`
 - `assets/sprite.svg`
@@ -45,7 +45,7 @@ npx life-ds init
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="./styles/life-design-system-tokens.css">
+  <link rel="stylesheet" href="./styles/life-ds-tokens.css">
   <link rel="stylesheet" href="./styles/base.css">
   <link rel="stylesheet" href="./styles/components.css">
 </head>
@@ -55,7 +55,7 @@ npx life-ds init
 </html>
 ```
 
-图标的使用方式请参考 [Icon 使用指南](./docs/icons-usage-guide.md)。
+图标的使用方式请参考 [Icon 使用指南](../icons/README.md)。
 
 ---
 
@@ -72,7 +72,7 @@ npm install @life-ds/tokens
 ```
 然后在您的 CSS 或入口文件中引入：
 ```css
-@import '@life-ds/tokens/life-design-system-tokens.css';
+@import '@life-ds/tokens/life-ds-tokens.css';
 ```
 
 ### 单独接入 Icon
@@ -113,5 +113,4 @@ npm run sync-icons
 ```
 
 ### 发布新版本
-本项目已配置 GitHub Actions 自动化发布工作流。
-当您将代码合入 `main` 分支并在 GitHub 上 **创建一个新的 Release** 时，CI 会自动将三个包发布到 NPM。
+本项目已配置自动化发布工作流。当您发布新版本时，所有包将同步发布到 NPM。

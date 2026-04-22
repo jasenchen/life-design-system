@@ -118,7 +118,7 @@ async function generateEffectTokens() {
     });
 
     if (cssRules.length > 0) {
-      const outputPath = path.resolve(__dirname, '../life-design-system-tokens.css');
+      const outputPath = path.resolve(__dirname, '../life-ds-tokens.css');
       let existingCss = '';
       if (fs.existsSync(outputPath)) {
         existingCss = fs.readFileSync(outputPath, 'utf-8');

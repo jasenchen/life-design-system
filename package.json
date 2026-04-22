@@ -8,13 +8,14 @@
   ],
   "scripts": {
     "sync-tokens": "npm run sync-tokens --workspace=@life-ds/tokens",
-    "sync-icons": "npm run sync-icons --workspace=@life-ds/icons"
+    "sync-icons": "npm run sync-icons --workspace=@life-ds/icons",
+    "sync-skills": "mkdir -p packages/skills/content && cp -r skills/* packages/skills/content/"
   },
   "devDependencies": {
-    "life-design-system-icons": "^1.0.0"
   },
   "dependencies": {
     "@life-ds/icons": "^1.0.0",
-    "@life-ds/tokens": "^1.0.0"
+    "@life-ds/tokens": "^1.0.0",
+    "@life-ds/skills": "^1.0.2"
   }
 }

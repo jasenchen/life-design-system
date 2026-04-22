@@ -1,6 +1,6 @@
 ### 颜色
 
-请务必使用来自 life-design-system-tokens.css的颜色 Token，并通过基于 CSS 数据属性选择器 (Data Attribute Selector) 结合 CSS Variables (自定义属性) 的方式来实现主题切换。
+请务必使用来自 life-ds-tokens.css的颜色 Token，并通过基于 CSS 数据属性选择器 (Data Attribute Selector) 结合 CSS Variables (自定义属性) 的方式来实现主题切换。
 
 > \*\*注意事项：**token有2层，底层token不带有业务属性，比如** **`--color-brand-5` 指5号品牌色，二层token都带有业务属性，比如** \*\*`--color-text-primary` 是主要文本的颜色token。
 >

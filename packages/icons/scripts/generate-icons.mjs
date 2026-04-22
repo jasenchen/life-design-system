@@ -265,9 +265,9 @@ function injectIcons() {
   if (typeof document === 'undefined') return;
   
   const inject = () => {
-    if (document.getElementById('life-design-system-icons-sprite')) return;
+    if (document.getElementById('life-ds-icons-sprite')) return;
     const div = document.createElement('div');
-    div.id = 'life-design-system-icons-sprite';
+    div.id = 'life-ds-icons-sprite';
     div.style.display = 'none';
     div.innerHTML = spriteSvg;
     document.body.insertBefore(div, document.body.firstChild);
@@ -286,7 +286,7 @@ injectIcons();
   
   // 生成独立的 package.json
   const packageJsonContent = {
-    "name": "life-design-system-icons",
+    "name": "@life-ds/icons",
     "version": "1.0.0",
     "description": "Life Design System Icons with auto-inject",
     "main": "index.js",
@@ -300,7 +300,7 @@ injectIcons();
   };
   fs.writeFileSync(path.join(pkgDir, 'package.json'), JSON.stringify(packageJsonContent, null, 2) + '\n');
   
-  console.log(`\n✅ Successfully generated life-design-system-icons package with ${iconList.length} icons!`);
+  console.log(`\n✅ Successfully generated @life-ds/icons package with ${iconList.length} icons!`);
   console.log(`📁 Package path: ${pkgDir}`);
   console.log(`👁️ Preview: file://${previewPath}`);
 }

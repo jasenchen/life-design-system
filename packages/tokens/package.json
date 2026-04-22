@@ -2,14 +2,14 @@
   "name": "@life-ds/tokens",
   "version": "1.0.0",
   "description": "Life Design System Tokens",
-  "main": "life-design-system-tokens.css",
-  "style": "life-design-system-tokens.css",
+  "main": "life-ds-tokens.css",
+  "style": "life-ds-tokens.css",
   "exports": {
-    ".": "./life-design-system-tokens.css",
-    "./tokens.css": "./life-design-system-tokens.css"
+    ".": "./life-ds-tokens.css",
+    "./tokens.css": "./life-ds-tokens.css"
   },
   "files": [
-    "life-design-system-tokens.css"
+    "life-ds-tokens.css"
   ],
   "publishConfig": {
     "access": "public"

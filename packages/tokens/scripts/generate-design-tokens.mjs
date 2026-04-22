@@ -116,12 +116,45 @@ async function fetchTokens() {
       }
 
       for (const [varId, figmaVar] of Object.entries(variables)) {
+        // 忽略已删除但被引用的变量
+        if (figmaVar.deletedButReferenced) {
+          continue;
+        }
+        
         if (figmaVar.variableCollectionId === colId) {
           const val = figmaVar.valuesByMode[mode.modeId];
           if (val !== undefined) {
             const cssName = formatName(figmaVar.name);
-            const cssValue = formatValue(val, figmaVar.resolvedType, figmaVar.name, variables);
-            cssBlocks[selector].push(`  ${cssName}: ${cssValue};`);
+            let cssValue;
+            
+            // 检查是否有完整属性声明的 codeSyntax（包含 ":"）
+            const hasUsefulCodeSyntax = figmaVar.codeSyntax && figmaVar.codeSyntax.WEB && 
+                                      typeof figmaVar.codeSyntax.WEB === 'string' && 
+                                      figmaVar.codeSyntax.WEB.includes(':');
+            
+            if (hasUsefulCodeSyntax) {
+              const webSyntax = figmaVar.codeSyntax.WEB;
+              // 只提取 value 部分，移除属性名和分号
+              if (webSyntax.includes(':')) {
+                cssValue = webSyntax.split(':')[1].trim().replace(/;$/, '');
+              } else {
+                cssValue = webSyntax;
+              }
+            } 
+            // 否则使用普通处理方式
+            else {
+              cssValue = formatValue(val, figmaVar.resolvedType, figmaVar.name, variables);
+            }
+            let cssRule = `  ${cssName}: ${cssValue};`;
+            
+            // 如果有 description，添加注释
+            if (figmaVar.description && figmaVar.description.trim() !== '') {
+              // 处理换行符，让注释更整洁
+              const description = figmaVar.description.trim().replace(/\n/g, ' ');
+              cssRule += ` /* ${description} */`;
+            }
+            
+            cssBlocks[selector].push(cssRule);
           }
         }
       }
@@ -136,7 +169,7 @@ async function fetchTokens() {
     }
   }
 
-  const outputPath = path.resolve(__dirname, '../life-design-system-tokens.css');
+  const outputPath = path.resolve(__dirname, '../life-ds-tokens.css');
   fs.writeFileSync(outputPath, cssOutput.trim() + '\n', 'utf-8');
   
   console.log(`✅ Successfully generated ${rulesCount(cssBlocks)} tokens!`);

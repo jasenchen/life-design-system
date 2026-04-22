@@ -122,10 +122,10 @@ async function generateTextTokens() {
     });
 
     if (cssRules.length > 0) {
-      const outputPath = path.resolve(__dirname, '../life-design-system-tokens.css');
+      const tokensPath = path.resolve(__dirname, '../life-ds-tokens.css');
       let existingCss = '';
-      if (fs.existsSync(outputPath)) {
-        existingCss = fs.readFileSync(outputPath, 'utf-8');
+      if (fs.existsSync(tokensPath)) {
+        existingCss = fs.readFileSync(tokensPath, 'utf-8');
       }
 
       // Check if we already appended text styles, to avoid duplicate appends
@@ -135,7 +135,7 @@ async function generateTextTokens() {
       }
 
       let appendCss = `\n${textStylesMarker}\n:root {\n${cssRules.join('\n')}}\n`;
-      fs.writeFileSync(outputPath, existingCss.trim() + '\n' + appendCss, 'utf-8');
+      fs.writeFileSync(tokensPath, existingCss.trim() + '\n' + appendCss, 'utf-8');
 
       console.log(`✅ Successfully extracted and appended ${textStylesMeta.length} Text Styles!`);
     } else {

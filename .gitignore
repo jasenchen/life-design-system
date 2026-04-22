@@ -7,8 +7,7 @@ yarn-error.log*
 
 # Dependency directories
 node_modules/
-
-# Mac OS
+.env.local
 .DS_Store
 
 # IDE

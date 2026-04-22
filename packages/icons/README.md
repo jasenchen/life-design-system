@@ -1,6 +1,6 @@
 # 图标库接入与使用指南
 
-本文档旨在说明如何在项目中接入由 `life-design-system-icons` npm 包提供的独立 SVG 图标库。
+本文档旨在说明如何在项目中接入由 `@life-ds/icons` npm 包提供的独立 SVG 图标库。
 
 ## 1. 核心概念：SVG 雪碧图 (Sprite)
 
@@ -19,7 +19,7 @@
 ### 步骤 1: 安装 npm 包
 
 ```bash
-npm install life-design-system-icons
+npm install @life-ds/icons
 ```
 *(注意：请确保该包已被发布到您的私有或公共 npm 镜像仓库中)*
 
@@ -28,7 +28,7 @@ npm install life-design-system-icons
 在您的项目前端入口文件（例如 `main.js`, `app.js` 或 `index.js`）中引入该包：
 
 ```javascript
-import 'life-design-system-icons';
+import '@life-ds/icons';
 ```
 
 **发生了什么？**

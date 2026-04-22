@@ -1,0 +1,13 @@
+{
+  "name": "@life-ds/icons",
+  "version": "1.0.0",
+  "description": "Life Design System Icons with auto-inject",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "assets/sprite.svg"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

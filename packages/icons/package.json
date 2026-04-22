@@ -1,6 +1,6 @@
 {
   "name": "@life-ds/icons",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Life Design System Icons with auto-inject",
   "main": "index.js",
   "files": [

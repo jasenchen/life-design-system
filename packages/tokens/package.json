@@ -1,6 +1,6 @@
 {
   "name": "@life-ds/tokens",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Life Design System Tokens",
   "main": "life-ds-tokens.css",
   "style": "life-ds-tokens.css",

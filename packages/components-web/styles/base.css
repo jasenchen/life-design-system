@@ -16,7 +16,10 @@ body {
   box-sizing: border-box;
 }
 
-/* App Layout Framework */
+/* ==========================================================================
+   App Layout Framework
+   ========================================================================== */
+
 .app-container {
   display: flex;
   flex-direction: column;
@@ -50,8 +53,12 @@ body {
   overflow-y: auto;
   padding: 12px 0;
   scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-.app-sidebar__menu::-webkit-scrollbar { display: none; }
+
+.app-sidebar__menu::-webkit-scrollbar {
+  display: none;
+}
 
 .app-body {
   flex: 1;

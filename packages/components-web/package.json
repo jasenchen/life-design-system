@@ -1,6 +1,6 @@
 {
   "name": "@life-ds/components-web",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "Life Design System Web Components",
   "main": "styles/components.css",
   "bin": {

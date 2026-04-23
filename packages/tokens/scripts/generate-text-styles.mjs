@@ -101,23 +101,26 @@ async function generateTextTokens() {
         // Create CSS shorthand or individual properties
         // font-family: "PingFang SC"; font-size: 16px; font-weight: 500; line-height: 1.5;
         const fontFamily = textStyle.fontFamily ? `"${textStyle.fontFamily}"` : 'inherit';
-        const fontSize = textStyle.fontSize ? `${textStyle.fontSize}px` : 'inherit';
+        const fontSize = textStyle.fontSize ? `${Math.round(textStyle.fontSize)}px` : 'inherit';
         const fontWeight = textStyle.fontWeight || 400;
         
         // Line height can be PERCENT or PIXELS
         let lineHeight = 'normal';
         if (textStyle.lineHeightPx) {
           // If we have line height in Px, convert it to a ratio based on font size or use px
-          lineHeight = `${textStyle.lineHeightPx}px`;
-        } else if (textStyle.lineHeightPercentFontSize) {
-          lineHeight = (textStyle.lineHeightPercentFontSize / 100).toFixed(2);
+          lineHeight = `${Math.round(textStyle.lineHeightPx)}px`;
+        } else if (textStyle.lineHeightPercentFontSize && textStyle.fontSize) {
+          lineHeight = `${Math.round(textStyle.fontSize * (textStyle.lineHeightPercentFontSize / 100))}px`;
+        } else if (textStyle.fontSize) {
+          lineHeight = `${Math.round(textStyle.fontSize * 1.5)}px`; // fallback
         }
 
         // We can output a shorthand font property: "font-weight font-size/line-height font-family"
         // User requested: "--display-bold: 500 32px/40px var(--font-normal); /* 超大标题 */"
         const fontShorthand = `${fontWeight} ${fontSize}/${lineHeight} var(--font-normal)`;
 
-        cssRules.push(`  ${cssName}: ${fontShorthand}; /* ${styleMeta.name} */`);
+        let cssRule = `  ${cssName}: ${fontShorthand}; /* ${styleMeta.name} */`;
+        cssRules.push(cssRule);
       }
     });
 

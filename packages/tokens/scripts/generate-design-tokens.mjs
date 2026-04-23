@@ -136,9 +136,9 @@ async function fetchTokens() {
               const webSyntax = figmaVar.codeSyntax.WEB;
               // 只提取 value 部分，移除属性名和分号
               if (webSyntax.includes(':')) {
-                cssValue = webSyntax.split(':')[1].trim().replace(/;$/, '');
+                cssValue = webSyntax.split(':')[1].trim().replace(/;$/, '').replace(/，/g, ',');
               } else {
-                cssValue = webSyntax;
+                cssValue = webSyntax.replace(/，/g, ',');
               }
             } 
             // 否则使用普通处理方式

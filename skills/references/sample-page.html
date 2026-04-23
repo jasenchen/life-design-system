@@ -16,9 +16,8 @@
   <header class="app-navbar">
     <div class="lds-navbar">
       <div class="lds-navbar__left">
-        <div class="lds-navbar__logo">
-          <img src="../../assets/logo-laike.svg" alt="Logo">
-        </div>
+        <!-- 移除内部的 img 标签，利用 components.css 中 .lds-navbar__logo 的默认内联背景 SVG 来渲染 Logo -->
+        <div class="lds-navbar__logo"></div>
       </div>
       <div class="lds-navbar__middle">
         <div class="lds-navbar__search">

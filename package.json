@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@life-ds/icons": "^1.0.1",
-    "@life-ds/tokens": "^1.0.1",
+    "@life-ds/tokens": "^1.0.2",
     "@life-ds/skills": "^1.0.7"
   }
 }

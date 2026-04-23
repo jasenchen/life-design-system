@@ -8,13 +8,14 @@ description: 使用 @life-ds 构建或优化 抖音来客原生风格的 React W
 
 以下规则适用于所有任务。没有任何例外。
 
-1. **优先使用** `life-ds` **组件。** 在构建自定义 UI 之前，务必优先使用 `@life-ds/components-web` 组件。当存在等效的 `life-ds` 组件时，禁止创建自定义组件。
+1. **优先使用** `life-ds` **组件样式。** 在构建自定义 UI 之前，务必优先使用 `@life-ds/components-web` 组件。当存在等效的 `life-ds` 组件时，禁止创建自定义组件。
 2. **所有视觉样式均使用语义化 Tokens。** 颜色、排版、圆角和阴影必须使用 design tokens。原则上严禁在 UI 中硬编码色值、字号或圆角大小，除非由设计师提供设计稿中的圆角和间距在token中不存在时可采用硬编码，但需要告知。
 3. 所有文本的字体族均使用`--font-normal`，你可以在全局层面使用这个字体族的token。只有用于数据展示的数字字体，才会使用`--font-number`。
 4. **使用** `@life-ds/icons` **图标。** 在引入组件时，脚本会自动引入 `@life-ds/icons`，如果没有引入，请手动引入。不要捏造图标名称 —— 务必核实存在完全一致的导出项。
-5. **在能提升清晰度的地方考虑使用动效。** 对于交互状态变化（展开/收起、切换、焦点滑动、错误反馈），优先使用 life-ds 组件内置的动效。仅对非组件元素使用自定义动效，并遵循 [references/motion.md](references/motion.md) 的预设以保持一致性。
-6. **遵循现有项目模式。** 如果仓库中已经使用了 life-ds 组件或本地封装组件，请在其基础上进行扩展，而不是创建平行的结构。
-7. 每个项目的页面，需要增加字体平滑的代码：`-webkit-font-smoothing: antialiased`
+5. 除非是全屏页面、弹框等非典型页面类型，否则必须使用基础结构构建页面的基础框架。包含顶部导航、左侧菜单和中间内容区域，对于大部分页面，均需要遵循此结构，且不要对组件和样式进行修改！页面基础框架请阅读[references/layout.md](references/components.md)
+6. **在能提升清晰度的地方考虑使用动效。** 对于交互状态变化（展开/收起、切换、焦点滑动、错误反馈），优先使用 life-ds 组件内置的动效。仅对非组件元素使用自定义动效，并遵循 [references/motion.md](references/motion.md) 的预设以保持一致性。
+7. **遵循现有项目模式。** 如果仓库中已经使用了 life-ds 组件或本地封装组件，请在其基础上进行扩展，而不是创建平行的结构。
+8. 每个项目的页面，需要增加字体平滑的代码：`-webkit-font-smoothing: antialiased`
 
 ***
 
@@ -72,6 +73,8 @@ description: 使用 @life-ds 构建或优化 抖音来客原生风格的 React W
 - [references/icon.md](references/icon.md)
 - [references/color.md](references/color.md)
 - [references/components.md](references/components.md)
+- [references/button.md](references/components.md)
+- [references/motion.md](references/components.md)
 
 <br />
 
@@ -79,7 +82,7 @@ description: 使用 @life-ds 构建或优化 抖音来客原生风格的 React W
 
 ## 2.5. 布局框架
 
-当准备生成页面时，你需要判断需要使用哪个类型的页面，且需要基于一个标准的页面模板框架，请阅读：
+当准备生成页面时，你需要判断需要使用哪个类型的页面，对于大部分业务，必须基于一个标准的页面基础框架，并在内容区域填充内容，请阅读：
 
 - [references/layout.md](references/layout.md)
 

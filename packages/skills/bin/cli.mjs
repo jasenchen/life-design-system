@@ -79,6 +79,24 @@ function getSkill(name) {
   }
 }
 
+function getReferencesContent() {
+  const referencesDir = path.join(CONTENT_DIR, 'references');
+  if (!fs.existsSync(referencesDir)) return '';
+
+  let combinedContent = '\n\n### 📖 REFERENCE KNOWLEDGE BASE (参考知识库)\n';
+  combinedContent += '以下是详细的设计规范参考，当涉及具体组件实现时请务必查阅：\n\n';
+
+  const files = fs.readdirSync(referencesDir);
+  for (const file of files) {
+    if (file.endsWith('.md')) {
+      const filePath = path.join(referencesDir, file);
+      const fileContent = fs.readFileSync(filePath, 'utf-8');
+      combinedContent += `#### FILE: ${file}\n\`\`\`markdown\n${fileContent}\n\`\`\`\n\n`;
+    }
+  }
+  return combinedContent;
+}
+
 function getTraeConfig(name) {
   const skillFile = path.join(CONTENT_DIR, 'SKILL.md');
   if (!fs.existsSync(skillFile)) {
@@ -94,7 +112,7 @@ function getTraeConfig(name) {
     const config = {
       name: nameMatch[1].trim(),
       description: descMatch ? descMatch[1].trim() : '',
-      instructions: getSkillContent(content)
+      instructions: getSkillContent(content) + getReferencesContent()
     };
     console.log(JSON.stringify(config, null, 2));
   } else {

@@ -7,19 +7,23 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONTENT_DIR = path.join(__dirname, '../content');
 
-const args = process.argv.slice(2);
-const command = args[0];
+const [,, command, ...args] = process.argv;
 
 async function main() {
   switch (command) {
+    case 'install':
+      installSkill();
+      break;
     case 'list':
       listSkills();
       break;
     case 'get':
-      getSkill(args[1]);
-      break;
-    case 'trae-config':
-      getTraeConfig(args[1]);
+      if (!args[0]) {
+        console.error('Error: Skill name required.');
+        showHelp();
+        process.exit(1);
+      }
+      getSkill(args[0]);
       break;
     case 'help':
     default:
@@ -79,44 +83,22 @@ function getSkill(name) {
   }
 }
 
-function getReferencesContent() {
-  const referencesDir = path.join(CONTENT_DIR, 'references');
-  if (!fs.existsSync(referencesDir)) return '';
-
-  let combinedContent = '\n\n### 📖 REFERENCE KNOWLEDGE BASE (参考知识库)\n';
-  combinedContent += '以下是详细的设计规范参考，当涉及具体组件实现时请务必查阅：\n\n';
-
-  const files = fs.readdirSync(referencesDir);
-  for (const file of files) {
-    if (file.endsWith('.md')) {
-      const filePath = path.join(referencesDir, file);
-      const fileContent = fs.readFileSync(filePath, 'utf-8');
-      combinedContent += `#### FILE: ${file}\n\`\`\`markdown\n${fileContent}\n\`\`\`\n\n`;
-    }
-  }
-  return combinedContent;
-}
-
-function getTraeConfig(name) {
-  const skillFile = path.join(CONTENT_DIR, 'SKILL.md');
-  if (!fs.existsSync(skillFile)) {
-    console.error('Error: SKILL.md not found.');
+function installSkill() {
+  if (!fs.existsSync(CONTENT_DIR)) {
+    console.error('Error: Content directory not found in the package.');
     return;
   }
 
-  const content = fs.readFileSync(skillFile, 'utf-8');
-  const nameMatch = content.match(/name:\s*(.*)/);
-  const descMatch = content.match(/description:\s*(.*)/);
-
-  if (nameMatch && nameMatch[1].trim() === name) {
-    const config = {
-      name: nameMatch[1].trim(),
-      description: descMatch ? descMatch[1].trim() : '',
-      instructions: getSkillContent(content) + getReferencesContent()
-    };
-    console.log(JSON.stringify(config, null, 2));
-  } else {
-    console.error(`Error: Skill "${name}" not found.`);
+  const targetDir = path.join(process.cwd(), '.trae', 'skills', 'life-design-system');
+  try {
+    fs.mkdirSync(targetDir, { recursive: true });
+    // Copy all contents from CONTENT_DIR to targetDir
+    fs.cpSync(CONTENT_DIR, targetDir, { recursive: true });
+    console.log(`✅ 技能 "life-design-system" 已成功安装到本地！`);
+    console.log(`📂 路径: ${path.relative(process.cwd(), targetDir)}`);
+    console.log(`\n现在您可以在 Trae 中重新加载或打开 Skill 面板使用它了！`);
+  } catch (error) {
+    console.error('❌ 安装技能失败:', error);
   }
 }
 
@@ -125,9 +107,9 @@ function showHelp() {
 Usage: life-ds-skills <command> [args]
 
 Commands:
+  install           Install the skill to local .trae/skills/ directory
   list              List all available skills
   get <name>        Get the core prompt for a skill
-  trae-config <name> Get Trae skill-creator config in JSON format
   help              Show this help message
   `);
 }

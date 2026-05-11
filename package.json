@@ -12,9 +12,9 @@
     "sync-skills": "mkdir -p packages/skills/content && cp -r skills/* packages/skills/content/"
   },
   "dependencies": {
-    "@life-ds/components-web": "^1.0.18",
+    "@life-ds/components-web": "^1.0.19",
     "@life-ds/icons": "^1.0.4",
-    "@life-ds/skills": "^1.1.1",
-    "@life-ds/tokens": "^1.0.6"
+    "@life-ds/skills": "^1.1.2",
+    "@life-ds/tokens": "^1.0.7"
   }
 }

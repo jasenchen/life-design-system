@@ -341,7 +341,13 @@ declare const Pagination: React.ForwardRefExoticComponent<PaginationProps & Reac
 type DrawerSize = 'large' | 'default-size' | 'small';
 interface DrawerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
     /**
+     * 使用约束：
+     * 为了保留打开 / 关闭动效，父组件应保持 Drawer 挂载，通过 open 控制显隐，
+     * 不要在关闭时立刻通过条件渲染将组件从 React 树中移除。
+     */
+    /**
      * 是否打开抽屉
+     * 建议始终保持组件挂载，仅切换 open，以确保退场动画能够完整执行。
      * @default false
      */
     open?: boolean;
@@ -405,6 +411,88 @@ interface DrawerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'
     closeLabel?: string;
 }
 declare const Drawer: React.ForwardRefExoticComponent<DrawerProps & React.RefAttributes<HTMLDivElement>>;
+
+type DialogType = 'neutral' | 'warning' | 'danger' | 'success' | 'custom';
+interface DialogProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+    /**
+     * 使用约束：
+     * 为了保留打开 / 关闭动效，父组件应保持 Dialog 挂载，通过 open 控制显隐，
+     * 不要在关闭时立刻通过条件渲染将组件从 React 树中移除。
+     */
+    /**
+     * 是否打开对话框
+     * 建议始终保持组件挂载，仅切换 open，以确保退场动画能够完整执行。
+     * @default false
+     */
+    open?: boolean;
+    /**
+     * 标题区域
+     */
+    title?: React.ReactNode;
+    /**
+     * 描述文案
+     */
+    description?: React.ReactNode;
+    /**
+     * 语义类型，会影响默认图标与颜色
+     * @default 'neutral'
+     */
+    type?: DialogType;
+    /**
+     * 自定义图标内容
+     */
+    icon?: React.ReactNode;
+    /**
+     * 是否显示左侧图标
+     * @default true
+     */
+    showIcon?: boolean;
+    /**
+     * 自定义底部区域
+     */
+    footer?: React.ReactNode;
+    /**
+     * 是否显示底部区域，默认跟随 footer 是否传入
+     */
+    showFooter?: boolean;
+    /**
+     * 点击蒙层是否关闭
+     * @default true
+     */
+    maskClosable?: boolean;
+    /**
+     * 按下 Esc 是否关闭
+     * @default true
+     */
+    closeOnEsc?: boolean;
+    /**
+     * 是否显示右上角关闭按钮
+     * @default true
+     */
+    showCloseButton?: boolean;
+    /**
+     * 关闭回调
+     */
+    onClose?: () => void;
+    /**
+     * 获取挂载容器，默认挂载到 document.body
+     */
+    getContainer?: () => HTMLElement | null;
+    /**
+     * 自定义对话框宽度，默认 402px
+     */
+    width?: number | string;
+    /**
+     * 自定义内容区域类名
+     */
+    bodyClassName?: string;
+    /**
+     * 关闭按钮可访问名称
+     * @default '关闭对话框'
+     */
+    closeLabel?: string;
+}
+declare const Dialog: React.ForwardRefExoticComponent<DialogProps & React.RefAttributes<HTMLDivElement>>;
 
 declare function useFormItemStatus(): {
     hasError: boolean;
@@ -534,4 +622,4 @@ interface UploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChan
 }
 declare const Upload: React.ForwardRefExoticComponent<UploadProps & React.RefAttributes<HTMLDivElement>>;
 
-export { Button, type ButtonProps, type ButtonSize, type ButtonVariant, Capsule, type CapsuleProps, Checkbox, type CheckboxProps, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, type FilterSize, type FilterType, Form, FormItem, type FormItemProps, type FormProps, Icon, type IconProps, Input, type InputProps, Menu, type MenuProps, Navbar, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, useFormItemStatus };
+export { Button, type ButtonProps, type ButtonSize, type ButtonVariant, Capsule, type CapsuleProps, Checkbox, type CheckboxProps, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, type FilterSize, type FilterType, Form, FormItem, type FormItemProps, type FormProps, Icon, type IconProps, Input, type InputProps, Menu, type MenuProps, Navbar, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, useFormItemStatus };

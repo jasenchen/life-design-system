@@ -3,18 +3,18 @@ import { createPortal } from 'react-dom';
 import { clsx } from 'clsx';
 import { Icon } from '../Icon/Icon';
 
-const DRAWER_ANIMATION_MS = 280;
+const DIALOG_ANIMATION_MS = 300;
 
-export type DrawerSize = 'large' | 'default-size' | 'small';
+export type DialogType = 'neutral' | 'warning' | 'danger' | 'success' | 'custom';
 
-export interface DrawerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+export interface DialogProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /**
    * 使用约束：
-   * 为了保留打开 / 关闭动效，父组件应保持 Drawer 挂载，通过 open 控制显隐，
+   * 为了保留打开 / 关闭动效，父组件应保持 Dialog 挂载，通过 open 控制显隐，
    * 不要在关闭时立刻通过条件渲染将组件从 React 树中移除。
    */
   /**
-   * 是否打开抽屉
+   * 是否打开对话框
    * 建议始终保持组件挂载，仅切换 open，以确保退场动画能够完整执行。
    * @default false
    */
@@ -24,23 +24,31 @@ export interface DrawerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
    */
   title?: React.ReactNode;
   /**
-   * 抽屉尺寸
-   * @default 'default-size'
+   * 描述文案
    */
-  size?: DrawerSize;
+  description?: React.ReactNode;
+  /**
+   * 语义类型，会影响默认图标与颜色
+   * @default 'neutral'
+   */
+  type?: DialogType;
+  /**
+   * 自定义图标内容
+   */
+  icon?: React.ReactNode;
+  /**
+   * 是否显示左侧图标
+   * @default true
+   */
+  showIcon?: boolean;
   /**
    * 自定义底部区域
    */
   footer?: React.ReactNode;
   /**
-   * 是否显示底部区域
-   * 默认跟随 footer 是否传入
+   * 是否显示底部区域，默认跟随 footer 是否传入
    */
   showFooter?: boolean;
-  /**
-   * 标题区域右侧附加内容
-   */
-  extra?: React.ReactNode;
   /**
    * 点击蒙层是否关闭
    * @default true
@@ -65,7 +73,7 @@ export interface DrawerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
    */
   getContainer?: () => HTMLElement | null;
   /**
-   * 自定义抽屉宽度，会覆盖 size 对应的默认宽度
+   * 自定义对话框宽度，默认 402px
    */
   width?: number | string;
   /**
@@ -74,21 +82,30 @@ export interface DrawerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   bodyClassName?: string;
   /**
    * 关闭按钮可访问名称
-   * @default '关闭抽屉'
+   * @default '关闭对话框'
    */
   closeLabel?: string;
 }
 
-export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
+const DIALOG_ICON_MAP: Record<Exclude<DialogType, 'custom'>, string> = {
+  neutral: 'ic-info-round-fill',
+  warning: 'ic-warning-round-fill',
+  danger: 'ic-error-round-fill',
+  success: 'ic-finish-round-fill',
+};
+
+export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
   (
     {
       className,
       open = false,
       title,
-      size = 'default-size',
+      description,
+      type = 'neutral',
+      icon,
+      showIcon = true,
       footer,
       showFooter,
-      extra,
       children,
       maskClosable = true,
       closeOnEsc = true,
@@ -97,13 +114,14 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       getContainer,
       width,
       bodyClassName,
-      closeLabel = '关闭抽屉',
+      closeLabel = '关闭对话框',
       style,
       ...props
     },
     ref
   ) => {
     const titleId = useId();
+    const descriptionId = useId();
     const [shouldRender, setShouldRender] = useState(open);
     const [visible, setVisible] = useState(false);
 
@@ -134,7 +152,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
 
       const timer = window.setTimeout(() => {
         setShouldRender(false);
-      }, DRAWER_ANIMATION_MS);
+      }, DIALOG_ANIMATION_MS);
 
       return () => window.clearTimeout(timer);
     }, [open]);
@@ -176,45 +194,64 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       ...style,
       ...(width !== undefined
         ? {
-            ['--lds-drawer-width' as const]: typeof width === 'number' ? `${width}px` : width,
+            ['--lds-dialog-width' as const]: typeof width === 'number' ? `${width}px` : width,
           }
         : null),
     } as React.CSSProperties;
 
     const shouldShowFooter = showFooter ?? footer !== undefined;
 
+    const resolvedIcon =
+      icon ??
+      (type !== 'custom' ? <Icon name={DIALOG_ICON_MAP[type]} aria-hidden="true" /> : null);
+
     return createPortal(
       <div
-        className={clsx('lds-drawer-root', visible && 'is-open')}
+        className={clsx('lds-dialog-root', visible && 'is-open')}
         onClick={(event) => {
           if (event.target === event.currentTarget && maskClosable) {
             onClose?.();
           }
         }}
       >
-        <div className="lds-drawer-root__mask" aria-hidden="true" />
+        <div className="lds-dialog-root__mask" aria-hidden="true" />
         <div
           ref={ref}
-          className={clsx('lds-drawer', `lds-drawer--${size}`, className)}
+          className={clsx('lds-dialog', `lds-dialog--${type}`, className)}
           role="dialog"
           aria-modal="true"
           aria-labelledby={title ? titleId : undefined}
+          aria-describedby={description ? descriptionId : undefined}
           style={mergedStyle}
           {...props}
         >
-          <div className="lds-drawer__header">
-            <div className="lds-drawer__header-main">
-              {title ? (
-                <h2 id={titleId} className="lds-drawer__title">
-                  {title}
-                </h2>
+          <div className={clsx('lds-dialog__body', bodyClassName)}>
+            <div className="lds-dialog__main">
+              {showIcon && resolvedIcon ? (
+                <div className="lds-dialog__icon" aria-hidden="true">
+                  {resolvedIcon}
+                </div>
               ) : null}
-              {extra ? <div className="lds-drawer__extra">{extra}</div> : null}
+
+              <div className="lds-dialog__content">
+                {title ? (
+                  <h2 id={titleId} className="lds-dialog__title">
+                    {title}
+                  </h2>
+                ) : null}
+                {description ? (
+                  <div id={descriptionId} className="lds-dialog__description">
+                    {description}
+                  </div>
+                ) : null}
+                {children ? <div className="lds-dialog__extra">{children}</div> : null}
+              </div>
             </div>
+
             {showCloseButton ? (
               <button
                 type="button"
-                className="lds-drawer__close"
+                className="lds-dialog__close"
                 onClick={() => onClose?.()}
                 aria-label={closeLabel}
               >
@@ -223,9 +260,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
             ) : null}
           </div>
 
-          <div className={clsx('lds-drawer__body', bodyClassName)}>{children}</div>
-
-          {shouldShowFooter ? <div className="lds-drawer__footer">{footer}</div> : null}
+          {shouldShowFooter ? <div className="lds-dialog__footer">{footer}</div> : null}
         </div>
       </div>,
       container
@@ -233,4 +268,4 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
   }
 );
 
-Drawer.displayName = 'Drawer';
+Dialog.displayName = 'Dialog';

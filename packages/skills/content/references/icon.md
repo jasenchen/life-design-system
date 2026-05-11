@@ -75,6 +75,7 @@ import '@life-ds/icons';
 | ic-warning-round-line | 警告提示     |
 | ic-error-round-line   | 错误提示     |
 | ic-time-round-line    | 时间、历史    |
+| ic-help-line          | 提示、详情、疑问 |
 
 <br />
 
@@ -117,3 +118,4 @@ import '@life-ds/icons';
 1. 仓库其他地方已在使用的图标
 2. 功能语义更清晰的图标
 3. 视觉上更简洁的图标
+

@@ -1336,7 +1336,187 @@ button.lds-filter {
   }
 }
 
-/* 13. 表单组件 (Form) */
+/* 13. 对话框组件 (Dialog) */
+.lds-dialog-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1250;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4x, 16px);
+  box-sizing: border-box;
+}
+
+.lds-dialog-root__mask {
+  position: absolute;
+  inset: 0;
+  background: var(--color-bg-mask, rgba(16, 17, 20, 0.5));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.lds-dialog-root.is-open .lds-dialog-root__mask {
+  opacity: 1;
+}
+
+.lds-dialog {
+  --lds-dialog-width: 402px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: min(var(--lds-dialog-width), calc(100vw - var(--spacing-8x, 32px)));
+  max-height: calc(100vh - var(--spacing-8x, 32px));
+  background: var(--color-bg-popup);
+  border-radius: var(--radius-xxl, 24px);
+  box-shadow: var(--shadow-large);
+  box-sizing: border-box;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale3d(0.9, 0.9, 1);
+  transform-origin: center center;
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lds-dialog-root.is-open .lds-dialog {
+  opacity: 1;
+  transform: scale3d(1, 1, 1);
+}
+
+.lds-dialog__body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--spacing-8x, 32px) var(--spacing-8x, 32px) var(--spacing-6x, 24px);
+  box-sizing: border-box;
+}
+
+.lds-dialog__main {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2x, 8px);
+}
+
+.lds-dialog__icon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.lds-dialog__icon .icon {
+  width: 28px;
+  height: 28px;
+}
+
+.lds-dialog__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-2x, 8px);
+}
+
+.lds-dialog__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font: var(--title-medium);
+}
+
+.lds-dialog__description {
+  color: var(--color-text-primary);
+  font: var(--subtitle-regular);
+  line-height: 24px;
+}
+
+.lds-dialog__extra {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4x, 16px);
+  margin-top: var(--spacing-2x, 8px);
+}
+
+.lds-dialog__close {
+  position: absolute;
+  top: var(--spacing-6x, 24px);
+  right: var(--spacing-6x, 24px);
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-text-caption);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.lds-dialog__close:hover {
+  background: var(--color-fill-hover);
+  color: var(--color-text-primary);
+}
+
+.lds-dialog__close:active {
+  background: var(--color-fill-active);
+  color: var(--color-text-primary);
+}
+
+.lds-dialog__close:focus-visible {
+  outline: 2px solid var(--color-primary-normal);
+  outline-offset: 2px;
+}
+
+.lds-dialog__close .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.lds-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-4x, 16px);
+  padding: 0 var(--spacing-6x, 24px) var(--spacing-6x, 24px);
+  box-sizing: border-box;
+}
+
+.lds-dialog--neutral .lds-dialog__icon {
+  color: var(--color-primary-normal);
+}
+
+.lds-dialog--warning .lds-dialog__icon {
+  color: var(--color-warning-normal);
+}
+
+.lds-dialog--danger .lds-dialog__icon {
+  color: var(--color-danger-normal);
+}
+
+.lds-dialog--success .lds-dialog__icon {
+  color: var(--color-success-normal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lds-dialog-root__mask,
+  .lds-dialog,
+  .lds-dialog__close {
+    transition: none;
+  }
+}
+
+/* 14. 表单组件 (Form) */
 .lds-form {
   display: flex;
   flex-direction: column;
@@ -1442,7 +1622,7 @@ button.lds-filter {
   color: var(--color-danger-normal);
 }
 
-/* 14. 图片上传组件 (Upload) */
+/* 15. 图片上传组件 (Upload) */
 .lds-upload {
   width: 100%;
   font-family: var(--font-normal, "PingFang SC", sans-serif);
@@ -1586,7 +1766,7 @@ button.lds-filter {
   margin-top: var(--spacing-2x, 8px);
 }
 
-/* 15. 表格组件 (Table) */
+/* 16. 表格组件 (Table) */
 .lds-table-wrapper {
   width: 100%;
   border-radius: 12px;
@@ -1689,7 +1869,7 @@ button.lds-filter {
   color: var(--color-text-caption);
 }
 
-/* 15. 标签组件 (Tag) */
+/* 16. 标签组件 (Tag) */
 .lds-tag {
   --lds-tag-fg: var(--color-text-secondary);
   --lds-tag-bg: transparent;
@@ -1920,7 +2100,7 @@ button.lds-filter {
   color: var(--color-danger-hover);
 }
 
-/* 16. 页面内容布局组件 (Page Layout Wrappers) */
+/* 17. 页面内容布局组件 (Page Layout Wrappers) */
 .lds-filter-card {
   margin-bottom: var(--spacing-5x, 20px);
 }
@@ -1938,7 +2118,7 @@ button.lds-filter {
   justify-content: flex-end;
 }
 
-/* 16.1 Pagination (React Component) */
+/* 17.1 Pagination (React Component) */
 .lds-pagination {
   display: inline-flex;
   align-items: center;
@@ -2103,7 +2283,7 @@ button.lds-filter {
   text-align: center;
 }
 
-/* 17. Checkbox */
+/* 18. Checkbox */
 .lds-checkbox {
   display: inline-flex;
   align-items: center;

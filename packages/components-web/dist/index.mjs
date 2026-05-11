@@ -1107,7 +1107,7 @@ var Drawer = React17.forwardRef(
   }, ref) => {
     const titleId = useId();
     const [shouldRender, setShouldRender] = useState5(open);
-    const [visible, setVisible] = useState5(open);
+    const [visible, setVisible] = useState5(false);
     const container = useMemo2(() => {
       var _a;
       if (typeof document === "undefined") return null;
@@ -1220,10 +1220,166 @@ var Drawer = React17.forwardRef(
 );
 Drawer.displayName = "Drawer";
 
-// src/components/Upload/Upload.tsx
-import React18 from "react";
+// src/components/Dialog/Dialog.tsx
+import React18, { useEffect as useEffect3, useId as useId2, useMemo as useMemo3, useState as useState6 } from "react";
+import { createPortal as createPortal2 } from "react-dom";
 import { clsx as clsx18 } from "clsx";
 import { jsx as jsx18, jsxs as jsxs16 } from "react/jsx-runtime";
+var DIALOG_ANIMATION_MS = 300;
+var DIALOG_ICON_MAP = {
+  neutral: "ic-info-round-fill",
+  warning: "ic-warning-round-fill",
+  danger: "ic-error-round-fill",
+  success: "ic-finish-round-fill"
+};
+var Dialog = React18.forwardRef(
+  ({
+    className,
+    open = false,
+    title,
+    description,
+    type = "neutral",
+    icon,
+    showIcon = true,
+    footer,
+    showFooter,
+    children,
+    maskClosable = true,
+    closeOnEsc = true,
+    showCloseButton = true,
+    onClose,
+    getContainer,
+    width,
+    bodyClassName,
+    closeLabel = "\u5173\u95ED\u5BF9\u8BDD\u6846",
+    style,
+    ...props
+  }, ref) => {
+    const titleId = useId2();
+    const descriptionId = useId2();
+    const [shouldRender, setShouldRender] = useState6(open);
+    const [visible, setVisible] = useState6(false);
+    const container = useMemo3(() => {
+      var _a;
+      if (typeof document === "undefined") return null;
+      return (_a = getContainer == null ? void 0 : getContainer()) != null ? _a : document.body;
+    }, [getContainer]);
+    useEffect3(() => {
+      if (open) {
+        setShouldRender(true);
+        setVisible(false);
+        let rafId2 = 0;
+        const rafId1 = window.requestAnimationFrame(() => {
+          rafId2 = window.requestAnimationFrame(() => {
+            setVisible(true);
+          });
+        });
+        return () => {
+          window.cancelAnimationFrame(rafId1);
+          window.cancelAnimationFrame(rafId2);
+        };
+      }
+      setVisible(false);
+      const timer = window.setTimeout(() => {
+        setShouldRender(false);
+      }, DIALOG_ANIMATION_MS);
+      return () => window.clearTimeout(timer);
+    }, [open]);
+    useEffect3(() => {
+      if (!shouldRender || !closeOnEsc) {
+        return void 0;
+      }
+      const handleKeyDown = (event) => {
+        if (event.key === "Escape") {
+          onClose == null ? void 0 : onClose();
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [closeOnEsc, onClose, shouldRender]);
+    useEffect3(() => {
+      if (!shouldRender || typeof document === "undefined") {
+        return void 0;
+      }
+      const { body } = document;
+      const previousOverflow = body.style.overflow;
+      body.style.overflow = "hidden";
+      return () => {
+        body.style.overflow = previousOverflow;
+      };
+    }, [shouldRender]);
+    if (!shouldRender || !container) {
+      return null;
+    }
+    const mergedStyle = {
+      ...style,
+      ...width !== void 0 ? {
+        ["--lds-dialog-width"]: typeof width === "number" ? `${width}px` : width
+      } : null
+    };
+    const shouldShowFooter = showFooter != null ? showFooter : footer !== void 0;
+    const resolvedIcon = icon != null ? icon : type !== "custom" ? /* @__PURE__ */ jsx18(Icon, { name: DIALOG_ICON_MAP[type], "aria-hidden": "true" }) : null;
+    return createPortal2(
+      /* @__PURE__ */ jsxs16(
+        "div",
+        {
+          className: clsx18("lds-dialog-root", visible && "is-open"),
+          onClick: (event) => {
+            if (event.target === event.currentTarget && maskClosable) {
+              onClose == null ? void 0 : onClose();
+            }
+          },
+          children: [
+            /* @__PURE__ */ jsx18("div", { className: "lds-dialog-root__mask", "aria-hidden": "true" }),
+            /* @__PURE__ */ jsxs16(
+              "div",
+              {
+                ref,
+                className: clsx18("lds-dialog", `lds-dialog--${type}`, className),
+                role: "dialog",
+                "aria-modal": "true",
+                "aria-labelledby": title ? titleId : void 0,
+                "aria-describedby": description ? descriptionId : void 0,
+                style: mergedStyle,
+                ...props,
+                children: [
+                  /* @__PURE__ */ jsxs16("div", { className: clsx18("lds-dialog__body", bodyClassName), children: [
+                    /* @__PURE__ */ jsxs16("div", { className: "lds-dialog__main", children: [
+                      showIcon && resolvedIcon ? /* @__PURE__ */ jsx18("div", { className: "lds-dialog__icon", "aria-hidden": "true", children: resolvedIcon }) : null,
+                      /* @__PURE__ */ jsxs16("div", { className: "lds-dialog__content", children: [
+                        title ? /* @__PURE__ */ jsx18("h2", { id: titleId, className: "lds-dialog__title", children: title }) : null,
+                        description ? /* @__PURE__ */ jsx18("div", { id: descriptionId, className: "lds-dialog__description", children: description }) : null,
+                        children ? /* @__PURE__ */ jsx18("div", { className: "lds-dialog__extra", children }) : null
+                      ] })
+                    ] }),
+                    showCloseButton ? /* @__PURE__ */ jsx18(
+                      "button",
+                      {
+                        type: "button",
+                        className: "lds-dialog__close",
+                        onClick: () => onClose == null ? void 0 : onClose(),
+                        "aria-label": closeLabel,
+                        children: /* @__PURE__ */ jsx18(Icon, { name: "ic-error-line", "aria-hidden": "true" })
+                      }
+                    ) : null
+                  ] }),
+                  shouldShowFooter ? /* @__PURE__ */ jsx18("div", { className: "lds-dialog__footer", children: footer }) : null
+                ]
+              }
+            )
+          ]
+        }
+      ),
+      container
+    );
+  }
+);
+Dialog.displayName = "Dialog";
+
+// src/components/Upload/Upload.tsx
+import React19 from "react";
+import { clsx as clsx19 } from "clsx";
+import { jsx as jsx19, jsxs as jsxs17 } from "react/jsx-runtime";
 var DEFAULT_TRIGGER_TEXT = "\u4E0A\u4F20";
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -1236,7 +1392,7 @@ function readFileAsDataUrl(file) {
     reader.readAsDataURL(file);
   });
 }
-var Upload = React18.forwardRef(
+var Upload = React19.forwardRef(
   ({
     className,
     value,
@@ -1258,15 +1414,15 @@ var Upload = React18.forwardRef(
   }, ref) => {
     var _a;
     const { hasError } = useFormItemStatus();
-    const inputRef = React18.useRef(null);
+    const inputRef = React19.useRef(null);
     const isControlled = value !== void 0;
-    const [innerValue, setInnerValue] = React18.useState(defaultValue);
+    const [innerValue, setInnerValue] = React19.useState(defaultValue);
     const mergedValue = (_a = isControlled ? value : innerValue) != null ? _a : [];
     const visibleItems = mergedValue.slice(0, maxCount);
     const shouldRenderTrigger = visibleItems.length < maxCount;
     const mergedError = error != null ? error : hasError;
     const mergedVisualState = mergedError ? "error" : visualState;
-    const updateValue = React18.useCallback(
+    const updateValue = React19.useCallback(
       (nextValue) => {
         const normalized = nextValue.slice(0, maxCount);
         if (!isControlled) {
@@ -1276,7 +1432,7 @@ var Upload = React18.forwardRef(
       },
       [isControlled, maxCount, onChange]
     );
-    const handleSelectFiles = React18.useCallback(
+    const handleSelectFiles = React19.useCallback(
       async (event) => {
         var _a2;
         const files = Array.from((_a2 = event.target.files) != null ? _a2 : []);
@@ -1301,21 +1457,21 @@ var Upload = React18.forwardRef(
       },
       [maxCount, updateValue, visibleItems]
     );
-    const handleRemove = React18.useCallback(
+    const handleRemove = React19.useCallback(
       (index) => {
         const nextItems = visibleItems.filter((_, currentIndex) => currentIndex !== index);
         updateValue(nextItems);
       },
       [updateValue, visibleItems]
     );
-    return /* @__PURE__ */ jsxs16(
+    return /* @__PURE__ */ jsxs17(
       "div",
       {
         ref,
-        className: clsx18("lds-upload", disabled && "is-disabled", className),
+        className: clsx19("lds-upload", disabled && "is-disabled", className),
         ...props,
         children: [
-          /* @__PURE__ */ jsx18(
+          /* @__PURE__ */ jsx19(
             "input",
             {
               ref: inputRef,
@@ -1329,15 +1485,15 @@ var Upload = React18.forwardRef(
               onChange: handleSelectFiles
             }
           ),
-          /* @__PURE__ */ jsxs16("div", { className: "lds-upload__list", children: [
+          /* @__PURE__ */ jsxs17("div", { className: "lds-upload__list", children: [
             visibleItems.map((item, index) => {
               var _a2, _b, _c;
-              return /* @__PURE__ */ jsxs16(
+              return /* @__PURE__ */ jsxs17(
                 "div",
                 {
                   className: "lds-upload__item",
                   children: [
-                    /* @__PURE__ */ jsx18(
+                    /* @__PURE__ */ jsx19(
                       "img",
                       {
                         className: "lds-upload__image",
@@ -1345,14 +1501,14 @@ var Upload = React18.forwardRef(
                         alt: (_c = item.name) != null ? _c : `\u5DF2\u4E0A\u4F20\u56FE\u7247 ${index + 1}`
                       }
                     ),
-                    !disabled ? /* @__PURE__ */ jsx18(
+                    !disabled ? /* @__PURE__ */ jsx19(
                       "button",
                       {
                         type: "button",
                         className: "lds-upload__remove",
                         "aria-label": removeAriaLabel,
                         onClick: () => handleRemove(index),
-                        children: /* @__PURE__ */ jsx18(Icon, { name: "ic-error-line", "aria-hidden": "true" })
+                        children: /* @__PURE__ */ jsx19(Icon, { name: "ic-error-line", "aria-hidden": "true" })
                       }
                     ) : null
                   ]
@@ -1360,11 +1516,11 @@ var Upload = React18.forwardRef(
                 (_b = (_a2 = item.id) != null ? _a2 : item.url) != null ? _b : `${index}`
               );
             }),
-            shouldRenderTrigger ? /* @__PURE__ */ jsxs16(
+            shouldRenderTrigger ? /* @__PURE__ */ jsxs17(
               "button",
               {
                 type: "button",
-                className: clsx18(
+                className: clsx19(
                   "lds-upload__trigger",
                   mergedVisualState === "hover" && "is-hover",
                   mergedVisualState === "active" && "is-active",
@@ -1377,13 +1533,13 @@ var Upload = React18.forwardRef(
                 },
                 "aria-label": triggerAriaLabel,
                 children: [
-                  /* @__PURE__ */ jsx18(Icon, { name: "ic-add-line", "aria-hidden": "true" }),
-                  /* @__PURE__ */ jsx18("span", { className: "lds-upload__text", children: triggerText })
+                  /* @__PURE__ */ jsx19(Icon, { name: "ic-add-line", "aria-hidden": "true" }),
+                  /* @__PURE__ */ jsx19("span", { className: "lds-upload__text", children: triggerText })
                 ]
               }
             ) : null
           ] }),
-          children ? /* @__PURE__ */ jsx18("div", { className: "lds-upload__extra", children }) : null
+          children ? /* @__PURE__ */ jsx19("div", { className: "lds-upload__extra", children }) : null
         ]
       }
     );
@@ -1394,6 +1550,7 @@ export {
   Button,
   Capsule,
   Checkbox,
+  Dialog,
   Drawer,
   Filter,
   FilterGroup,

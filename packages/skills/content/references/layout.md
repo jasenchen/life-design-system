@@ -85,7 +85,7 @@ export function AppLayoutDemo() {
     ├── <PageHeader /> (页面标题区)
     ├── <FilterGroup /> (搜索/筛选区，可选)
     ├── .lds-action-bar (状态与操作工具栏)
-    │   ├── <Tabs variant="capsule" /> (左侧: 数据状态页签)
+    │   ├── <Tabs /> (左侧: 数据状态页签/筛选项，请根据 tabs.md 的指南选择合适的 variant)
     │   └── .lds-actions (右侧: 新建/导出等全局操作)
     ├── <TableWrapper /> (数据表格区域)
     │   └── <Table /> (核心数据表格)

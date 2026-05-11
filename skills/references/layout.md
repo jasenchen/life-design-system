@@ -12,6 +12,8 @@
 
 其中 `Menu` 已内置默认的 6 组侧边导航内容，页面中直接使用 `<Menu />` 即可，不要自行增删菜单组、菜单项数量或修改默认文案。默认分组为：`常用`、`店铺`、`订单`、`财务`、`达人带货`、`内容推广`。
 
+每个一级页面必须有pageheader，若没有提供标题文案的输入，你需要根据内容生成一个标题文案。
+
 实现结构请参考以下 React 示例，其中 `.app-content` 里的内容仅为参考内容，其他部分则为固定结构：
 
 ```tsx
@@ -94,8 +96,6 @@ export function AppLayoutDemo() {
     └── .lds-pagination-wrapper (分页器区域)
         └── <Pagination /> (分页组件)
 ```
-
-
 
 #### 标准结构示例
 
@@ -215,3 +215,4 @@ export function ListPageLayoutDemo() {
   );
 }
 ```
+

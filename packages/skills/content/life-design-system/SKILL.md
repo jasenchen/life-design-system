@@ -1,8 +1,7 @@
-***
-
-name: life-design-system
-description: 使用 @life-ds 构建或优化 抖音来客原生风格的 React Web 界面。当需要根据截图、设计稿、文本提示或现有代码实现抖音来客风格 UI 时（尤其是期望在 Web 端高度还原原生来客页面模式时）使用。
-----------------------------------------------------------------------------------------------------------------------
+---
+name: "life-design-system"
+description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界面。当需要根据截图、设计稿、文本提示或现有代码实现或优化页面时使用。"
+---
 
 # 强制性规则
 
@@ -104,6 +103,7 @@ description: 使用 @life-ds 构建或优化 抖音来客原生风格的 React W
 - 多选框 ：[references/checkbox.md](references/checkbox.md)
 - 胶囊 ：[references/capsule.md](references/capsule.md)
 - 抽屉 ：[references/drawer.md](references/drawer.md)
+- 表单 ：[references/form.md](references/form.md)
 
 ***
 
@@ -122,6 +122,8 @@ description: 使用 @life-ds 构建或优化 抖音来客原生风格的 React W
 如果追求像素级完美的克隆会导致糟糕的 Web 端实现效果，请不要这么做。在需要时使用占位图（例如 `https://picsum.photos/seed/reel-fashion/720/1280`）。
 
 ***
+
+
 
 ## 4. 优先使用可用的 Figma 源数据
 
@@ -173,4 +175,3 @@ description: 使用 @life-ds 构建或优化 抖音来客原生风格的 React W
 - 响应式行为能够自适应结构，而不仅仅是尺寸
 - 动效用于阐明状态变化，而不是用于装饰
 - 代码实现遵循了仓库现有的规范
-

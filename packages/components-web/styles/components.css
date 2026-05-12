@@ -2104,20 +2104,20 @@ button.lds-filter {
   transform: translateY(-1px);
 }
 
-/* Legacy aliases (for older Table demos / external usage) */
-.lds-tag--default {
+/* Legacy aliases (for older single-class usage only) */
+.lds-tag--default:not(.lds-tag--fill):not(.lds-tag--light):not(.lds-tag--outline) {
   --lds-tag-fg: var(--color-text-secondary);
   --lds-tag-bg: transparent;
   --lds-tag-border: var(--color-border-normal);
 }
 
-.lds-tag--red {
+.lds-tag--red:not(.lds-tag--fill):not(.lds-tag--light):not(.lds-tag--outline) {
   --lds-tag-fg: var(--color-danger-normal);
   --lds-tag-bg: var(--color-danger-light-normal);
   --lds-tag-border: var(--color-danger-normal);
 }
 
-.lds-tag--orange {
+.lds-tag--orange:not(.lds-tag--fill):not(.lds-tag--light):not(.lds-tag--outline) {
   --lds-tag-fg: var(--color-warning-normal);
   --lds-tag-bg: var(--color-warning-light-normal);
   --lds-tag-border: var(--color-warning-normal);

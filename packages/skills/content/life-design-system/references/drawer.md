@@ -18,6 +18,7 @@
 - 用于承载**与当前页面强相关**的二级内容（编辑详情、查看详情、配置面板）。
 - 标题用名词短语，明确告知用户"这是什么"（如"编辑用户"、"订单详情"）。
 - 底部操作区固定一组主要操作（取消 + 确认），避免堆叠过多按钮。
+- 如果 footer 内除了按钮还需要增加说明、统计、状态提示等**自定义内容**，则应放置在 **footer 左侧区域**，右侧区域保留给主要操作按钮。
 - **保持组件挂载，仅切换 `open` 控制显隐**，确保进/出场动画完整执行。禁止使用 `{open && <Drawer />}` 的条件渲染方式。
 - 一次只打开一个抽屉，避免抽屉嵌套抽屉。
 - 复杂表单建议拆分为分步或分组，避免抽屉内出现过长的单列滚动表单。
@@ -29,6 +30,7 @@
 - **编辑表单**：标题 + 表单 Body，底部固定 "取消 + 保存" 按钮。
 - **配置面板**：标题 + 分组配置项，底部 "重置 + 应用"。
 - **批量操作流程**：标题 + 步骤指示 + 内容区，底部 "上一步 + 下一步 / 完成"。
+- **带辅助信息的操作区**：footer 左侧放说明/统计/提示信息，右侧放取消、确认等操作按钮。
 
 ## React 组件用法（推荐）
 
@@ -49,10 +51,23 @@ const [open, setOpen] = useState(false);
     title="编辑用户信息"
     onClose={() => setOpen(false)}
     footer={
-      <>
-        <Button onClick={() => setOpen(false)}>取消</Button>
-        <Button variant="primary" onClick={handleSave}>保存</Button>
-      </>
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 16
+        }}
+      >
+        <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+          已选择 12 项
+        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Button onClick={() => setOpen(false)}>取消</Button>
+          <Button variant="primary" onClick={handleSave}>保存</Button>
+        </div>
+      </div>
     }
   >
     {/* 表单内容 */}
@@ -71,7 +86,7 @@ const [open, setOpen] = useState(false);
 | `title` | `React.ReactNode` | — | 标题区域内容 |
 | `size` | `'large' \| 'default-size' \| 'small'` | `'default-size'` | 抽屉尺寸（large 920px / default 640px / small 480px） |
 | `width` | `number \| string` | — | 自定义宽度，会覆盖 `size` 的默认宽度 |
-| `footer` | `React.ReactNode` | — | 自定义底部内容（通常放操作按钮） |
+| `footer` | `React.ReactNode` | — | 自定义底部内容。通常右侧放操作按钮；如存在额外说明、统计、状态提示等内容，应放在左侧区域 |
 | `showFooter` | `boolean` | 跟随 `footer` | 是否显示底部区域 |
 | `extra` | `React.ReactNode` | — | 标题右侧附加内容（常用于状态标签、辅助操作） |
 | `maskClosable` | `boolean` | `true` | 点击蒙层是否关闭 |
@@ -104,6 +119,7 @@ const [open, setOpen] = useState(false);
 - **键盘可达**：标题节点带 `id`，外层 `role="dialog"` + `aria-modal="true"` + `aria-labelledby`，无需额外处理。
 - **背景色**：抽屉本体与底部操作区使用 `--color-bg-popup`，不要硬编码颜色。
 - **内容区可滚动**：当内容超出视口高度时，仅 `.lds-drawer__body` 内部滚动，标题与底部操作区保持固定。
+- **Footer 信息布局**：footer 需要同时承载信息与操作时，遵循"左信息、右操作"的布局约定，避免把说明类内容混入右侧按钮组。
 
 ## 与相关组件的区别
 

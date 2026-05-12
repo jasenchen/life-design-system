@@ -1,6 +1,6 @@
 {
   "name": "@life-ds/skills",
-  "version": "1.1.4",
+  "version": "1.1.6",
   "description": "Life Design System Skills and Agent Prompts",
   "main": "index.js",
   "bin": {

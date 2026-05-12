@@ -9,10 +9,10 @@
   "scripts": {
     "sync-tokens": "npm run sync-tokens --workspace=@life-ds/tokens",
     "sync-icons": "npm run sync-icons --workspace=@life-ds/icons",
-    "sync-skills": "mkdir -p packages/skills/content && cp -r skills/* packages/skills/content/"
+    "sync-skills": "rm -rf packages/skills/content && mkdir -p packages/skills/content && cp -R skills/. packages/skills/content/"
   },
   "dependencies": {
-    "@life-ds/components-web": "^1.0.21",
+    "@life-ds/components-web": "^1.0.22",
     "@life-ds/icons": "^1.0.4",
     "@life-ds/skills": "^1.1.4",
     "@life-ds/tokens": "^1.0.7"

@@ -21,6 +21,9 @@
 - 字段说明优先用 `description`（灰色），仅在校验失败时使用 `error`（红色）。
 - 同一个 `FormItem` 内尽量只放一个主控件；需要并排多个控件时，自行在 `children` 中组合。
 - 所有控件优先使用 `@life-ds/components-web` 提供的 Input / Textarea / Select / Upload 等，确保高度与 label 行高对齐。
+- **表单提交按钮在任何时候都应保持可点击状态，不要默认置灰或根据字段是否填写动态 disabled**；校验应发生在用户点击提交时，集中检查必填项、格式等信息，并将结果通过每个 `FormItem` 的 `error` 属性回显。
+- 校验失败时应聚焦到第一个出错字段，并保持提交按钮仍然可再次点击，允许用户修正后继续提交。
+- 仅在请求进行中（Loading）使用按钮的加载态防止重复提交，而不是用 disabled 表达"表单未填完"。
 
 ## 常见布局
 
@@ -159,6 +162,68 @@ import { Form, FormItem, Input, Textarea } from '@life-ds/components-web';
 - `error` 文案存在时优先级高于 `description`，且整段文字切换为 `var(--color-danger-normal)`，并设置 `role="alert"` 以便屏幕阅读器及时朗读。
 - 当 `htmlFor` 提供时，标题区使用 `<label>` 渲染，点击标题可聚焦控件。
 - 与 Input / Textarea / Select / Upload 等控件搭配使用时，控件应自行占满 `__control` 宽度。
+- **提交按钮应始终保持可点击**：不要根据字段是否填写来 disabled 提交按钮；校验在用户点击提交时一次性触发，错误通过 `FormItem` 的 `error` 回显，提交按钮仅在请求进行中使用 Loading 防重。
+
+## 提交与校验
+
+表单的校验时机统一在"点击提交"这一刻触发，而不是在用户输入过程中持续阻止提交。推荐模式如下：
+
+1. 提交按钮始终保持 `variant="primary"` 可点击状态，**不要使用 `disabled` 表达"字段未填完"**。
+2. 点击提交时，业务层集中运行校验规则（必填、格式、长度、异步接口校验等）。
+3. 将校验结果映射为 `errors` 对象，并通过对应 `FormItem` 的 `error` 属性回显红色错误文案。
+4. 若存在错误，聚焦首个出错字段；若全部通过，再进入真实的请求阶段，此时再对提交按钮使用 Loading 状态防止重复点击。
+
+```tsx
+import { useState } from 'react';
+import { Button, Form, FormItem, Input } from '@life-ds/components-web';
+
+function CreateUserForm() {
+  const [values, setValues] = useState({ name: '', phone: '' });
+  const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    // ✅ 点击提交时统一校验
+    const nextErrors: typeof errors = {};
+    if (!values.name) nextErrors.name = '请输入用户名称';
+    if (!/^1\d{10}$/.test(values.phone)) nextErrors.phone = '请输入正确的手机号';
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setLoading(true);
+    try {
+      await submit(values);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Form labelWidth={90}>
+      <FormItem label="用户名称" htmlFor="name" required error={errors.name}>
+        <Input
+          id="name"
+          value={values.name}
+          onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
+        />
+      </FormItem>
+      <FormItem label="联系方式" htmlFor="phone" required error={errors.phone}>
+        <Input
+          id="phone"
+          value={values.phone}
+          onChange={(e) => setValues((v) => ({ ...v, phone: e.target.value }))}
+        />
+      </FormItem>
+      {/* ✅ 正确：提交按钮始终可点击，仅在请求中使用 Loading */}
+      <Button variant="primary" loading={loading} onClick={handleSubmit}>
+        提交
+      </Button>
+      {/* ❌ 错误：根据字段是否填写动态 disabled */}
+      {/* <Button variant="primary" disabled={!values.name || !values.phone}>提交</Button> */}
+    </Form>
+  );
+}
+```
 
 ## 兜底策略
 

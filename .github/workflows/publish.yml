@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Sync skills content
+        run: npm run sync-skills
+
       - name: Publish @life-ds/tokens
         run: npm publish --access public
         working-directory: packages/tokens
@@ -39,5 +42,11 @@ jobs:
       - name: Publish @life-ds/components-web
         run: npm publish --access public
         working-directory: packages/components-web
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @life-ds/skills
+        run: npm publish --access public
+        working-directory: packages/skills
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

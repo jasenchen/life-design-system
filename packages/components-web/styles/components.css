@@ -1697,7 +1697,7 @@ button.lds-filter {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: var(--spacing-8x, 32px) var(--spacing-8x, 32px) var(--spacing-6x, 24px);
+  padding: var(--spacing-8x, 32px) 28px var(--spacing-6x, 24px);
   box-sizing: border-box;
 }
 
@@ -1708,8 +1708,8 @@ button.lds-filter {
 }
 
 .lds-dialog__icon {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1717,8 +1717,8 @@ button.lds-filter {
 }
 
 .lds-dialog__icon .icon {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
 }
 
 .lds-dialog__content {
@@ -1733,13 +1733,13 @@ button.lds-filter {
 .lds-dialog__title {
   margin: 0;
   color: var(--color-text-primary);
-  font: var(--title-medium);
+  font: var(--subtitle-medium);
 }
 
 .lds-dialog__description {
   color: var(--color-text-primary);
-  font: var(--subtitle-regular);
-  line-height: 24px;
+  font: var(--body-regular);
+  line-height: 22px;
 }
 
 .lds-dialog__extra {

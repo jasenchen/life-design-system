@@ -112,6 +112,69 @@ type FilterButtonProps = CommonProps & Omit<React.ButtonHTMLAttributes<HTMLButto
 type FilterProps = FilterInputProps | FilterButtonProps;
 declare const Filter: React.ForwardRefExoticComponent<FilterProps & React.RefAttributes<HTMLElement>>;
 
+interface FilterSelectOption {
+    label: React.ReactNode;
+    value: string;
+    iconName?: string;
+    disabled?: boolean;
+}
+interface FilterSelectProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
+    label: React.ReactNode;
+    placeholder?: React.ReactNode;
+    size?: FilterSize;
+    disabled?: boolean;
+    isActive?: boolean;
+    filterClassName?: string;
+    width?: number | string;
+    value?: string;
+    defaultValue?: string;
+    options: FilterSelectOption[];
+    open?: boolean;
+    defaultOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
+    onChange?: (value: string, option: FilterSelectOption) => void;
+    matchTriggerWidth?: boolean;
+    panelWidth?: number | string;
+}
+declare const FilterSelect: React.ForwardRefExoticComponent<FilterSelectProps & React.RefAttributes<HTMLSpanElement>>;
+
+interface FilterDatePickerProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
+    label: React.ReactNode;
+    placeholder?: React.ReactNode;
+    size?: FilterSize;
+    disabled?: boolean;
+    isActive?: boolean;
+    filterClassName?: string;
+    width?: number | string;
+    value?: Date | null;
+    defaultValue?: Date | null;
+    open?: boolean;
+    defaultOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
+    onChange?: (value: Date) => void;
+    disabledDate?: (date: Date) => boolean;
+}
+declare const FilterDatePicker: React.ForwardRefExoticComponent<FilterDatePickerProps & React.RefAttributes<HTMLSpanElement>>;
+
+interface FilterTimePickerProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
+    label: React.ReactNode;
+    placeholder?: React.ReactNode;
+    size?: FilterSize;
+    disabled?: boolean;
+    isActive?: boolean;
+    filterClassName?: string;
+    width?: number | string;
+    value?: string;
+    defaultValue?: string;
+    open?: boolean;
+    defaultOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
+    onChange?: (value: string) => void;
+    hourStep?: number;
+    minuteStep?: number;
+}
+declare const FilterTimePicker: React.ForwardRefExoticComponent<FilterTimePickerProps & React.RefAttributes<HTMLSpanElement>>;
+
 interface FilterGroupProps extends React.HTMLAttributes<HTMLDivElement> {
     /**
      * 过滤项尺寸（用于按钮尺寸对齐；筛选项本身由使用方传入）
@@ -338,6 +401,74 @@ interface PaginationProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onCha
     showTotal?: (total: number, range: [number, number]) => React.ReactNode;
 }
 declare const Pagination: React.ForwardRefExoticComponent<PaginationProps & React.RefAttributes<HTMLElement>>;
+
+type PopoverPlacement = 'bottom-start' | 'bottom-center' | 'bottom-end' | 'top-start' | 'top-center' | 'top-end';
+interface PopoverProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children'> {
+    /**
+     * Trigger element used to toggle the popover.
+     */
+    trigger: React.ReactElement;
+    /**
+     * Content rendered inside the popover panel.
+     */
+    children: React.ReactNode;
+    /**
+     * Controlled open state.
+     */
+    open?: boolean;
+    /**
+     * Uncontrolled initial open state.
+     * @default false
+     */
+    defaultOpen?: boolean;
+    /**
+     * Callback fired when open state changes.
+     */
+    onOpenChange?: (open: boolean) => void;
+    /**
+     * Preferred placement relative to the trigger.
+     * @default 'bottom-start'
+     */
+    placement?: PopoverPlacement;
+    /**
+     * Gap between trigger and panel.
+     * @default 8
+     */
+    offset?: number;
+    /**
+     * Force the panel width to match the trigger width.
+     * @default false
+     */
+    matchTriggerWidth?: boolean;
+    /**
+     * Close when clicking outside of the trigger + panel.
+     * @default true
+     */
+    closeOnClickOutside?: boolean;
+    /**
+     * Close when pressing Escape.
+     * @default true
+     */
+    closeOnEsc?: boolean;
+    /**
+     * Render content in a custom container. Defaults to document.body.
+     */
+    getContainer?: () => HTMLElement | null;
+    /**
+     * Additional class for the floating panel.
+     */
+    contentClassName?: string;
+    /**
+     * Additional style for the floating panel.
+     */
+    contentStyle?: React.CSSProperties;
+    /**
+     * ARIA role for the floating panel.
+     * @default 'dialog'
+     */
+    contentRole?: React.AriaRole;
+}
+declare const Popover: React.ForwardRefExoticComponent<PopoverProps & React.RefAttributes<HTMLDivElement>>;
 
 type DrawerSize = 'large' | 'default-size' | 'small';
 interface DrawerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -633,4 +764,4 @@ interface UploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChan
 }
 declare const Upload: React.ForwardRefExoticComponent<UploadProps & React.RefAttributes<HTMLDivElement>>;
 
-export { Button, type ButtonProps, type ButtonSize, type ButtonVariant, Capsule, type CapsuleProps, Checkbox, type CheckboxProps, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, type FilterSize, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, Input, type InputProps, Menu, type MenuProps, Navbar, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, useFormItemStatus };
+export { Button, type ButtonProps, type ButtonSize, type ButtonVariant, Capsule, type CapsuleProps, Checkbox, type CheckboxProps, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, Input, type InputProps, Menu, type MenuProps, Navbar, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, useFormItemStatus };

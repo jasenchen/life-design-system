@@ -309,6 +309,7 @@
     <a href="#textarea" class="nav-item" data-target="textarea">Textarea</a>
     <a href="#filter" class="nav-item" data-target="filter">Filter</a>
     <a href="#filtergroup" class="nav-item" data-target="filtergroup">FilterGroup</a>
+    <a href="#popover" class="nav-item" data-target="popover">Popover</a>
     <a href="#tabs" class="nav-item" data-target="tabs">Tabs</a>
     <a href="#navbar" class="nav-item" data-target="navbar">Navbar</a>
     <a href="#menu" class="nav-item" data-target="menu">Menu</a>
@@ -606,6 +607,32 @@
           render: (_size, _state) => {
             const id = `filtergroup-multi`;
             window.pendingReactRenders.push({ id, type: 'filter-group-demo', mode: 'multi' });
+            return `<div id="${id}"></div>`;
+          }
+        }
+      ]
+    },
+    popover: {
+      title: 'Popover (React Component)',
+      layout: 'full',
+      sizes: [{ id: 'default', label: '默认规格', meta: 'Anchor overlay · 8px offset · 16px radius' }],
+      desc: 'A non-modal anchored overlay rendered in a portal. Supports controlled open state, outside click / Escape dismissal, placement, and optional trigger-width matching.',
+      variants: [
+        {
+          title: 'Default Surface',
+          desc: 'Standard popover panel with white background, 16px radius, 8px padding and large shadow from the Figma draft.',
+          render: (_size, _state) => {
+            const id = 'popover-default';
+            window.pendingReactRenders.push({ id, type: 'popover-demo', mode: 'default' });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: 'Match Trigger Width',
+          desc: 'Common dropdown usage where the overlay width follows the filter trigger width.',
+          render: (_size, _state) => {
+            const id = 'popover-match-trigger';
+            window.pendingReactRenders.push({ id, type: 'popover-demo', mode: 'match-trigger' });
             return `<div id="${id}"></div>`;
           }
         }
@@ -1007,7 +1034,7 @@
     mainEl.innerHTML = html;
 
     // Trigger custom event so React script knows to mount
-    if (['button', 'capsule', 'checkbox', 'input', 'textarea', 'filter', 'filtergroup', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
+    if (['button', 'capsule', 'checkbox', 'input', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }
@@ -1047,7 +1074,7 @@
 
   // Also trigger initial render in case it was already button
   setTimeout(() => {
-    if (['button', 'capsule', 'input', 'textarea', 'filter', 'filtergroup', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
+    if (['button', 'capsule', 'input', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }, 200);
@@ -1059,7 +1086,11 @@
   import { 
     Button, Icon, Capsule, Input, Textarea, Tabs, Tab,
     Filter,
+    FilterSelect,
+    FilterDatePicker,
+    FilterTimePicker,
     FilterGroup,
+    Popover,
     Navbar,
     Menu,
     PageHeader, Checkbox, Drawer, Dialog, Form, FormItem, Upload,
@@ -1184,18 +1215,54 @@
           };
           root.render(<FilterInputCell />);
         } else {
+          const selectOptions = [
+            { label: '选项1', value: 'option-1', iconName: 'ic-drink-line' },
+            { label: '选项2', value: 'option-2', iconName: 'ic-drink-line' },
+            { label: '选项3', value: 'option-3', iconName: 'ic-drink-line' },
+            { label: '选项4', value: 'option-4', iconName: 'ic-drink-line' },
+            { label: '选项5', value: 'option-5', iconName: 'ic-drink-line' },
+            { label: '选项6', value: 'option-6', iconName: 'ic-drink-line' }
+          ];
+
           const FilterPickCell = () => {
-            const [val, setVal] = React.useState(undefined);
+            if (item.filterType === 'select') {
+              return (
+                <FilterSelect
+                  label={label}
+                  placeholder={placeholder}
+                  size={item.size}
+                  disabled={item.disabled}
+                  isActive={isActive}
+                  filterClassName={item.className}
+                  defaultValue={isActive ? 'option-5' : undefined}
+                  options={selectOptions}
+                />
+              );
+            }
+
+            if (item.filterType === 'date') {
+              return (
+                <FilterDatePicker
+                  label={label}
+                  placeholder={placeholder}
+                  size={item.size}
+                  disabled={item.disabled}
+                  isActive={isActive}
+                  filterClassName={item.className}
+                  defaultValue={isActive ? new Date(2018, 10, 8) : null}
+                />
+              );
+            }
+
             return (
-              <Filter
-                {...commonProps}
-                type={item.filterType}
-                value={val}
+              <FilterTimePicker
+                label={label}
+                placeholder={placeholder}
+                size={item.size}
+                disabled={item.disabled}
                 isActive={isActive}
-                onClick={() => {
-                  if (!isActive) return; // only interactive in Active cell for docs
-                  setVal((prev) => (prev ? undefined : sampleValue));
-                }}
+                filterClassName={item.className}
+                defaultValue={isActive ? '18:36' : undefined}
               />
             );
           };
@@ -1219,13 +1286,36 @@
         const FiltersRow = ({ extraCount = 0, includeTime = false }) => (
           <>
             <Filter type="input" size="small" label="字段标题" placeholder="请输入" value="" onChange={() => {}} />
-            <Filter type="select" size="small" label="字段标题" placeholder="请选择" onClick={() => {}} />
-            <Filter type="date" size="small" label="字段标题" placeholder="请选择" onClick={() => {}} />
+            <FilterSelect
+              size="small"
+              label="字段标题"
+              placeholder="请选择"
+              options={[
+                { label: '选项1', value: 'option-1', iconName: 'ic-drink-line' },
+                { label: '选项2', value: 'option-2', iconName: 'ic-drink-line' },
+                { label: '选项3', value: 'option-3', iconName: 'ic-drink-line' }
+              ]}
+            />
+            <FilterDatePicker size="small" label="字段标题" placeholder="请选择" />
             {includeTime ? (
-              <Filter type="time" size="small" label="字段标题" placeholder="请选择" onClick={() => {}} />
+              <FilterTimePicker
+                size="small"
+                label="字段标题"
+                placeholder="请选择"
+                defaultValue="18:36"
+              />
             ) : null}
             {Array.from({ length: extraCount }).map((_, i) => (
-              <Filter key={i} type="select" size="small" label="字段标题" placeholder="请选择" onClick={() => {}} />
+              <FilterSelect
+                key={i}
+                size="small"
+                label="字段标题"
+                placeholder="请选择"
+                options={[
+                  { label: '选项1', value: 'option-1', iconName: 'ic-drink-line' },
+                  { label: '选项2', value: 'option-2', iconName: 'ic-drink-line' }
+                ]}
+              />
             ))}
           </>
         );
@@ -1251,6 +1341,73 @@
         } else {
           root.render(<Wrapper width={'100%'}><Demo /></Wrapper>);
         }
+      } else if (item.type === 'popover-demo') {
+        const PopoverDemo = () => {
+          const [open, setOpen] = React.useState(false);
+
+          const items = item.mode === 'match-trigger'
+            ? ['全部', '审核中', '已上架', '已下架']
+            : ['编辑', '复制', '停用', '删除'];
+
+          const trigger = item.mode === 'match-trigger' ? (
+            <Filter
+              type="select"
+              size="small"
+              label="状态"
+              placeholder="请选择"
+              value={open ? '全部' : undefined}
+              isActive={open}
+            />
+          ) : (
+            <Button variant="secondary" size="default-size" icon={<Icon name="ic-arrow-down-line" />}>
+              打开 Popover
+            </Button>
+          );
+
+          return (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, minHeight: 280 }}>
+              <Popover
+                open={open}
+                onOpenChange={setOpen}
+                trigger={trigger}
+                placement="bottom-start"
+                matchTriggerWidth={item.mode === 'match-trigger'}
+                contentStyle={item.mode === 'match-trigger' ? undefined : { width: 188 }}
+              >
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, width: item.mode === 'match-trigger' ? '100%' : 172 }}>
+                  {items.map((entry, index) => (
+                    <button
+                      key={entry}
+                      type="button"
+                      onClick={() => setOpen(false)}
+                      style={{
+                        height: 38,
+                        border: 'none',
+                        borderRadius: 12,
+                        background: index === 0 ? 'var(--color-fill-hover)' : 'transparent',
+                        color: 'var(--color-text-primary)',
+                        font: 'var(--body-regular)',
+                        textAlign: 'left',
+                        padding: '0 12px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {entry}
+                    </button>
+                  ))}
+                </div>
+              </Popover>
+
+              <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                {item.mode === 'match-trigger'
+                  ? '适合作为筛选器下拉的基础浮层'
+                  : '默认容器对齐 Figma：白底、16px 圆角、8px 内边距、大阴影'}
+              </span>
+            </div>
+          );
+        };
+
+        root.render(<PopoverDemo />);
       } else if (item.type === 'navbar') {
         root.render(
           <Navbar />

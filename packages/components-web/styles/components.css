@@ -622,10 +622,6 @@ button.lds-filter {
   color: var(--color-text-primary);
 }
 
-.lds-filter.is-filled .lds-filter__icon {
-  color: var(--color-text-primary);
-}
-
 .lds-filter__input {
   flex: 1;
   width: 100%;
@@ -1217,7 +1213,287 @@ button.lds-filter {
 
 /* PageHeader keeps top/right/bottom spacing while aligning the left edge to the content area. */
 
-/* 12. 抽屉组件 (Drawer) */
+/* 12. 气泡弹层组件 (Popover) */
+.lds-popover-anchor {
+  display: inline-flex;
+  max-width: 100%;
+}
+
+.lds-popover {
+  --lds-popover-max-height: calc(100vh - 32px);
+  position: fixed;
+  z-index: 1150;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-width: calc(100vw - 32px);
+  max-height: var(--lds-popover-max-height);
+  overflow: auto;
+  padding: var(--spacing-2x, 8px);
+  background: var(--color-bg-popup);
+  border-radius: var(--radius-l, 16px);
+  box-shadow: var(--shadow-large);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, -4px, 0) scale(0.98);
+  transform-origin: top left;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lds-popover[data-side='top'] {
+  transform: translate3d(0, 4px, 0) scale(0.98);
+}
+
+.lds-popover.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.lds-popover:focus-visible {
+  outline: 2px solid var(--color-primary-normal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lds-popover {
+    transition: none;
+  }
+}
+
+.lds-filter-select__popover {
+  padding: var(--spacing-2x, 8px);
+}
+
+.lds-filter-select__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base, 4px);
+}
+
+.lds-filter-select__option {
+  min-height: 40px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x, 8px);
+  width: 100%;
+  padding: 9px var(--spacing-2x, 8px);
+  font: var(--body-regular);
+  font-family: var(--font-normal);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.lds-filter-select__option:hover,
+.lds-filter-select__option:focus-visible,
+.lds-filter-select__option.is-selected {
+  background: var(--color-fill-hover);
+}
+
+.lds-filter-select__option:focus-visible {
+  outline: none;
+}
+
+.lds-filter-select__option-icon,
+.lds-filter-select__option-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
+.lds-filter-select__option-icon .icon,
+.lds-filter-select__option-check .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.lds-filter-select__option-check {
+  margin-left: auto;
+  color: var(--color-primary-normal);
+}
+
+.lds-filter-select__option-label {
+  min-width: 0;
+  flex: 1;
+}
+
+.lds-filter-date-picker__popover {
+  padding: 0;
+  box-shadow: var(--shadow-large);
+}
+
+.lds-filter-date-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4x, 16px);
+  padding: var(--spacing-6x, 24px);
+  box-sizing: border-box;
+}
+
+.lds-filter-date-picker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4x, 16px);
+}
+
+.lds-filter-date-picker__nav-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4x, 16px);
+}
+
+.lds-filter-date-picker__nav {
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lds-filter-date-picker__nav .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.lds-filter-date-picker__title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4x, 16px);
+  color: var(--color-text-primary);
+  font: var(--subtitle-medium);
+  font-family: var(--font-normal);
+}
+
+.lds-filter-date-picker__weekdays,
+.lds-filter-date-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--spacing-base, 4px);
+}
+
+.lds-filter-date-picker__weekday {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  font: var(--body-regular);
+  font-family: var(--font-normal);
+}
+
+.lds-filter-date-picker__cell {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font: var(--body-regular);
+  font-family: var(--font-normal);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.lds-filter-date-picker__cell:hover,
+.lds-filter-date-picker__cell:focus-visible {
+  background: var(--color-fill-hover);
+}
+
+.lds-filter-date-picker__cell:focus-visible {
+  outline: none;
+}
+
+.lds-filter-date-picker__cell.is-outside {
+  color: var(--color-text-caption);
+}
+
+.lds-filter-date-picker__cell.is-selected {
+  background: var(--color-primary-normal);
+  color: var(--color-text-white);
+  font: var(--body-medium);
+}
+
+.lds-filter-time-picker__popover {
+  padding: 0;
+  box-shadow: var(--shadow-normal);
+}
+
+.lds-filter-time-picker {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4x, 16px);
+  padding: var(--spacing-3x, 12px);
+  box-sizing: border-box;
+}
+
+.lds-filter-time-picker__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base, 4px);
+  max-height: 284px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.lds-filter-time-picker__column::-webkit-scrollbar {
+  display: none;
+}
+
+.lds-filter-time-picker__cell {
+  width: 44px;
+  height: 32px;
+  min-height: 32px;
+  flex: 0 0 32px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font: var(--body-regular);
+  font-family: var(--font-normal);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+
+.lds-filter-time-picker__cell:hover,
+.lds-filter-time-picker__cell:focus-visible {
+  background: var(--color-fill-hover);
+}
+
+.lds-filter-time-picker__cell.is-selected {
+  background: var(--color-primary-light-normal);
+}
+
+.lds-filter-time-picker__cell:focus-visible {
+  outline: none;
+}
+
+/* 13. 抽屉组件 (Drawer) */
 .lds-drawer-root {
   position: fixed;
   inset: 0;
@@ -1366,7 +1642,7 @@ button.lds-filter {
   }
 }
 
-/* 13. 对话框组件 (Dialog) */
+/* 14. 对话框组件 (Dialog) */
 .lds-dialog-root {
   position: fixed;
   inset: 0;

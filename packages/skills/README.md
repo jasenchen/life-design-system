@@ -13,7 +13,10 @@ npx @life-ds/skills install
 ```
 
 **命令效果**：
-该命令会自动将所有组件的详细参考规范和核心工作流文件 (`SKILL.md`) 复制到当前项目工作区的 `.trae/skills/life-design-system/` 目录下。
+该命令会自动将 `content/` 中的每个技能目录分别安装到当前项目工作区的 `.trae/skills/` 下，例如：
+
+- `.trae/skills/life-design-system/`
+- `.trae/skills/prd-design-summarizer/`
 
 ### 2. 在 Trae 中使用
 
@@ -122,5 +125,5 @@ npm publish --access public
 
 ## 📂 目录结构
 - `bin/`: CLI 工具源码。
-- `content/`: 同步后的技能文档内容（发布产物）。
+- `content/`: 按技能目录组织的发布产物，每个子目录包含自己的 `SKILL.md` 与支撑文档。
 - `index.js`: 包入口。

@@ -42,18 +42,21 @@ function listSkills() {
     return;
   }
 
-  const skillFile = path.join(CONTENT_DIR, 'SKILL.md');
-  if (fs.existsSync(skillFile)) {
+  const skills = getPackagedSkills();
+  if (skills.length === 0) {
+    console.log('No skills found in content/');
+    return;
+  }
+
+  skills.forEach(({ skillFile }) => {
     const content = fs.readFileSync(skillFile, 'utf-8');
     const nameMatch = content.match(/name:\s*(.*)/);
     const descMatch = content.match(/description:\s*(.*)/);
-    
+
     if (nameMatch) {
       console.log(`- ${nameMatch[1].trim()}: ${descMatch ? descMatch[1].trim() : ''}`);
     }
-  } else {
-    console.log('No skills found in SKILL.md');
-  }
+  });
 }
 
 function getSkillContent(content) {
@@ -71,20 +74,24 @@ function getSkillContent(content) {
 }
 
 function getSkill(name) {
-  const skillFile = path.join(CONTENT_DIR, 'SKILL.md');
-  if (!fs.existsSync(skillFile)) {
-    console.error('Error: SKILL.md not found.');
+  const skills = getPackagedSkills();
+  if (skills.length === 0) {
+    console.error('Error: No packaged skills found.');
     return;
   }
 
-  const content = fs.readFileSync(skillFile, 'utf-8');
-  const nameMatch = content.match(/name:\s*(.*)/);
-  
-  if (nameMatch && nameMatch[1].trim() === name) {
-    console.log(getSkillContent(content));
-  } else {
-    console.error(`Error: Skill "${name}" not found.`);
+  for (const { skillDirName, skillFile } of skills) {
+    const content = fs.readFileSync(skillFile, 'utf-8');
+    const nameMatch = content.match(/name:\s*(.*)/);
+    const resolvedName = nameMatch ? nameMatch[1].trim() : skillDirName;
+
+    if (resolvedName === name || skillDirName === name) {
+      console.log(getSkillContent(content));
+      return;
+    }
   }
+
+  console.error(`Error: Skill "${name}" not found.`);
 }
 
 function installSkill() {
@@ -93,13 +100,11 @@ function installSkill() {
     return;
   }
 
-  const targetDir = path.join(process.cwd(), '.trae', 'skills', 'life-design-system');
+  const targetRootDir = path.join(process.cwd(), '.trae', 'skills');
   try {
-    fs.mkdirSync(targetDir, { recursive: true });
-    // Copy all contents from CONTENT_DIR to targetDir
-    fs.cpSync(CONTENT_DIR, targetDir, { recursive: true });
-    console.log(`✅ 技能 "life-design-system" 已成功安装到本地！`);
-    console.log(`📂 路径: ${path.relative(process.cwd(), targetDir)}`);
+    installSkillsTo(targetRootDir);
+    console.log('✅ Skills 已成功安装到本地 Trae！');
+    console.log(`📂 路径: ${path.relative(process.cwd(), targetRootDir)}`);
     console.log(`\n现在您可以在 Trae 中重新加载或打开 Skill 面板使用它了！`);
   } catch (error) {
     console.error('❌ 安装技能失败:', error);
@@ -124,15 +129,14 @@ function installClaudeSkill(scope = 'project') {
     process.exit(1);
   }
 
-  const targetDir = normalizedScope === 'user'
-    ? path.join(os.homedir(), '.claude', 'skills', 'life-design-system')
-    : path.join(process.cwd(), '.claude', 'skills', 'life-design-system');
+  const targetRootDir = normalizedScope === 'user'
+    ? path.join(os.homedir(), '.claude', 'skills')
+    : path.join(process.cwd(), '.claude', 'skills');
 
   try {
-    fs.mkdirSync(targetDir, { recursive: true });
-    fs.cpSync(CONTENT_DIR, targetDir, { recursive: true });
-    console.log(`✅ 技能 "life-design-system" 已成功安装到 Claude Code！`);
-    console.log(`📂 路径: ${targetDir}`);
+    installSkillsTo(targetRootDir);
+    console.log('✅ Skills 已成功安装到 Claude Code！');
+    console.log(`📂 路径: ${targetRootDir}`);
     if (normalizedScope === 'project') {
       console.log('\n当前为项目级安装，仅对当前项目生效。');
     } else {
@@ -142,6 +146,41 @@ function installClaudeSkill(scope = 'project') {
   } catch (error) {
     console.error('❌ 安装 Claude Code 技能失败:', error);
   }
+}
+
+function getPackagedSkills() {
+  if (!fs.existsSync(CONTENT_DIR)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(CONTENT_DIR, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => {
+      const skillDir = path.join(CONTENT_DIR, entry.name);
+      const skillFile = path.join(skillDir, 'SKILL.md');
+      return {
+        skillDirName: entry.name,
+        skillDir,
+        skillFile,
+      };
+    })
+    .filter(({ skillFile }) => fs.existsSync(skillFile));
+}
+
+function installSkillsTo(targetRootDir) {
+  const skills = getPackagedSkills();
+  if (skills.length === 0) {
+    throw new Error('No packaged skills found in content/.');
+  }
+
+  fs.mkdirSync(targetRootDir, { recursive: true });
+
+  skills.forEach(({ skillDirName, skillDir }) => {
+    const targetDir = path.join(targetRootDir, skillDirName);
+    fs.mkdirSync(targetDir, { recursive: true });
+    fs.cpSync(skillDir, targetDir, { recursive: true });
+  });
 }
 
 function showHelp() {

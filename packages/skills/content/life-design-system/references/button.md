@@ -20,6 +20,7 @@
 - 大多数情况下，优先使用系统默认的按钮颜色。
 - 保持清晰的聚焦可见性（Focus Visibility）和易于点击的触碰区域。
 - 在按钮内部处理加载状态（Loading），防止重复触发。
+- **按钮成组出现时（如对话框页脚、表单底部、表格批量操作区等），按钮之间的间距统一使用 `var(--spacing-3x)`，不要随意改用其他间距 token 或硬编码数值。**
 
 ## 常见布局
 
@@ -27,6 +28,22 @@
 - **表单页脚**：一个明确的 Primary 操作 + 一个低强调度的辅助操作。
 - **底部 CTA 区域**：一个突出的操作，与屏幕边缘保持舒适的间距。
 - 快捷操作：table的顶部一个Primary的新建操作+多个**Default批量操作**
+
+> 以上场景中，按钮之间的水平 / 垂直间距统一为 `var(--spacing-3x)`。
+
+```tsx
+// ✅ 推荐：成组按钮使用 spacing-3x 作为间距
+<div style={{ display: 'flex', gap: 'var(--spacing-3x)' }}>
+  <Button variant="default">取消</Button>
+  <Button variant="primary">确认</Button>
+</div>
+
+// ❌ 不推荐：硬编码间距或使用其他间距 token
+<div style={{ display: 'flex', gap: 8 }}>
+  <Button variant="default">取消</Button>
+  <Button variant="primary">确认</Button>
+</div>
+```
 
 ## React 组件用法（推荐）
 

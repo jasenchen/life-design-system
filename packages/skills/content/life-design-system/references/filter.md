@@ -321,6 +321,20 @@ export function FilterGroupWithActionsDemo() {
 />
 ```
 
+```tsx
+// ❌ 不推荐：在 FilterGroup 内部为单个筛选器自定义 width
+<FilterGroup>
+  <FilterSelect label="状态" width={200} options={statusOptions} />
+  <FilterDatePicker label="日期" width={360} />
+</FilterGroup>
+
+// ✅ 推荐：保持组件默认宽度，由 FilterGroup 统一控制布局
+<FilterGroup>
+  <FilterSelect label="状态" options={statusOptions} />
+  <FilterDatePicker label="日期" />
+</FilterGroup>
+```
+
 ```html
 <!-- ❌ 禁止：React 项目不要手工拼装 .lds-filter DOM / 类名 -->
 <div class="lds-filter">...</div>

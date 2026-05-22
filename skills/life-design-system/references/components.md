@@ -24,6 +24,7 @@
 - 一个占据主导地位的实心操作通常意味着主按钮（Primary Button）。
 - 主操作附近的辅助性小操作通常意味着普通按钮（**Default** Button）或文本按钮（text Button）。
 - 水平分段的同级选项通常意味着标签页（Tabs）。
+- 一组互斥的选项，通常带有圆形选中标记、胶囊高亮或卡片整体选中态时，通常意味着单选框（Radio）。
 - 悬浮或浮起的面板通常意味着底页（Sheets）、抽屉（Drawers）或模态框（Modals）。
 - 重复的药丸形状通常指示标签（Chips）、药丸标签（Pills）或胶囊选项（Capsule ）。
 
@@ -31,9 +32,10 @@
 
 ## 核心组件模式
 
-首先关注这些模式，因为它们涵盖了大部分 TikTok 风格 UI 的实现工作：
+首先关注这些模式，因为它们涵盖了大部分 Life-ds UI 的实现工作：
 
 - 按钮 (Button)
+- 提示条 (Alert)
 - 图标 (Icon)
 - 顶部导航栏 (Navbar)
 - 左侧菜单 (Menu)
@@ -46,7 +48,8 @@
 - 分页器 (Pagination)
 - 标签 (Tag)
 - 多选框 (Checkbox)
-- 选项 (Capsule)
+- 单选框 (Radio)
+- 开关 (Switch)
 
 如果 UI 可以用这些模式表示，请在引入自定义结构之前优先使用它们。
 
@@ -64,6 +67,7 @@
 当 UI 明显匹配以下模式时，请必须阅读对应的文件：
 
 - UI中需要按钮时：[button.md](button.md)；
+- UI中需要提示、公告或状态反馈条时：[alert.md](alert.md)；
 - UI中需要图标时：[icon.md](icon.md)；
 - UI中需要标签页时：[tabs.md](tabs.md)；
 - UI中需要筛选器或筛选器组时：[filter.md](filter.md)；
@@ -71,6 +75,8 @@
 - UI中需要分页器时：[pagination.md](pagination.md)；
 - UI中需要标签时：[tag.md](tag.md)；
 - UI中需要多选框时：[checkbox.md](checkbox.md)；
+- UI中需要单选框时：[radio.md](radio.md)；
+- UI中需要开关时：[switch.md](switch.md)；
 
 ## 兜底策略
 

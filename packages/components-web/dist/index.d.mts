@@ -21,6 +21,60 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
 
+type AlertVariant = 'info' | 'success' | 'warning' | 'error' | 'gray';
+interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+    /**
+     * 标题文案
+     */
+    title?: React.ReactNode;
+    /**
+     * 描述文案
+     */
+    description?: React.ReactNode;
+    /**
+     * 语义类型
+     * @default 'info'
+     */
+    variant?: AlertVariant;
+    /**
+     * 自定义左侧图标
+     */
+    icon?: React.ReactNode;
+    /**
+     * 是否显示左侧图标
+     * @default true
+     */
+    showIcon?: boolean;
+    /**
+     * 右侧操作区
+     */
+    action?: React.ReactNode;
+    /**
+     * 是否显示关闭按钮
+     * @default false
+     */
+    closable?: boolean;
+    /**
+     * 非受控模式下的初始显示状态
+     * @default true
+     */
+    defaultVisible?: boolean;
+    /**
+     * 受控显示状态
+     */
+    visible?: boolean;
+    /**
+     * 点击关闭按钮时触发
+     */
+    onClose?: () => void;
+    /**
+     * 关闭按钮可访问名称
+     * @default '关闭提示'
+     */
+    closeLabel?: string;
+}
+declare const Alert: React.ForwardRefExoticComponent<AlertProps & React.RefAttributes<HTMLDivElement>>;
+
 interface IconProps extends React.SVGProps<SVGSVGElement> {
     /**
      * The ID of the icon in the SVG sprite (e.g., 'ic-add-round-line')
@@ -29,11 +83,29 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
 }
 declare const Icon: React.ForwardRefExoticComponent<Omit<IconProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
 
-interface CapsuleProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
-    size?: 'large' | 'default-size' | 'small';
-    label: React.ReactNode;
+type RadioVariant = 'default' | 'capsule' | 'card';
+type RadioSize = 'large' | 'default-size' | 'small' | 'mini';
+interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+    /**
+     * 单选框视觉样式
+     * @default 'default'
+     */
+    variant?: RadioVariant;
+    /**
+     * 尺寸大小
+     * @default 'default-size'
+     */
+    size?: RadioSize;
+    /**
+     * 主文案
+     */
+    label?: React.ReactNode;
+    /**
+     * 卡片样式下的辅助文案
+     */
+    description?: React.ReactNode;
 }
-declare const Capsule: React.ForwardRefExoticComponent<CapsuleProps & React.RefAttributes<HTMLInputElement>>;
+declare const Radio: React.ForwardRefExoticComponent<RadioProps & React.RefAttributes<HTMLInputElement>>;
 
 interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'> {
     size?: 'large' | 'default-size' | 'small';
@@ -298,6 +370,19 @@ interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>
     label?: React.ReactNode;
 }
 declare const Checkbox: React.ForwardRefExoticComponent<CheckboxProps & React.RefAttributes<HTMLInputElement>>;
+
+interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+    /**
+     * 尺寸大小
+     * @default 'default-size'
+     */
+    size?: 'default-size' | 'small';
+    /**
+     * 开关状态变更回调
+     */
+    onCheckedChange?: (checked: boolean) => void;
+}
+declare const Switch: React.ForwardRefExoticComponent<SwitchProps & React.RefAttributes<HTMLInputElement>>;
 
 type TagSize = 'large' | 'default-size' | 'small';
 type TagVariant = 'fill' | 'light' | 'outline';
@@ -764,4 +849,4 @@ interface UploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChan
 }
 declare const Upload: React.ForwardRefExoticComponent<UploadProps & React.RefAttributes<HTMLDivElement>>;
 
-export { Button, type ButtonProps, type ButtonSize, type ButtonVariant, Capsule, type CapsuleProps, Checkbox, type CheckboxProps, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, Input, type InputProps, Menu, type MenuProps, Navbar, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, useFormItemStatus };
+export { Alert, type AlertProps, type AlertVariant, Button, type ButtonProps, type ButtonSize, type ButtonVariant, Checkbox, type CheckboxProps, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, Input, type InputProps, Menu, type MenuProps, Navbar, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Radio, type RadioProps, type RadioSize, type RadioVariant, Switch, type SwitchProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, useFormItemStatus };

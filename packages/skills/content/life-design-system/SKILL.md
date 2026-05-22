@@ -94,6 +94,7 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 当准备生成页面时，如果需要使用组件，必须阅读对应组件的文档并优先使用 `@life-ds/components-web` 的 React 组件 API：
 
 - 按钮 ：[references/button.md](references/button.md)
+- 提示条 ：[references/alert.md](references/alert.md)
 - 图标 ：[references/icon.md](references/icon.md)
 - 标签页 ：[references/tabs.md](references/tabs.md)
 - 分页器 ：[references/pagination.md](references/pagination.md)
@@ -101,7 +102,8 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 - 筛选器 ：[references/filter.md](references/filter.md)
 - 标签 ：[references/tag.md](references/tag.md)
 - 多选框 ：[references/checkbox.md](references/checkbox.md)
-- 胶囊 ：[references/capsule.md](references/capsule.md)
+- 单选框 ：[references/radio.md](references/radio.md)
+- 开关 ：[references/switch.md](references/switch.md)
 - 抽屉 ：[references/drawer.md](references/drawer.md)
 - 表单 ：[references/form.md](references/form.md)
 

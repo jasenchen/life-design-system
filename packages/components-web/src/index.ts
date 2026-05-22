@@ -1,6 +1,7 @@
 export * from './components/Button/Button';
+export * from './components/Alert/Alert';
 export * from './components/Icon/Icon';
-export * from './components/Capsule/Capsule';
+export * from './components/Radio/Radio';
 export * from './components/Input/Input';
 export * from './components/Textarea/Textarea';
 export * from './components/Filter/Filter';
@@ -14,6 +15,7 @@ export * from './components/Menu/Menu';
 export * from './components/PageHeader/PageHeader';
 export * from './components/Table/Table';
 export * from './components/Checkbox/Checkbox';
+export * from './components/Switch/Switch';
 export * from './components/Tag/Tag';
 export * from './components/Pagination/Pagination';
 export * from './components/Popover/Popover';

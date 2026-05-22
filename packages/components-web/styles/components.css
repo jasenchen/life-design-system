@@ -195,17 +195,23 @@
   height: 20px;
 }
 
-/* 6. 胶囊选项 (Capsule Radio Option) */
+/* 6. Radio */
+.lds-radio,
 .lds-capsule-wrapper {
   display: inline-flex;
   position: relative;
   cursor: pointer;
   user-select: none;
   vertical-align: middle;
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
 }
 
-/* Hide the actual radio input visually but keep it accessible */
-.lds-capsule-wrapper input[type="radio"] {
+.lds-radio--disabled,
+.lds-capsule-wrapper:has(.lds-radio__input:disabled) {
+  cursor: not-allowed;
+}
+
+.lds-radio__input {
   position: absolute;
   opacity: 0;
   width: 0;
@@ -213,90 +219,403 @@
   margin: 0;
 }
 
+.lds-radio__visual,
+.lds-capsule {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  transition:
+    background-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+    box-shadow 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+    color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  color: var(--color-text-primary);
+}
+
+.lds-radio__content {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lds-radio__label,
+.lds-radio__title,
+.lds-radio__description {
+  min-width: 0;
+}
+
+.lds-radio__label,
+.lds-radio__title {
+  color: inherit;
+}
+
+.lds-radio__description {
+  color: var(--color-text-secondary);
+}
+
+.lds-radio__input:focus-visible + .lds-radio__visual {
+  outline: 2px solid var(--color-primary-normal);
+  outline-offset: 2px;
+}
+
+/* Default radio */
+.lds-radio--default .lds-radio__visual {
+  gap: var(--spacing-base, 4px);
+}
+
+.lds-radio__control {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  box-sizing: border-box;
+  position: relative;
+  background-color: transparent;
+  transition:
+    background-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+    box-shadow 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.lds-radio__control::before {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  box-sizing: border-box;
+  background-color: var(--color-bg-normal);
+  box-shadow: inset 0 0 0 1px var(--color-border-normal);
+  transition:
+    background-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+    box-shadow 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+    width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+    height 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.lds-radio__dot {
+  display: block;
+  position: relative;
+  border-radius: 999px;
+  background-color: var(--color-bg-normal);
+  transform: scale(0.5);
+  opacity: 0;
+  transition:
+    opacity 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46),
+    transform 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46),
+    background-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.lds-radio--default.lds-radio--large .lds-radio__control {
+  width: 24px;
+  height: 24px;
+}
+
+.lds-radio--default.lds-radio--large .lds-radio__control::before {
+  width: 20px;
+  height: 20px;
+}
+
+.lds-radio--default.lds-radio--default-size .lds-radio__control {
+  width: 20px;
+  height: 20px;
+}
+
+.lds-radio--default.lds-radio--default-size .lds-radio__control::before {
+  width: 16px;
+  height: 16px;
+}
+
+.lds-radio--default.lds-radio--small .lds-radio__control,
+.lds-radio--default.lds-radio--mini .lds-radio__control {
+  width: 16px;
+  height: 16px;
+}
+
+.lds-radio--default.lds-radio--small .lds-radio__control::before {
+  width: 14px;
+  height: 14px;
+}
+
+.lds-radio--default.lds-radio--mini .lds-radio__control::before {
+  width: 13px;
+  height: 13px;
+}
+
+.lds-radio--default.lds-radio--large .lds-radio__dot {
+  width: 10px;
+  height: 10px;
+}
+
+.lds-radio--default.lds-radio--default-size .lds-radio__dot {
+  width: 8px;
+  height: 8px;
+}
+
+.lds-radio--default.lds-radio--small .lds-radio__dot,
+.lds-radio--default.lds-radio--mini .lds-radio__dot {
+  width: 6px;
+  height: 6px;
+}
+
+.lds-radio--default.lds-radio--large .lds-radio__label {
+  font: var(--subtitle-regular);
+}
+
+.lds-radio--default.lds-radio--default-size .lds-radio__label,
+.lds-radio--default.lds-radio--small .lds-radio__label {
+  font: var(--body-regular);
+}
+
+.lds-radio--default.lds-radio--mini .lds-radio__label {
+  font: var(--caption-regular);
+}
+
+.lds-radio--default:hover .lds-radio__control,
+.lds-radio--default.is-hover .lds-radio__control {
+  background-color: var(--color-fill-primary);
+}
+
+.lds-radio--default:hover .lds-radio__control::before,
+.lds-radio--default.is-hover .lds-radio__control::before {
+  box-shadow: inset 0 0 0 1px var(--color-primary-normal);
+}
+
+.lds-radio--default .lds-radio__input:checked + .lds-radio__visual .lds-radio__control {
+  background-color: transparent;
+}
+
+.lds-radio--default .lds-radio__input:checked + .lds-radio__visual .lds-radio__control::before {
+  background-color: var(--color-primary-normal);
+  box-shadow: none;
+}
+
+.lds-radio--default .lds-radio__input:checked + .lds-radio__visual .lds-radio__dot {
+  background-color: var(--color-bg-normal);
+  transform: scale(1);
+  opacity: 1;
+}
+
+.lds-radio--default:hover .lds-radio__input:checked + .lds-radio__visual .lds-radio__control,
+.lds-radio--default.is-hover .lds-radio__input:checked + .lds-radio__visual .lds-radio__control {
+  background-color: var(--color-primary-light-normal);
+}
+
+.lds-radio--default.lds-radio--disabled .lds-radio__control,
+.lds-radio--default .lds-radio__input:disabled + .lds-radio__visual .lds-radio__control {
+  background-color: var(--color-fill-disable);
+}
+
+.lds-radio--default.lds-radio--disabled .lds-radio__control::before,
+.lds-radio--default .lds-radio__input:disabled + .lds-radio__visual .lds-radio__control::before {
+  background-color: var(--color-border-disable);
+  box-shadow: none;
+}
+
+.lds-radio--default.lds-radio--disabled .lds-radio__label,
+.lds-radio--default .lds-radio__input:disabled + .lds-radio__visual .lds-radio__label {
+  color: var(--color-text-disable);
+}
+
+.lds-radio--default .lds-radio__input:checked:disabled + .lds-radio__visual .lds-radio__control {
+  background-color: transparent;
+}
+
+.lds-radio--default .lds-radio__input:checked:disabled + .lds-radio__visual .lds-radio__control::before {
+  background-color: var(--color-primary-disable);
+  box-shadow: none;
+}
+
+.lds-radio--default .lds-radio__input:checked:disabled + .lds-radio__visual .lds-radio__dot {
+  background-color: var(--color-bg-normal);
+}
+
+/* Capsule radio */
+.lds-radio--capsule .lds-radio__visual,
+.lds-capsule {
+  justify-content: center;
+  white-space: nowrap;
+  text-align: center;
+  background-color: var(--color-bg-normal);
+  box-shadow: inset 0 0 0 1px var(--color-border-normal);
+  border-radius: 999px;
+  color: var(--color-text-primary);
+}
+
+.lds-radio--capsule .lds-radio__content,
 .lds-capsule {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
-  font-family: var(--font-normal, "PingFang SC", sans-serif);
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  background-color: var(--color-bg-normal);
-  /* 使用内阴影模拟边框，防止边框宽度改变导致的抖动 */
-  box-shadow: inset 0 0 0 1px var(--color-border-normal);
-  border-radius: 999px; /* Pill shape */
-  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  color: var(--color-text-primary);
 }
 
-/* Capsule Sizes */
+.lds-radio--capsule .lds-radio__label {
+  color: inherit;
+}
+
+.lds-radio--capsule.lds-radio--large .lds-radio__visual,
 .lds-capsule--large {
   height: var(--spacing-12x, 48px);
   padding: 0 var(--spacing-5x, 20px);
   font: var(--subtitle-regular);
 }
 
+.lds-radio--capsule.lds-radio--default-size .lds-radio__visual,
 .lds-capsule--default-size {
   height: var(--spacing-10x, 40px);
   padding: 0 var(--spacing-5x, 20px);
   font: var(--body-regular);
 }
 
+.lds-radio--capsule.lds-radio--small .lds-radio__visual,
 .lds-capsule--small {
   height: var(--spacing-9x, 36px);
   padding: 0 var(--spacing-4x, 16px);
   font: var(--body-regular);
 }
 
+.lds-radio--capsule.lds-radio--mini .lds-radio__visual,
 .lds-capsule--mini {
   height: var(--spacing-7x, 28px);
   padding: 0 var(--spacing-3x, 12px);
   font: var(--caption-regular);
 }
 
-/* Capsule States (controlled by input state) */
-.lds-capsule-wrapper:hover .lds-capsule {
+.lds-radio--capsule:hover .lds-radio__visual,
+.lds-radio--capsule.is-hover .lds-radio__visual,
+.lds-capsule-wrapper:hover .lds-capsule,
+.lds-capsule-wrapper.is-hover .lds-capsule {
   background-color: var(--color-fill-hover);
   box-shadow: inset 0 0 0 1px var(--color-border-normal);
 }
 
-.lds-capsule-wrapper input[type="radio"]:checked + .lds-capsule {
+.lds-radio--capsule .lds-radio__input:checked + .lds-radio__visual,
+.lds-capsule-wrapper .lds-radio__input:checked + .lds-capsule {
   color: var(--color-primary-normal);
   box-shadow: inset 0 0 0 1.5px var(--color-primary-normal);
   background-color: var(--color-bg-normal);
-  font-weight: 500; /* medium */
 }
 
-/* Disabled States */
-.lds-capsule-wrapper input[type="radio"]:disabled ~ .lds-capsule {
-  color: var(--color-text-disable);
-  background-color: var(--color-fill-disable);
-  box-shadow: inset 0 0 0 1px var(--color-border-disable);
-  font-weight: 400; /* revert to regular */
-}
-
-.lds-capsule-wrapper input[type="radio"]:disabled {
-  cursor: not-allowed;
-}
-
-.lds-capsule-wrapper:has(input[type="radio"]:disabled) {
-  cursor: not-allowed;
-}
-
-/* Checked + Disabled */
-.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule {
-  color: var(--color-primary-disable);
-  box-shadow: inset 0 0 0 1.5px var(--color-primary-disable);
-  background-color: var(--color-bg-normal);
+.lds-radio--capsule .lds-radio__input:checked + .lds-radio__visual .lds-radio__label,
+.lds-capsule-wrapper .lds-radio__input:checked + .lds-capsule {
   font-weight: 500;
 }
 
-/* Apply padding offset for checked disabled state */
-.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule--large { padding: 0 calc(var(--spacing-5x, 20px) - 0.5px); }
-.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule--default-size { padding: 0 calc(var(--spacing-5x, 20px) - 0.5px); }
-.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule--small { padding: 0 calc(var(--spacing-4x, 16px) - 0.5px); }
-.lds-capsule-wrapper input[type="radio"]:checked:disabled + .lds-capsule--mini { padding: 0 calc(var(--spacing-3x, 12px) - 0.5px); }
+.lds-radio--capsule .lds-radio__input:disabled + .lds-radio__visual,
+.lds-capsule-wrapper .lds-radio__input:disabled + .lds-capsule {
+  color: var(--color-text-disable);
+  background-color: var(--color-fill-disable);
+  box-shadow: inset 0 0 0 1px var(--color-border-disable);
+}
+
+.lds-radio--capsule .lds-radio__input:checked:disabled + .lds-radio__visual,
+.lds-capsule-wrapper .lds-radio__input:checked:disabled + .lds-capsule {
+  color: var(--color-primary-disable);
+  box-shadow: inset 0 0 0 1.5px var(--color-primary-disable);
+  background-color: var(--color-bg-normal);
+}
+
+.lds-radio--capsule .lds-radio__input:checked:disabled + .lds-radio__visual .lds-radio__label {
+  font-weight: 500;
+}
+
+.lds-radio--capsule.lds-radio--large .lds-radio__input:checked:disabled + .lds-radio__visual,
+.lds-capsule-wrapper .lds-radio__input:checked:disabled + .lds-capsule--large {
+  padding: 0 calc(var(--spacing-5x, 20px) - 0.5px);
+}
+
+.lds-radio--capsule.lds-radio--default-size .lds-radio__input:checked:disabled + .lds-radio__visual,
+.lds-capsule-wrapper .lds-radio__input:checked:disabled + .lds-capsule--default-size {
+  padding: 0 calc(var(--spacing-5x, 20px) - 0.5px);
+}
+
+.lds-radio--capsule.lds-radio--small .lds-radio__input:checked:disabled + .lds-radio__visual,
+.lds-capsule-wrapper .lds-radio__input:checked:disabled + .lds-capsule--small {
+  padding: 0 calc(var(--spacing-4x, 16px) - 0.5px);
+}
+
+.lds-radio--capsule.lds-radio--mini .lds-radio__input:checked:disabled + .lds-radio__visual,
+.lds-capsule-wrapper .lds-radio__input:checked:disabled + .lds-capsule--mini {
+  padding: 0 calc(var(--spacing-3x, 12px) - 0.5px);
+}
+
+/* Card radio */
+.lds-radio--card .lds-radio__visual {
+  width: 180px;
+  justify-content: center;
+  gap: var(--spacing-base, 4px);
+  border-radius: 16px;
+  background-color: var(--color-bg-normal);
+  box-shadow: inset 0 0 0 1px var(--color-border-normal);
+}
+
+.lds-radio--card.lds-radio--large .lds-radio__visual {
+  padding: var(--spacing-4x, 16px);
+}
+
+.lds-radio--card.lds-radio--default-size .lds-radio__visual,
+.lds-radio--card.lds-radio--small .lds-radio__visual,
+.lds-radio--card.lds-radio--mini .lds-radio__visual {
+  padding: var(--spacing-3x, 12px) var(--spacing-4x, 16px);
+}
+
+.lds-radio--card .lds-radio__content {
+  gap: 2px;
+  flex: 1;
+}
+
+.lds-radio--card.lds-radio--large .lds-radio__title {
+  font: var(--subtitle-medium);
+}
+
+.lds-radio--card.lds-radio--default-size .lds-radio__title,
+.lds-radio--card.lds-radio--small .lds-radio__title,
+.lds-radio--card.lds-radio--mini .lds-radio__title {
+  font: var(--body-medium);
+}
+
+.lds-radio--card.lds-radio--large .lds-radio__description {
+  font: var(--body-regular);
+}
+
+.lds-radio--card.lds-radio--default-size .lds-radio__description,
+.lds-radio--card.lds-radio--small .lds-radio__description,
+.lds-radio--card.lds-radio--mini .lds-radio__description {
+  font: var(--caption-regular);
+}
+
+.lds-radio--card:hover .lds-radio__visual,
+.lds-radio--card.is-hover .lds-radio__visual {
+  background-color: var(--color-fill-disable);
+}
+
+.lds-radio--card .lds-radio__input:checked + .lds-radio__visual {
+  box-shadow: inset 0 0 0 1.5px var(--color-primary-normal);
+}
+
+.lds-radio--card .lds-radio__input:checked + .lds-radio__visual .lds-radio__title,
+.lds-radio--card .lds-radio__input:checked + .lds-radio__visual .lds-radio__description {
+  color: var(--color-primary-normal);
+}
+
+.lds-radio--card .lds-radio__input:disabled + .lds-radio__visual {
+  background-color: var(--color-fill-disable);
+  box-shadow: inset 0 0 0 1px var(--color-border-disable);
+}
+
+.lds-radio--card .lds-radio__input:disabled + .lds-radio__visual .lds-radio__title,
+.lds-radio--card .lds-radio__input:disabled + .lds-radio__visual .lds-radio__description {
+  color: var(--color-text-disable);
+}
+
+.lds-radio--card .lds-radio__input:checked:disabled + .lds-radio__visual {
+  background-color: var(--color-bg-normal);
+  box-shadow: inset 0 0 0 1.5px var(--color-primary-disable);
+}
+
+.lds-radio--card .lds-radio__input:checked:disabled + .lds-radio__visual .lds-radio__title,
+.lds-radio--card .lds-radio__input:checked:disabled + .lds-radio__visual .lds-radio__description {
+  color: var(--color-primary-disable);
+}
 
 /* 7. 输入框 (Input) */
 .lds-input-wrapper {
@@ -2374,6 +2693,268 @@ button.lds-filter {
 .lds-tag--outline.lds-tag--gray {
   --lds-tag-fg: var(--color-text-secondary);
   --lds-tag-border: var(--color-border-normal);
+}
+
+/* 18. 提示条 Alert */
+.lds-alert {
+  --lds-alert-bg: var(--color-primary-light-normal);
+  --lds-alert-icon-color: var(--color-primary-normal);
+  --lds-alert-title-color: var(--color-text-primary);
+  --lds-alert-description-color: var(--color-text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3x, 12px);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px var(--spacing-4x, 16px);
+  border-radius: var(--radius-m, 12px);
+  background-color: var(--lds-alert-bg);
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.lds-alert--info {
+  --lds-alert-bg: var(--color-primary-light-normal);
+  --lds-alert-icon-color: var(--color-primary-normal);
+}
+
+.lds-alert--success {
+  --lds-alert-bg: var(--color-success-light-normal);
+  --lds-alert-icon-color: var(--color-success-normal);
+}
+
+.lds-alert--warning {
+  --lds-alert-bg: var(--color-warning-light-normal);
+  --lds-alert-icon-color: var(--color-warning-normal);
+}
+
+.lds-alert--error {
+  --lds-alert-bg: var(--color-danger-light-normal);
+  --lds-alert-icon-color: var(--color-danger-normal);
+}
+
+.lds-alert--gray {
+  --lds-alert-bg: var(--color-fill-gray);
+  --lds-alert-icon-color: var(--color-gray-5);
+}
+
+.lds-alert__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 0;
+  color: var(--lds-alert-icon-color);
+}
+
+.lds-alert__icon .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.lds-alert__content {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1x, 4px);
+}
+
+.lds-alert__title {
+  margin: 0;
+  font: var(--body-medium);
+  color: var(--lds-alert-title-color);
+}
+
+.lds-alert__description,
+.lds-alert__extra {
+  margin: 0;
+  font: var(--body-regular);
+  color: var(--lds-alert-description-color);
+}
+
+.lds-alert__description a,
+.lds-alert__extra a {
+  color: var(--lds-alert-icon-color);
+  text-decoration: none;
+}
+
+.lds-alert__description a:hover,
+.lds-alert__extra a:hover {
+  text-decoration: underline;
+}
+
+.lds-alert__extra {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1x, 4px);
+}
+
+.lds-alert__action {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-3x, 12px);
+  padding: 3px 0 3px 12px;
+}
+
+.lds-alert__close {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 0 3px 12px;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.lds-alert__close:hover {
+  color: var(--color-text-primary);
+}
+
+.lds-alert__close:active {
+  color: var(--color-text-primary);
+}
+
+.lds-alert__close:focus-visible {
+  outline: 2px solid var(--color-primary-normal);
+  outline-offset: 2px;
+}
+
+.lds-alert__close .icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* 19. 开关组件 (Switch) */
+.lds-switch {
+  display: inline-flex;
+  position: relative;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lds-switch__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lds-switch__track {
+  --lds-switch-track-bg: var(--color-gray-4);
+  --lds-switch-thumb-translate-x: 0px;
+  --lds-switch-thumb-scale: 1;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: var(--lds-switch-width);
+  height: var(--lds-switch-height);
+  padding: 2px;
+  box-sizing: border-box;
+  border-radius: var(--radius-round, 999px);
+  background: var(--lds-switch-track-bg);
+  transition:
+    background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lds-switch__thumb {
+  width: var(--lds-switch-thumb-width);
+  height: var(--lds-switch-thumb-height);
+  border-radius: var(--radius-round, 999px);
+  background: var(--color-text-white);
+  box-shadow: var(--shadow-small);
+  transform: translate3d(var(--lds-switch-thumb-translate-x), 0, 0) scale(var(--lds-switch-thumb-scale));
+  transform-origin: center center;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lds-switch--default-size {
+  --lds-switch-width: 64px;
+  --lds-switch-height: 28px;
+  --lds-switch-thumb-width: 39px;
+  --lds-switch-thumb-height: 24px;
+  --lds-switch-thumb-offset: 21px;
+}
+
+.lds-switch--small {
+  --lds-switch-width: 44px;
+  --lds-switch-height: 20px;
+  --lds-switch-thumb-width: 26px;
+  --lds-switch-thumb-height: 16px;
+  --lds-switch-thumb-offset: 14px;
+}
+
+.lds-switch:hover:not(.lds-switch--disabled):not(.lds-switch--readonly) .lds-switch__thumb {
+  box-shadow: var(--shadow-normal);
+}
+
+.lds-switch:active:not(.lds-switch--disabled):not(.lds-switch--readonly) .lds-switch__track {
+  box-shadow: inset 0 0 0 1px var(--color-opacity-1);
+}
+
+.lds-switch:active:not(.lds-switch--disabled):not(.lds-switch--readonly) .lds-switch__track {
+  --lds-switch-thumb-scale: 0.97;
+}
+
+.lds-switch--checked .lds-switch__track {
+  --lds-switch-track-bg: var(--color-primary-normal);
+  --lds-switch-thumb-translate-x: var(--lds-switch-thumb-offset);
+}
+
+.lds-switch--checked:hover:not(.lds-switch--disabled):not(.lds-switch--readonly) .lds-switch__track {
+  --lds-switch-track-bg: var(--color-primary-hover);
+}
+
+.lds-switch:not(.lds-switch--checked):hover:not(.lds-switch--disabled):not(.lds-switch--readonly) .lds-switch__track {
+  --lds-switch-track-bg: var(--color-gray-5);
+}
+
+.lds-switch--checked:active:not(.lds-switch--disabled):not(.lds-switch--readonly) .lds-switch__track {
+  --lds-switch-track-bg: var(--color-primary-active);
+}
+
+.lds-switch__input:focus-visible + .lds-switch__track {
+  box-shadow: 0 0 0 3px var(--color-primary-light-normal);
+}
+
+.lds-switch--disabled {
+  cursor: not-allowed;
+}
+
+.lds-switch--disabled .lds-switch__track {
+  --lds-switch-track-bg: var(--color-gray-2);
+}
+
+.lds-switch--disabled.lds-switch--checked .lds-switch__track {
+  --lds-switch-track-bg: var(--color-primary-disable);
+}
+
+.lds-switch--readonly {
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lds-switch__track,
+  .lds-switch__thumb {
+    transition: none;
+  }
 }
 
 .lds-tag--interactive:hover {

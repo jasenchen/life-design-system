@@ -303,8 +303,10 @@
     </div>
     <div class="nav-group">COMPONENTS</div>
     <a href="#button" class="nav-item active" data-target="button">Button</a>
-    <a href="#capsule" class="nav-item" data-target="capsule">Capsule</a>
+    <a href="#alert" class="nav-item" data-target="alert">Alert</a>
+    <a href="#radio" class="nav-item" data-target="radio">Radio</a>
     <a href="#checkbox" class="nav-item" data-target="checkbox">Checkbox</a>
+    <a href="#switch" class="nav-item" data-target="switch">Switch</a>
     <a href="#input" class="nav-item" data-target="input">Input</a>
     <a href="#textarea" class="nav-item" data-target="textarea">Textarea</a>
     <a href="#filter" class="nav-item" data-target="filter">Filter</a>
@@ -429,18 +431,62 @@
         }}
       ]
     },
-    capsule: {
-      title: 'Capsule (React Component)',
-      sizes: COMMON_SIZES,
-      desc: 'A pill-shaped radio toggle component for mutually exclusive selections within a group.',
+    alert: {
+      title: 'Alert (React Component)',
+      layout: 'full',
+      sizes: [{ id: 'default', label: '默认规格', meta: '语义提示条 · 400px · 12px 圆角 · 9/16px Padding' }],
+      desc: 'A semantic inline notice for lightweight status messaging. The Figma spec uses a compact single-line layout with 18px semantic icons, 16px close icon, and a gray neutral state.',
       variants: [
-        { title: 'Standard', desc: 'Radio option', render: (size, state) => {
-            const id = `cap-${size.id}-${state.id}`;
-            const className = `${state.id==='hover'?'is-hover':''} ${state.id==='active'?'is-active':''}`;
-            window.pendingReactRenders.push({ 
-              id, type: 'capsule', size: size.id, className, disabled: state.props.includes('disabled'),
-              checked: state.id === 'active', name: id, label: 'Option'
-            });
+        {
+          title: 'Semantic Types',
+          desc: 'Info, success, warning, error, and gray notices share the same compact structure from the Figma component set.',
+          render: (_size, _state) => {
+            const id = 'alert-semantic';
+            window.pendingReactRenders.push({ id, type: 'alert-demo', mode: 'semantic' });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: 'Closable',
+          desc: 'The right-side close button matches the Figma close area and removes the alert from the current page after click.',
+          render: (_size, _state) => {
+            const id = 'alert-closable';
+            window.pendingReactRenders.push({ id, type: 'alert-demo', mode: 'closable' });
+            return `<div id="${id}"></div>`;
+          }
+        }
+      ]
+    },
+    radio: {
+      title: 'Radio (React Component)',
+      layout: 'full',
+      sizes: [{ id: 'default', label: '默认规格', meta: 'default / capsule / card 三种样式' }],
+      desc: '单个组件，三种样式',
+      variants: [
+        {
+          title: 'Default',
+          desc: 'Classic circular radio with small, default and large sizes from the Figma source.',
+          render: (_size, _state) => {
+            const id = 'radio-default';
+            window.pendingReactRenders.push({ id, type: 'radio-demo', mode: 'default' });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: 'Capsule',
+          desc: 'Pill-shaped single-select buttons built on top of the same Radio API.',
+          render: (_size, _state) => {
+            const id = 'radio-capsule';
+            window.pendingReactRenders.push({ id, type: 'radio-demo', mode: 'capsule' });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: 'Card',
+          desc: '180px card option with title and supporting text, available in medium and large sizes.',
+          render: (_size, _state) => {
+            const id = 'radio-card';
+            window.pendingReactRenders.push({ id, type: 'radio-demo', mode: 'card' });
             return `<div id="${id}"></div>`;
           }
         }
@@ -464,6 +510,35 @@
             return `<div id="${id}"></div>`;
           }
         },
+      ]
+    },
+    switch: {
+      title: 'Switch (React Component)',
+      layout: 'full',
+      sizes: [
+        { id: 'default-size', label: '默认 (Default)', meta: '64px x 28px · knob 39px x 24px' },
+        { id: 'small', label: '小号 (Small)', meta: '44px x 20px · knob 26px x 16px' },
+      ],
+      desc: 'A binary on/off control with smooth thumb translation. Built from the Figma spec with two sizes, disabled states, and spring-like easing aligned to motion guidance.',
+      variants: [
+        {
+          title: 'States',
+          desc: 'Default, checked, disabled-off and disabled-on states for both sizes.',
+          render: (size, _state) => {
+            const id = `switch-states-${size.id}`;
+            window.pendingReactRenders.push({ id, type: 'switch-demo', size: size.id, mode: 'states' });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: 'Interactive',
+          desc: 'Click to toggle with a reset control so the thumb transition can be observed repeatedly.',
+          render: (size, _state) => {
+            const id = `switch-interactive-${size.id}`;
+            window.pendingReactRenders.push({ id, type: 'switch-demo', size: size.id, mode: 'interactive' });
+            return `<div id="${id}"></div>`;
+          }
+        }
       ]
     },
     input: {
@@ -1034,7 +1109,7 @@
     mainEl.innerHTML = html;
 
     // Trigger custom event so React script knows to mount
-    if (['button', 'capsule', 'checkbox', 'input', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
+    if (['button', 'alert', 'radio', 'checkbox', 'switch', 'input', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }
@@ -1074,7 +1149,7 @@
 
   // Also trigger initial render in case it was already button
   setTimeout(() => {
-    if (['button', 'capsule', 'input', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
+    if (['button', 'alert', 'radio', 'switch', 'input', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }, 200);
@@ -1084,7 +1159,7 @@
   import React from 'react';
   import { createRoot } from 'react-dom/client';
   import { 
-    Button, Icon, Capsule, Input, Textarea, Tabs, Tab,
+    Button, Alert, Icon, Radio, Input, Textarea, Tabs, Tab,
     Filter,
     FilterSelect,
     FilterDatePicker,
@@ -1093,7 +1168,7 @@
     Popover,
     Navbar,
     Menu,
-    PageHeader, Checkbox, Drawer, Dialog, Form, FormItem, Upload,
+    PageHeader, Checkbox, Switch, Drawer, Dialog, Form, FormItem, Upload,
     TableWrapper, Table, Thead, Tbody, Tr, Th, Td, TableCellProduct, TableCellAmount, TableCellOperation, TableCellAction,
     Tag,
     Pagination
@@ -1125,10 +1200,199 @@
             {item.text}
           </Button>
         );
-      } else if (item.type === 'capsule') {
-        root.render(
-          <Capsule size={item.size} className={item.className} disabled={item.disabled} defaultChecked={item.checked} name={item.name} label={item.label} />
+      } else if (item.type === 'alert-demo') {
+        const semanticAlertConfigs = [
+          {
+            key: 'info',
+            variant: 'info',
+            label: '蓝色',
+          },
+          {
+            key: 'success',
+            variant: 'success',
+            label: '绿色',
+          },
+          {
+            key: 'warning',
+            variant: 'warning',
+            label: '橙色',
+          },
+          {
+            key: 'error',
+            variant: 'error',
+            label: '红色',
+          },
+          {
+            key: 'gray',
+            variant: 'gray',
+            label: '灰色',
+          }
+        ];
+
+        const AlertDemo = () => {
+          const [seed, setSeed] = React.useState(0);
+          const alertText = (
+            <>
+              消息提示文字自动布局{' '}
+              <a href="javascript:void(0)">查看详情</a>
+            </>
+          );
+
+          const AlertStack = ({ closable = false, includeLabels = false }) => (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {semanticAlertConfigs.map((config) => (
+                <div key={config.key} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {includeLabels ? (
+                    <span style={{ font: 'var(--caption-medium)', color: 'var(--color-text-caption)' }}>
+                      {config.label}
+                    </span>
+                  ) : null}
+                  <div style={{ width: 400 }}>
+                    <Alert
+                      key={`${seed}-${config.key}`}
+                      variant={config.variant}
+                      description={alertText}
+                      closable={closable}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+
+          if (item.mode === 'closable') {
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+                  <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                    点击右侧关闭按钮后，提示条会直接从当前页面中移除；重置后可再次查看五种颜色状态。
+                  </span>
+                  <Button variant="default" size="small" onClick={() => setSeed(prev => prev + 1)}>
+                    重置示例
+                  </Button>
+                </div>
+
+                <AlertStack closable includeLabels />
+              </div>
+            );
+          }
+
+          return (
+            <AlertStack includeLabels />
+          );
+        };
+
+        root.render(<AlertDemo />);
+      } else if (item.type === 'radio-demo') {
+        const PreviewTable = ({ columns, rows, renderCell }) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: `120px repeat(${columns.length}, minmax(180px, max-content))`, gap: 12, alignItems: 'end' }}>
+              <div />
+              {columns.map((column) => (
+                <div key={column.id} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <strong style={{ font: 'var(--caption-medium)', color: 'var(--color-text-primary)' }}>{column.label}</strong>
+                  <span style={{ font: 'var(--caption-regular)', color: 'var(--color-text-caption)' }}>{column.meta}</span>
+                </div>
+              ))}
+            </div>
+            {rows.map((row) => (
+              <div key={row.id} style={{ display: 'grid', gridTemplateColumns: `120px repeat(${columns.length}, minmax(180px, max-content))`, gap: 12, alignItems: 'center' }}>
+                <span style={{ font: 'var(--caption-medium)', color: 'var(--color-text-secondary)' }}>{row.label}</span>
+                {columns.map((column) => (
+                  <div key={column.id}>{renderCell(column, row)}</div>
+                ))}
+              </div>
+            ))}
+          </div>
         );
+
+        const RadioDemo = () => {
+          const rows = [
+            { id: 'default', label: '默认', className: '', checked: false, disabled: false },
+            { id: 'hover', label: '悬停', className: 'is-hover', checked: false, disabled: false },
+            { id: 'checked', label: '选中', className: '', checked: true, disabled: false },
+            { id: 'checked-hover', label: '选中悬停', className: 'is-hover', checked: true, disabled: false },
+            { id: 'disabled', label: '禁用', className: '', checked: false, disabled: true },
+            { id: 'checked-disabled', label: '选中禁用', className: '', checked: true, disabled: true }
+          ];
+
+          if (item.mode === 'default') {
+            const columns = [
+              { id: 'small', label: '小号', meta: '16px 控件 · Body' },
+              { id: 'default-size', label: '默认', meta: '20px 控件 · Body' },
+              { id: 'large', label: '大号', meta: '24px 控件 · Subtitle' }
+            ];
+
+            return (
+              <PreviewTable
+                columns={columns}
+                rows={rows}
+                renderCell={(column, row) => (
+                  <Radio
+                    size={column.id}
+                    className={row.className}
+                    name={`radio-${column.id}-${row.id}`}
+                    label="单选框"
+                    defaultChecked={row.checked}
+                    disabled={row.disabled}
+                  />
+                )}
+              />
+            );
+          }
+
+          if (item.mode === 'capsule') {
+            const columns = [
+              { id: 'small', label: '小号', meta: '36px 高' },
+              { id: 'default-size', label: '默认', meta: '40px 高' },
+              { id: 'large', label: '大号', meta: '48px 高' }
+            ];
+
+            return (
+              <PreviewTable
+                columns={columns}
+                rows={rows}
+                renderCell={(column, row) => (
+                  <Radio
+                    variant="capsule"
+                    size={column.id}
+                    className={row.className}
+                    name={`radio-capsule-${column.id}-${row.id}`}
+                    label="Option"
+                    defaultChecked={row.checked}
+                    disabled={row.disabled}
+                  />
+                )}
+              />
+            );
+          }
+
+          const columns = [
+            { id: 'default-size', label: '中号', meta: '180px · 12/16px padding' },
+            { id: 'large', label: '大号', meta: '180px · 16px padding' }
+          ];
+
+          return (
+            <PreviewTable
+              columns={columns}
+              rows={rows}
+              renderCell={(column, row) => (
+                <Radio
+                  variant="card"
+                  size={column.id}
+                  className={row.className}
+                  name={`radio-card-${column.id}-${row.id}`}
+                  label="单选标题"
+                  description="辅助文案，单行显示"
+                  defaultChecked={row.checked}
+                  disabled={row.disabled}
+                />
+              )}
+            />
+          );
+        };
+
+        root.render(<RadioDemo />);
       } else if (item.type === 'checkbox-demo') {
         root.render(
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
@@ -1140,6 +1404,51 @@
             <Checkbox size={item.size} showLabel={item.showLabel} label="多选框" disabled indeterminate readOnly />
           </div>
         );
+      } else if (item.type === 'switch-demo') {
+        const SwitchDemo = () => {
+          const [checked, setChecked] = React.useState(false);
+          const [seed, setSeed] = React.useState(0);
+
+          if (item.mode === 'interactive') {
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+                  <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                    点击切换后，滑块会沿轨道平滑移动；重置后可重复观察开关动画。
+                  </span>
+                  <Button
+                    variant="default"
+                    size="small"
+                    onClick={() => {
+                      setChecked(false);
+                      setSeed(prev => prev + 1);
+                    }}
+                  >
+                    重置示例
+                  </Button>
+                </div>
+
+                <div key={seed} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <Switch size={item.size} checked={checked} onCheckedChange={setChecked} />
+                  <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-primary)' }}>
+                    {checked ? '已开启' : '已关闭'}
+                  </span>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
+              <Switch size={item.size} />
+              <Switch size={item.size} defaultChecked />
+              <Switch size={item.size} disabled />
+              <Switch size={item.size} defaultChecked disabled />
+            </div>
+          );
+        };
+
+        root.render(<SwitchDemo />);
       } else if (item.type === 'input') {
         const InputCell = () => {
           const [value, setValue] = React.useState(item.value ?? '');

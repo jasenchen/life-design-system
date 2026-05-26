@@ -11,9 +11,9 @@
   --color-primary-light-active: var(--color-brand-2);
   --color-primary-text: var(--color-brand-7);
   --color-text-primary: var(--color-opacity-13);
-  --color-text-secondary: var(--color-opacity-7);
+  --color-text-secondary: var(--color-opacity-8);
   --color-text-caption: var(--color-opacity-6);
-  --color-text-disable: var(--color-opacity-4);
+  --color-text-disable: var(--color-opacity-5);
   --color-text-white: var(--always-white);
   --color-text-important: var(--color-orange-5); /* 金额等强调色 */
   --color-border-normal: var(--color-opacity-2);

@@ -43,6 +43,7 @@
 - 输入框 (Input)
 - 搜索框 (Search)
 - 选择器 (Select)
+- 日期选择器 (DatePicker)
 - 筛选器 (Filter)
 - 筛选器组 (FilterGroup)
 - 页面标题区 (PageHeader)
@@ -52,6 +53,8 @@
 - 多选框 (Checkbox)
 - 单选框 (Radio)
 - 开关 (Switch)
+- 抽屉 (Drawer)
+- 表单 (Form)
 
 如果 UI 可以用这些模式表示，请在引入自定义结构之前优先使用它们。
 
@@ -72,6 +75,7 @@
 - UI中需要提示、公告或状态反馈条时：[alert.md](alert.md)；
 - UI中需要图标时：[icon.md](icon.md)；
 - UI中需要选择器时：[select.md](select.md)；
+- UI中需要日期选择器时：[datepicker.md](datepicker.md)；
 - UI中需要搜索输入框时：[search.md](search.md)；
 - UI中需要标签页时：[tabs.md](tabs.md)；
 - UI中需要筛选器或筛选器组时：[filter.md](filter.md)；
@@ -81,6 +85,8 @@
 - UI中需要多选框时：[checkbox.md](checkbox.md)；
 - UI中需要单选框时：[radio.md](radio.md)；
 - UI中需要开关时：[switch.md](switch.md)；
+- UI中需要抽屉时：[drawer.md](drawer.md)；
+- UI中需要表单时：[form.md](form.md)；
 
 ## 兜底策略
 

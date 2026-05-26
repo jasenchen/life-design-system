@@ -175,7 +175,7 @@ export const FilterDatePicker = React.forwardRef<HTMLSpanElement, FilterDatePick
                   )
                 }
               >
-                <Icon name={'ic-\bdouble-left-line'} aria-hidden="true" />
+                <Icon name="ic-double-left-line" aria-hidden="true" />
               </button>
               <button
                 type="button"
@@ -216,7 +216,7 @@ export const FilterDatePicker = React.forwardRef<HTMLSpanElement, FilterDatePick
                   )
                 }
               >
-                <Icon name={'ic-\b\bdouble-right-line'} aria-hidden="true" />
+                <Icon name="ic-double-right-line" aria-hidden="true" />
               </button>
             </div>
           </div>

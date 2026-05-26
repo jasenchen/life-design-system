@@ -1219,6 +1219,190 @@
   background: var(--color-border-disable);
 }
 
+.lds-date-picker__icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.lds-date-picker__range {
+  display: grid;
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.lds-date-picker__range-value {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lds-date-picker__range-value.is-placeholder {
+  color: var(--color-text-caption);
+}
+
+.lds-date-picker__range-separator {
+  color: var(--color-text-primary);
+}
+
+.lds-date-picker__range-value.is-selected {
+  color: var(--color-text-primary);
+}
+
+.lds-date-picker__range-popover {
+  padding: 0;
+  box-shadow: var(--shadow-normal);
+}
+
+.lds-date-picker__range-panel {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.lds-date-picker__range-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  min-height: 40px;
+}
+
+.lds-date-picker__range-header > .lds-filter-date-picker__nav-group {
+  position: relative;
+  z-index: 1;
+}
+
+.lds-date-picker__range-titles {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 740px;
+  display: grid;
+  grid-template-columns: repeat(2, 370px);
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.lds-date-picker__range-titles .lds-filter-date-picker__title {
+  justify-content: center;
+}
+
+.lds-date-picker__range-body {
+  display: grid;
+  grid-template-columns: repeat(2, 370px);
+  align-items: start;
+}
+
+.lds-date-picker__calendar--range {
+  width: 370px;
+  min-height: 304px;
+  box-sizing: border-box;
+  padding: 0 12px 12px;
+}
+
+.lds-date-picker__range-body > .lds-date-picker__calendar--range:first-child {
+  padding-right: 26px;
+}
+
+.lds-date-picker__range-body > .lds-date-picker__calendar--range:last-child {
+  padding-left: 26px;
+}
+
+.lds-date-picker__calendar--range .lds-filter-date-picker__weekdays,
+.lds-date-picker__calendar--range .lds-filter-date-picker__grid {
+  width: max-content;
+  grid-template-columns: repeat(7, 44px);
+  justify-items: stretch;
+  justify-content: start;
+}
+
+.lds-date-picker__calendar--range .lds-filter-date-picker__grid {
+  gap: var(--spacing-base, 4px);
+}
+
+.lds-date-picker__range-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base, 4px);
+  width: max-content;
+}
+
+.lds-date-picker__range-row {
+  position: relative;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 44px);
+  gap: var(--spacing-base, 4px);
+  width: max-content;
+}
+
+.lds-date-picker__range-row-bg {
+  position: absolute;
+  top: 0;
+  height: 44px;
+  background: var(--color-primary-light-normal);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.lds-date-picker__range-cell-shell {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.lds-date-picker__range-cell {
+  position: relative;
+  z-index: 1;
+}
+
+.lds-date-picker__range-cell.is-range-start,
+.lds-date-picker__range-cell.is-range-end,
+.lds-date-picker__range-cell.is-range-single {
+  background: var(--color-primary-normal);
+  color: var(--color-text-white);
+  font: var(--body-medium);
+  border-radius: 12px;
+}
+
+.lds-date-picker__range-cell.is-range-start-connected {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.lds-date-picker__range-cell.is-range-end-connected {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.lds-date-picker__range-cell.is-range-start:hover,
+.lds-date-picker__range-cell.is-range-start:focus-visible,
+.lds-date-picker__range-cell.is-range-end:hover,
+.lds-date-picker__range-cell.is-range-end:focus-visible,
+.lds-date-picker__range-cell.is-range-single:hover,
+.lds-date-picker__range-cell.is-range-single:focus-visible {
+  background: var(--color-primary-normal);
+  color: var(--color-text-white);
+}
+
+.lds-select.is-disabled .lds-date-picker__range-value,
+.lds-select:disabled .lds-date-picker__range-value,
+.lds-select.is-disabled .lds-date-picker__range-separator,
+.lds-select:disabled .lds-date-picker__range-separator {
+  color: var(--color-text-disable);
+}
+
 /* 7.6 筛选-元件 (Filter) */
 .lds-filter {
   display: inline-flex;
@@ -2095,6 +2279,12 @@ button.lds-filter {
 
 .lds-filter-date-picker__cell:focus-visible {
   outline: none;
+}
+
+.lds-filter-date-picker__cell:disabled {
+  background: transparent;
+  color: var(--color-text-disable);
+  cursor: not-allowed;
 }
 
 .lds-filter-date-picker__cell.is-outside {

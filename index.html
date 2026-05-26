@@ -311,6 +311,7 @@
     <a href="#input" class="nav-item" data-target="input">Input</a>
     <a href="#search" class="nav-item" data-target="search">Search</a>
     <a href="#select" class="nav-item" data-target="select">Select</a>
+    <a href="#datepicker" class="nav-item" data-target="datepicker">DatePicker</a>
     <a href="#textarea" class="nav-item" data-target="textarea">Textarea</a>
     <a href="#filter" class="nav-item" data-target="filter">Filter</a>
     <a href="#filtergroup" class="nav-item" data-target="filtergroup">FilterGroup</a>
@@ -577,6 +578,41 @@
           render: (_size, _state) => {
             const id = 'select-form-usage';
             window.pendingReactRenders.push({ id, type: 'select-demo', mode: 'form' });
+            return `<div id="${id}"></div>`;
+          }
+        }
+      ]
+    },
+    datepicker: {
+      title: 'DatePicker (React Component)',
+      layout: 'full',
+      sizes: [{ id: 'default', label: '默认规格', meta: '通用日期选择器 · 单日期 / 区间日期' }],
+      desc: 'A general-purpose DatePicker for form fields and wider data-entry scenes. The single-date popup reuses the FilterDatePicker calendar panel, while the range picker adds a dual-month popup and configurable max-range disabling.',
+      variants: [
+        {
+          title: 'States',
+          desc: 'Shows single-date and range triggers across three sizes, including default, hover, active, filled, disabled and error states.',
+          render: (_size, _state) => {
+            const id = 'datepicker-states';
+            window.pendingReactRenders.push({ id, type: 'datepicker-demo', mode: 'states' });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: 'Panels',
+          desc: 'Demonstrates the single-date popup and the range popup with a configurable max selection span. Dates outside the allowed range become disabled after choosing the start date.',
+          render: (_size, _state) => {
+            const id = 'datepicker-panel';
+            window.pendingReactRenders.push({ id, type: 'datepicker-demo', mode: 'panel' });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: 'In Form',
+          desc: 'Demonstrates how DatePicker is used as a standard field control inside Form, including a range field trigger for general form scenarios.',
+          render: (_size, _state) => {
+            const id = 'datepicker-form-usage';
+            window.pendingReactRenders.push({ id, type: 'datepicker-demo', mode: 'form' });
             return `<div id="${id}"></div>`;
           }
         }
@@ -1197,7 +1233,7 @@
     mainEl.innerHTML = html;
 
     // Trigger custom event so React script knows to mount
-    if (['button', 'alert', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
+    if (['button', 'alert', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }
@@ -1237,7 +1273,7 @@
 
   // Also trigger initial render in case it was already button
   setTimeout(() => {
-    if (['button', 'alert', 'radio', 'switch', 'input', 'search', 'select', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
+    if (['button', 'alert', 'radio', 'switch', 'input', 'search', 'select', 'datepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }, 200);
@@ -1247,7 +1283,7 @@
   import React from 'react';
   import { createRoot } from 'react-dom/client';
   import { 
-    Button, Alert, Icon, Radio, Input, Search, Select, Textarea, Tabs, Tab,
+    Button, Alert, Icon, Radio, Input, Search, Select, DatePicker, Textarea, Tabs, Tab,
     Filter,
     FilterSelect,
     FilterDatePicker,
@@ -1537,6 +1573,189 @@
         };
 
         root.render(<SwitchDemo />);
+      } else if (item.type === 'datepicker-demo') {
+        const columns = SELECT_SIZES;
+        const singleDate = new Date(2025, 11, 23);
+        const rangeValue = [new Date(2025, 11, 23), new Date(2025, 11, 29)];
+
+        const PreviewTable = ({ rows, renderCell }) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: `120px repeat(${columns.length}, minmax(220px, max-content))`, gap: 12, alignItems: 'end' }}>
+              <div />
+              {columns.map((column) => (
+                <div key={column.id} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <strong style={{ font: 'var(--caption-medium)', color: 'var(--color-text-primary)' }}>{column.label}</strong>
+                  <span style={{ font: 'var(--caption-regular)', color: 'var(--color-text-caption)' }}>{column.meta}</span>
+                </div>
+              ))}
+            </div>
+            {rows.map((row) => (
+              <div key={row.id} style={{ display: 'grid', gridTemplateColumns: `120px repeat(${columns.length}, minmax(220px, max-content))`, gap: 12, alignItems: 'center' }}>
+                <span style={{ font: 'var(--caption-medium)', color: 'var(--color-text-secondary)' }}>{row.label}</span>
+                {columns.map((column) => (
+                  <div key={column.id} style={{ width: 360, maxWidth: '100%' }}>
+                    {renderCell(column, row)}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        );
+
+        const DatePickerDemo = () => {
+          if (item.mode === 'panel') {
+            return (
+              <div style={{ display: 'grid', gap: 24 }}>
+                <div style={{ width: 360, maxWidth: '100%' }}>
+                  <DatePicker
+                    aria-label="日期面板示例"
+                    defaultValue={singleDate}
+                    defaultOpen
+                  />
+                </div>
+
+                <div style={{ width: 360, maxWidth: '100%' }}>
+                  <DatePicker
+                    aria-label="日期区间面板示例"
+                    picker="range"
+                    defaultValue={[new Date(2025, 11, 8), null]}
+                    maxRangeDays={7}
+                    defaultOpen
+                  />
+                </div>
+
+                <span style={{ font: 'var(--caption-regular)', color: 'var(--color-text-caption)' }}>
+                  区间日期示例设置了最大选择范围 7 天，选择开始日期后，超出范围的候选日期会置灰禁用。
+                </span>
+              </div>
+            );
+          }
+
+          if (item.mode === 'form') {
+            const DatePickerFormUsage = () => {
+              const [publishDate, setPublishDate] = React.useState(null);
+              const [activeRange, setActiveRange] = React.useState(rangeValue);
+
+              return (
+                <div style={{ display: 'grid', gap: 24, gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
+                  <div style={{ padding: 24, border: '1px dashed var(--color-border-normal)', borderRadius: 16 }}>
+                    <Form labelWidth={90}>
+                      <FormItem
+                        label="发布日期"
+                        required
+                        description="单日期选择沿用 FilterDatePicker 的日历面板样式。"
+                      >
+                        <DatePicker
+                          id="datepicker-form-single"
+                          aria-label="发布日期"
+                          size="default-size"
+                          width="100%"
+                          value={publishDate}
+                          onChange={setPublishDate}
+                          placeholder="请选择"
+                        />
+                      </FormItem>
+                    </Form>
+                  </div>
+
+                  <div style={{ padding: 24, border: '1px dashed var(--color-border-normal)', borderRadius: 16 }}>
+                    <Form labelWidth={90}>
+                      <FormItem
+                        label="有效周期"
+                        description="区间日期支持双月联动面板和最大选择范围限制。"
+                        error="请选择完整日期区间"
+                      >
+                        <DatePicker
+                          id="datepicker-form-range"
+                          aria-label="有效周期"
+                          picker="range"
+                          size="default-size"
+                          width="100%"
+                          value={activeRange}
+                          maxRangeDays={31}
+                          onChange={setActiveRange}
+                        />
+                      </FormItem>
+                    </Form>
+                  </div>
+                </div>
+              );
+            };
+
+            return <DatePickerFormUsage />;
+          }
+
+          const singleRows = [
+            { id: 'single-default', label: '单日期默认', className: '', isFocused: false, disabled: false, value: null, error: false },
+            { id: 'single-hover', label: '单日期悬停', className: 'is-hover', isFocused: false, disabled: false, value: null, error: false },
+            { id: 'single-active', label: '单日期激活', className: '', isFocused: true, disabled: false, value: singleDate, error: false },
+            { id: 'single-filled', label: '单日期已选', className: '', isFocused: false, disabled: false, value: singleDate, error: false },
+            { id: 'single-disabled', label: '单日期禁用', className: '', isFocused: false, disabled: true, value: null, error: false },
+            { id: 'single-error', label: '单日期报错', className: '', isFocused: false, disabled: false, value: null, error: true },
+          ];
+
+          const rangeRows = [
+            { id: 'range-default', label: '区间默认', className: '', isFocused: false, disabled: false, value: [null, null], error: false },
+            { id: 'range-hover', label: '区间悬停', className: 'is-hover', isFocused: false, disabled: false, value: [null, null], error: false },
+            { id: 'range-active', label: '区间激活', className: '', isFocused: true, disabled: false, value: rangeValue, error: false },
+            { id: 'range-filled', label: '区间已选', className: '', isFocused: false, disabled: false, value: rangeValue, error: false },
+            { id: 'range-disabled', label: '区间禁用', className: '', isFocused: false, disabled: true, value: [null, null], error: false },
+            { id: 'range-error', label: '区间报错', className: '', isFocused: false, disabled: false, value: [null, null], error: true },
+          ];
+
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <strong style={{ font: 'var(--caption-medium)', color: 'var(--color-text-primary)' }}>单日期</strong>
+                <PreviewTable
+                  rows={singleRows}
+                  renderCell={(column, row) => (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <DatePicker
+                        aria-label={`${row.label}-${column.label}`}
+                        size={column.id}
+                        className={row.className}
+                        isFocused={row.isFocused}
+                        disabled={row.disabled}
+                        error={row.error}
+                        defaultValue={row.value}
+                      />
+                      {row.error ? (
+                        <span style={{ font: 'var(--caption-regular)', color: 'var(--color-danger-normal)' }}>报错文案保持清晰、简洁</span>
+                      ) : null}
+                    </div>
+                  )}
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <strong style={{ font: 'var(--caption-medium)', color: 'var(--color-text-primary)' }}>区间日期</strong>
+                <PreviewTable
+                  rows={rangeRows}
+                  renderCell={(column, row) => (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <DatePicker
+                        aria-label={`${row.label}-${column.label}`}
+                        picker="range"
+                        size={column.id}
+                        className={row.className}
+                        isFocused={row.isFocused}
+                        disabled={row.disabled}
+                        error={row.error}
+                        defaultValue={row.value}
+                      />
+                      {row.error ? (
+                        <span style={{ font: 'var(--caption-regular)', color: 'var(--color-danger-normal)' }}>报错文案保持清晰、简洁</span>
+                      ) : null}
+                    </div>
+                  )}
+                />
+              </div>
+            </div>
+          );
+        };
+
+        root.render(<DatePickerDemo />);
       } else if (item.type === 'select-demo') {
         const selectOptions = [
           { label: '生活服务 / 到店综合', value: 'life-service', iconName: 'ic-sell-line' },
@@ -2171,11 +2390,15 @@
       } else if (item.type === 'form-demo') {
         const controlId = `form-control-${item.id}`;
         const selectId = `form-select-${item.id}`;
+        const dateId = `form-date-${item.id}`;
+        const rangeDateId = `form-date-range-${item.id}`;
         const textareaId = `form-textarea-${item.id}`;
         const uploadId = `form-upload-${item.id}`;
         const FormDemo = () => {
           const [images, setImages] = React.useState([]);
           const [category, setCategory] = React.useState();
+          const [publishDate, setPublishDate] = React.useState(null);
+          const [dateRange, setDateRange] = React.useState([new Date(2025, 11, 23), new Date(2025, 11, 29)]);
           const isErrorMode = item.mode === 'error';
           const isVertical = item.layout === 'vertical';
           const selectOptions = [
@@ -2213,6 +2436,39 @@
                     value={category}
                     onChange={setCategory}
                     placeholder="请选择"
+                  />
+                </FormItem>
+
+                <FormItem
+                  label={isVertical ? '日期选择' : item.labelWidth > 90 ? '发布日期选择' : '日期选择'}
+                  description="通用 DatePicker 的单日期面板沿用 FilterDatePicker 的下拉样式。"
+                  error={isErrorMode ? '请选择发布日期' : undefined}
+                >
+                  <DatePicker
+                    id={dateId}
+                    aria-label="发布日期"
+                    size="default-size"
+                    width="100%"
+                    value={publishDate}
+                    onChange={setPublishDate}
+                    placeholder="请选择"
+                  />
+                </FormItem>
+
+                <FormItem
+                  label={isVertical ? '日期区间' : item.labelWidth > 90 ? '有效周期选择' : '日期区间'}
+                  description="区间日期支持双月联动面板和最大选择范围限制。"
+                  error={isErrorMode ? '请选择完整日期区间' : undefined}
+                >
+                  <DatePicker
+                    id={rangeDateId}
+                    aria-label="有效周期"
+                    picker="range"
+                    size="default-size"
+                    width="100%"
+                    value={dateRange}
+                    maxRangeDays={31}
+                    onChange={setDateRange}
                   />
                 </FormItem>
 

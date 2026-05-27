@@ -95,6 +95,7 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 
 - 按钮 ：[references/button.md](references/button.md)
 - 提示条 ：[references/alert.md](references/alert.md)
+- 全局提示 ：[references/message.md](references/message.md)
 - 图标 ：[references/icon.md](references/icon.md)
 - 选择器 ：[references/select.md](references/select.md)
 - 日期选择器 ：[references/datepicker.md](references/datepicker.md)

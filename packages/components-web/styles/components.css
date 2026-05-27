@@ -1528,6 +1528,29 @@ button.lds-filter {
   color: var(--color-text-primary);
 }
 
+.lds-filter__range-display {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.lds-filter__range-part {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lds-filter__range-part.is-placeholder {
+  color: var(--color-text-secondary);
+}
+
+.lds-filter__range-separator {
+  flex: 0 0 auto;
+  color: var(--color-text-primary);
+}
+
 .lds-filter__input {
   flex: 1;
   width: 100%;
@@ -1603,7 +1626,9 @@ button.lds-filter {
 .lds-filter.is-disabled .lds-filter__value,
 .lds-filter:disabled .lds-filter__value,
 .lds-filter.is-disabled .lds-filter__icon,
-.lds-filter:disabled .lds-filter__icon {
+.lds-filter:disabled .lds-filter__icon,
+.lds-filter.is-disabled .lds-filter__range-separator,
+.lds-filter:disabled .lds-filter__range-separator {
   color: var(--color-text-disable);
 }
 
@@ -3432,6 +3457,166 @@ button.lds-filter {
 .lds-alert__close .icon {
   width: 16px;
   height: 16px;
+}
+
+/* 19. 全局提示 Message */
+.lds-message-viewport {
+  position: fixed;
+  top: var(--spacing-4x, 16px);
+  left: 50%;
+  z-index: 1230;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  max-width: calc(100vw - var(--spacing-8x, 32px));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.lds-message-viewport__item {
+  width: max-content;
+  max-width: 100%;
+  max-height: 0;
+  margin-bottom: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    margin-bottom 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lds-message-viewport__item.is-visible {
+  max-height: 80px;
+  margin-bottom: var(--spacing-3x, 12px);
+  opacity: 1;
+}
+
+.lds-message-viewport__item:last-child {
+  margin-bottom: 0;
+}
+
+.lds-message {
+  --lds-message-bg: var(--color-primary-light-normal);
+  --lds-message-border: var(--color-primary-normal);
+  --lds-message-icon-color: var(--color-primary-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-3x, 12px);
+  min-height: 46px;
+  max-width: min(520px, calc(100vw - var(--spacing-8x, 32px)));
+  box-sizing: border-box;
+  padding: 13px var(--spacing-4x, 16px);
+  border: 1px solid var(--lds-message-border);
+  border-radius: var(--radius-m, 12px);
+  background-color: var(--lds-message-bg);
+  box-shadow: var(--shadow-normal);
+  color: var(--color-text-primary);
+  font: var(--body-medium);
+  font-family: var(--font-normal, "PingFang SC", sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translateY(-12px) scale(0.96);
+  opacity: 0;
+  transition:
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: auto;
+}
+
+.lds-message.is-visible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.lds-message--info {
+  --lds-message-bg: var(--color-primary-light-normal);
+  --lds-message-border: var(--color-primary-normal);
+  --lds-message-icon-color: var(--color-primary-normal);
+}
+
+.lds-message--success {
+  --lds-message-bg: var(--color-success-light-normal);
+  --lds-message-border: var(--color-success-normal);
+  --lds-message-icon-color: var(--color-success-normal);
+}
+
+.lds-message--warning {
+  --lds-message-bg: var(--color-warning-light-normal);
+  --lds-message-border: var(--color-warning-normal);
+  --lds-message-icon-color: var(--color-warning-normal);
+}
+
+.lds-message--error {
+  --lds-message-bg: var(--color-danger-light-normal);
+  --lds-message-border: var(--color-danger-normal);
+  --lds-message-icon-color: var(--color-danger-normal);
+}
+
+.lds-message__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--lds-message-icon-color);
+}
+
+.lds-message__icon .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.lds-message__content {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-text-primary);
+  font: var(--body-medium);
+  white-space: nowrap;
+}
+
+.lds-message__close {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0 0 0 4px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.lds-message__close:hover,
+.lds-message__close:active {
+  color: var(--color-text-primary);
+}
+
+.lds-message__close:focus-visible {
+  outline: 2px solid var(--color-primary-normal);
+  outline-offset: 2px;
+}
+
+.lds-message__close .icon {
+  width: 16px;
+  height: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lds-message-viewport__item {
+    transition: none;
+  }
+
+  .lds-message {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* 19. 开关组件 (Switch) */

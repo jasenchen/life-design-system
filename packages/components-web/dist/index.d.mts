@@ -75,6 +75,72 @@ interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>
 }
 declare const Alert: React.ForwardRefExoticComponent<AlertProps & React.RefAttributes<HTMLDivElement>>;
 
+type MessageVariant = 'info' | 'success' | 'warning' | 'error';
+interface MessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'content'> {
+    /**
+     * 提示文案
+     */
+    content: React.ReactNode;
+    /**
+     * 语义类型
+     * @default 'info'
+     */
+    variant?: MessageVariant;
+    /**
+     * 自定义左侧图标
+     */
+    icon?: React.ReactNode;
+    /**
+     * 是否显示关闭按钮
+     * @default false
+     */
+    closable?: boolean;
+    /**
+     * 关闭按钮可访问名称
+     * @default '关闭提示'
+     */
+    closeLabel?: string;
+    /**
+     * 是否处于显示态，用于承载进出场动画
+     * @default true
+     */
+    visible?: boolean;
+    /**
+     * 关闭时触发
+     */
+    onClose?: () => void;
+}
+interface MessageOptions extends Omit<MessageProps, 'visible' | 'onClose' | 'closeLabel' | 'role'> {
+    /**
+     * 可选唯一标识；相同 key 会复用并刷新该条消息
+     */
+    key?: React.Key;
+    /**
+     * 自动关闭时长（毫秒），0 表示不自动关闭
+     * @default 3000
+     */
+    duration?: number;
+    /**
+     * 关闭时触发
+     */
+    onClose?: () => void;
+    /**
+     * 关闭按钮可访问名称
+     * @default '关闭提示'
+     */
+    closeLabel?: string;
+}
+type MessageOpenInput = React.ReactNode | MessageOptions;
+declare const Message: React.ForwardRefExoticComponent<MessageProps & React.RefAttributes<HTMLDivElement>>;
+declare const message: {
+    open: (input: MessageOpenInput) => () => void;
+    info: (input: MessageOpenInput) => () => void;
+    success: (input: MessageOpenInput) => () => void;
+    warning: (input: MessageOpenInput) => () => void;
+    error: (input: MessageOpenInput) => () => void;
+    destroy: (key?: React.Key) => void;
+};
+
 interface IconProps extends React.SVGProps<SVGSVGElement> {
     /**
      * The ID of the icon in the SVG sprite (e.g., 'ic-add-round-line')
@@ -294,38 +360,49 @@ interface FilterSelectProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
 }
 declare const FilterSelect: React.ForwardRefExoticComponent<FilterSelectProps & React.RefAttributes<HTMLSpanElement>>;
 
+type FilterDatePickerType = 'date' | 'range';
+type FilterDateRangeValue = [Date | null, Date | null];
+type FilterDatePickerValue = Date | FilterDateRangeValue | null;
 interface FilterDatePickerProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
     label: React.ReactNode;
+    picker?: FilterDatePickerType;
     placeholder?: React.ReactNode;
+    rangePlaceholder?: [React.ReactNode, React.ReactNode];
     size?: FilterSize;
     disabled?: boolean;
     isActive?: boolean;
     filterClassName?: string;
     width?: number | string;
-    value?: Date | null;
-    defaultValue?: Date | null;
+    value?: FilterDatePickerValue;
+    defaultValue?: FilterDatePickerValue;
     open?: boolean;
     defaultOpen?: boolean;
     onOpenChange?: (open: boolean) => void;
-    onChange?: (value: Date) => void;
+    onChange?: (value: FilterDatePickerValue) => void;
     disabledDate?: (date: Date) => boolean;
+    maxRangeDays?: number;
 }
 declare const FilterDatePicker: React.ForwardRefExoticComponent<FilterDatePickerProps & React.RefAttributes<HTMLSpanElement>>;
 
+type FilterTimePickerType = 'time' | 'range';
+type FilterTimeRangeValue = [string | null, string | null];
+type FilterTimePickerValue = string | FilterTimeRangeValue | null;
 interface FilterTimePickerProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
     label: React.ReactNode;
+    picker?: FilterTimePickerType;
     placeholder?: React.ReactNode;
+    rangePlaceholder?: [React.ReactNode, React.ReactNode];
     size?: FilterSize;
     disabled?: boolean;
     isActive?: boolean;
     filterClassName?: string;
     width?: number | string;
-    value?: string;
-    defaultValue?: string;
+    value?: FilterTimePickerValue;
+    defaultValue?: FilterTimePickerValue;
     open?: boolean;
     defaultOpen?: boolean;
     onOpenChange?: (open: boolean) => void;
-    onChange?: (value: string) => void;
+    onChange?: (value: FilterTimePickerValue) => void;
     hourStep?: number;
     minuteStep?: number;
 }
@@ -933,4 +1010,4 @@ interface UploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChan
 }
 declare const Upload: React.ForwardRefExoticComponent<UploadProps & React.RefAttributes<HTMLDivElement>>;
 
-export { Alert, type AlertProps, type AlertVariant, Button, type ButtonProps, type ButtonSize, type ButtonVariant, Checkbox, type CheckboxProps, DatePicker, type DatePickerProps, type DatePickerSize, type DatePickerType, type DatePickerValue, type DateRangeValue, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, Input, type InputProps, Menu, type MenuProps, Navbar, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Radio, type RadioProps, type RadioSize, type RadioVariant, Search, type SearchProps, Select, type SelectOption, type SelectProps, type SelectSize, Switch, type SwitchProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, TimePicker, type TimePickerProps, type TimePickerSize, type TimePickerType, type TimePickerValue, type TimeRangeValue, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, useFormItemStatus };
+export { Alert, type AlertProps, type AlertVariant, Button, type ButtonProps, type ButtonSize, type ButtonVariant, Checkbox, type CheckboxProps, DatePicker, type DatePickerProps, type DatePickerSize, type DatePickerType, type DatePickerValue, type DateRangeValue, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, type FilterDatePickerType, type FilterDatePickerValue, type FilterDateRangeValue, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterTimePickerType, type FilterTimePickerValue, type FilterTimeRangeValue, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, Input, type InputProps, Menu, type MenuProps, Message, type MessageOptions, type MessageProps, type MessageVariant, Navbar, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Radio, type RadioProps, type RadioSize, type RadioVariant, Search, type SearchProps, Select, type SelectOption, type SelectProps, type SelectSize, Switch, type SwitchProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, TimePicker, type TimePickerProps, type TimePickerSize, type TimePickerType, type TimePickerValue, type TimeRangeValue, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, message, useFormItemStatus };

@@ -305,6 +305,7 @@
     <div class="nav-group">COMPONENTS</div>
     <a href="#button" class="nav-item active" data-target="button">Button</a>
     <a href="#alert" class="nav-item" data-target="alert">Alert</a>
+    <a href="#message" class="nav-item" data-target="message">Message</a>
     <a href="#radio" class="nav-item" data-target="radio">Radio</a>
     <a href="#checkbox" class="nav-item" data-target="checkbox">Checkbox</a>
     <a href="#switch" class="nav-item" data-target="switch">Switch</a>
@@ -558,6 +559,32 @@
         }
       ]
     },
+    message: {
+      title: 'Message (React Component)',
+      layout: 'full',
+      sizes: [{ id: 'default', label: '默认规格', meta: '顶部全局轻提示 · 默认 3s 自动消失' }],
+      desc: 'A lightweight global prompt shown at the top of the page after a trigger action. It auto-dismisses after 3 seconds by default, supports configurable duration, and uses a subtle enter/exit motion aligned with the motion guidance.',
+      variants: [
+        {
+          title: 'Semantic Variants',
+          desc: 'Trigger info, success, warning, and error messages. The message appears at the top of the page, stacks automatically, and fades out after the configured duration.',
+          render: (_size, _state) => {
+            const id = 'message-demo';
+            window.pendingReactRenders.push({ id, type: 'message-demo', mode: 'semantic' });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: 'Duration & Close',
+          desc: 'Demonstrates a custom stay duration, a persistent message, and a closable variant for operations that need explicit dismissal.',
+          render: (_size, _state) => {
+            const id = 'message-demo-duration';
+            window.pendingReactRenders.push({ id, type: 'message-demo', mode: 'duration' });
+            return `<div id="${id}"></div>`;
+          }
+        }
+      ]
+    },
     select: {
       title: 'Select (React Component)',
       layout: 'full',
@@ -790,7 +817,7 @@
     filter: {
       title: 'Filter (React Component)',
       sizes: FILTER_SIZES,
-      desc: 'A compact filter control used in list/table toolbars. Supports input/select/date/time types and two sizes per Figma 3.0.',
+      desc: 'A compact filter control used in list/table toolbars. Supports input/select/date/time types, including date-range and time-range selection in the filter scene.',
       variants: [
         { title: 'Input', desc: 'Text input filter.', render: (size, state) => {
             const id = `filter-input-empty-${size.id}-${state.id}`;
@@ -810,10 +837,22 @@
             window.pendingReactRenders.push({ id, type: 'filter', filterType: 'date', size: size.id, className, disabled: state.props.includes('disabled') });
             return `<div id="${id}"></div>`;
         }},
+        { title: 'Date Range', desc: 'Date range filter trigger.', render: (size, state) => {
+            const id = `filter-date-range-${size.id}-${state.id}`;
+            const className = `${state.id==='hover'?'is-hover':''} ${state.id==='active'?'is-active':''}`;
+            window.pendingReactRenders.push({ id, type: 'filter', filterType: 'date-range', size: size.id, className, disabled: state.props.includes('disabled') });
+            return `<div id="${id}"></div>`;
+        }},
         { title: 'Time', desc: 'Time picker trigger.', render: (size, state) => {
             const id = `filter-time-empty-${size.id}-${state.id}`;
             const className = `${state.id==='hover'?'is-hover':''} ${state.id==='active'?'is-active':''}`;
             window.pendingReactRenders.push({ id, type: 'filter', filterType: 'time', size: size.id, className, disabled: state.props.includes('disabled') });
+            return `<div id="${id}"></div>`;
+        }},
+        { title: 'Time Range', desc: 'Time range filter trigger.', render: (size, state) => {
+            const id = `filter-time-range-${size.id}-${state.id}`;
+            const className = `${state.id==='hover'?'is-hover':''} ${state.id==='active'?'is-active':''}`;
+            window.pendingReactRenders.push({ id, type: 'filter', filterType: 'time-range', size: size.id, className, disabled: state.props.includes('disabled') });
             return `<div id="${id}"></div>`;
         }},
       ]
@@ -1269,7 +1308,7 @@
     mainEl.innerHTML = html;
 
     // Trigger custom event so React script knows to mount
-    if (['button', 'alert', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
+    if (['button', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }
@@ -1309,7 +1348,7 @@
 
   // Also trigger initial render in case it was already button
   setTimeout(() => {
-    if (['button', 'alert', 'radio', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
+    if (['button', 'alert', 'message', 'radio', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }, 200);
@@ -1319,7 +1358,7 @@
   import React from 'react';
   import { createRoot } from 'react-dom/client';
   import { 
-    Button, Alert, Icon, Radio, Input, Search, Select, DatePicker, TimePicker, Textarea, Tabs, Tab,
+    Button, Alert, Message, message, Icon, Radio, Input, Search, Select, DatePicker, TimePicker, Textarea, Tabs, Tab,
     Filter,
     FilterSelect,
     FilterDatePicker,
@@ -1443,6 +1482,109 @@
         };
 
         root.render(<AlertDemo />);
+      } else if (item.type === 'message-demo') {
+        const semanticMessageConfigs = [
+          { key: 'info', label: '信息', variant: 'info', text: '已更新筛选条件' },
+          { key: 'success', label: '成功', variant: 'success', text: '保存成功' },
+          { key: 'warning', label: '警告', variant: 'warning', text: '请先完成必填项' },
+          { key: 'error', label: '错误', variant: 'error', text: '操作失败，请稍后重试' }
+        ];
+
+        const MessageDemo = () => {
+          const triggerMessage = (callback) => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.setTimeout(() => {
+              callback();
+            }, 220);
+          };
+
+          React.useEffect(() => {
+            return () => {
+              message.destroy();
+            };
+          }, []);
+
+          if (item.mode === 'duration') {
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                  点击按钮后，全局提示会固定出现在页面顶部；支持自定义停留时间，也可以配置为不自动关闭并展示关闭按钮。
+                </span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                  <Button
+                    variant="default"
+                    size="default-size"
+                    onClick={() =>
+                      triggerMessage(() =>
+                        message.open({
+                          key: 'message-custom-duration',
+                          variant: 'info',
+                          content: '将在 5 秒后自动消失',
+                          duration: 5000,
+                        })
+                      )
+                    }
+                  >
+                    5 秒提示
+                  </Button>
+                  <Button
+                    variant="default"
+                    size="default-size"
+                    onClick={() =>
+                      triggerMessage(() =>
+                        message.open({
+                          key: 'message-closable',
+                          variant: 'warning',
+                          content: '请尽快处理待办事项',
+                          duration: 0,
+                          closable: true,
+                        })
+                      )
+                    }
+                  >
+                    常驻可关闭
+                  </Button>
+                  <Button variant="outline" size="default-size" onClick={() => message.destroy()}>
+                    清空全部
+                  </Button>
+                </div>
+
+                <div style={{ width: 'fit-content' }}>
+                  <Message content="不要超过8个字符" variant="info" visible />
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                用下面的按钮触发全局轻提示；点击后页面会自动回到顶部，方便直接看到真实展示效果。
+              </span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                {semanticMessageConfigs.map((config) => (
+                  <Button
+                    key={config.key}
+                    variant="default"
+                    size="default-size"
+                    onClick={() =>
+                      triggerMessage(() =>
+                        message.open({
+                          variant: config.variant,
+                          content: config.text,
+                        })
+                      )
+                    }
+                  >
+                    {config.label}提示
+                  </Button>
+                ))}
+              </div>
+            </div>
+          );
+        };
+
+        root.render(<MessageDemo />);
       } else if (item.type === 'radio-demo') {
         const PreviewTable = ({ columns, rows, renderCell }) => (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -2221,8 +2363,12 @@
             ? '酒旅/旅游/主题公园'
             : item.filterType === 'date'
               ? '2026.04.29'
+              : item.filterType === 'date-range'
+                ? '2026/03/23 ～ 2026/03/23'
               : item.filterType === 'time'
                 ? '12:00'
+                : item.filterType === 'time-range'
+                  ? '10:30 ～ 22:30'
                 : '';
 
         const commonProps = { size: item.size, className: item.className, disabled: item.disabled, label, placeholder };
@@ -2283,6 +2429,36 @@
               );
             }
 
+            if (item.filterType === 'date-range') {
+              return (
+                <FilterDatePicker
+                  picker="range"
+                  label={label}
+                  placeholder={placeholder}
+                  size={item.size}
+                  disabled={item.disabled}
+                  isActive={isActive}
+                  filterClassName={item.className}
+                  defaultValue={isActive ? [new Date(2026, 2, 23), null] : [new Date(2026, 2, 23), new Date(2026, 2, 23)]}
+                />
+              );
+            }
+
+            if (item.filterType === 'time-range') {
+              return (
+                <FilterTimePicker
+                  picker="range"
+                  label={label}
+                  placeholder={placeholder}
+                  size={item.size}
+                  disabled={item.disabled}
+                  isActive={isActive}
+                  filterClassName={item.className}
+                  defaultValue={isActive ? ['10:30', null] : ['10:30', '22:30']}
+                />
+              );
+            }
+
             return (
               <FilterTimePicker
                 label={label}
@@ -2326,13 +2502,29 @@
               ]}
             />
             <FilterDatePicker size="small" label="字段标题" placeholder="请选择" />
+            <FilterDatePicker
+              picker="range"
+              size="small"
+              label="字段标题"
+              placeholder="请选择"
+              defaultValue={[new Date(2026, 2, 23), new Date(2026, 2, 23)]}
+            />
             {includeTime ? (
-              <FilterTimePicker
-                size="small"
-                label="字段标题"
-                placeholder="请选择"
-                defaultValue="18:36"
-              />
+              <>
+                <FilterTimePicker
+                  size="small"
+                  label="字段标题"
+                  placeholder="请选择"
+                  defaultValue="18:36"
+                />
+                <FilterTimePicker
+                  picker="range"
+                  size="small"
+                  label="字段标题"
+                  placeholder="请选择"
+                  defaultValue={['10:30', '22:30']}
+                />
+              </>
             ) : null}
             {Array.from({ length: extraCount }).map((_, i) => (
               <FilterSelect

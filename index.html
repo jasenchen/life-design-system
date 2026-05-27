@@ -994,6 +994,20 @@
             window.pendingReactRenders.push({ id, type: 'pageheader', withTabs: true });
             return `<div id="${id}"></div>`;
           }
+        },
+        {
+          title: 'Secondary Page',
+          desc: 'Secondary page header with a back button, smaller title, and the same tabs slot support.',
+          render: (size, state) => {
+            const id = `ph-secondary-${size.id}-${state.id}`;
+            window.pendingReactRenders.push({
+              id,
+              type: 'pageheader',
+              variant: 'secondary',
+              withTabs: true
+            });
+            return `<div id="${id}"></div>`;
+          }
         }
       ]
     },
@@ -2640,7 +2654,9 @@
       } else if (item.type === 'pageheader') {
         root.render(
           <PageHeader 
-            title="一级页面标题" 
+            title={item.variant === 'secondary' ? '二级页面标题' : '一级页面标题'}
+            variant={item.variant ?? 'primary'}
+            onBackClick={item.variant === 'secondary' ? () => {} : undefined}
             tabs={item.withTabs ? (
               <Tabs variant="primary" size="small" defaultValue="1">
                 <Tab value="1">标签名称</Tab>

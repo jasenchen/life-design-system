@@ -69,6 +69,27 @@ export function AppLayoutDemo() {
 4. **样式覆盖**：除非用户明确要求，否则不要修改 `base.css` 中核心框架的 `width`、`z-index` 和 `flex` 属性。
 5. **阴影处理**：严格遵循base.css与基础框架示例代码，`.app-body` 的 `z-index` 高于侧边栏和导航栏，以保证 `shadow-large` 投影效果正常显示。
 
+### PageHeader 变体
+
+- `PageHeader` 默认使用一级页样式：大标题，无返回按钮。
+- 当页面是从列表/一级页钻取进入的二级页、详情页或配置页时，使用 `variant="secondary"`。
+- `variant="secondary"` 会在标题左侧增加返回按钮，并将标题字号切换为较小的二级页样式；`tabs` 插槽能力与一级页保持一致。
+- 需要处理返回行为时，为 `PageHeader` 传入 `onBackClick`。
+
+```tsx
+<PageHeader
+  variant="secondary"
+  title="二级页面标题"
+  onBackClick={() => window.history.back()}
+  tabs={
+    <Tabs variant="primary" size="small" defaultValue="tab-1">
+      <Tab value="tab-1">标签一</Tab>
+      <Tab value="tab-2">标签二</Tab>
+    </Tabs>
+  }
+/>
+```
+
 ## 页面类型
 
 ### 列表页 (List Page)
@@ -215,4 +236,3 @@ export function ListPageLayoutDemo() {
   );
 }
 ```
-

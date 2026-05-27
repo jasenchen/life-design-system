@@ -3518,13 +3518,45 @@ Menu.displayName = "Menu";
 // src/components/PageHeader/PageHeader.tsx
 import React22 from "react";
 import { clsx as clsx22 } from "clsx";
-import { jsx as jsx22, jsxs as jsxs20 } from "react/jsx-runtime";
+import { Fragment as Fragment4, jsx as jsx22, jsxs as jsxs20 } from "react/jsx-runtime";
 var PageHeader = React22.forwardRef(
-  ({ className, title, tabs, ...props }, ref) => {
-    return /* @__PURE__ */ jsxs20("div", { ref, className: clsx22("lds-page-header", className), ...props, children: [
-      /* @__PURE__ */ jsx22("h1", { className: "lds-page-header__title", children: title }),
-      tabs && /* @__PURE__ */ jsx22("div", { className: "lds-page-header__tabs", children: tabs })
-    ] });
+  ({
+    className,
+    title,
+    tabs,
+    variant = "primary",
+    onBackClick,
+    backButtonAriaLabel = "\u8FD4\u56DE\u4E0A\u4E00\u9875",
+    ...props
+  }, ref) => {
+    const isSecondary = variant === "secondary";
+    return /* @__PURE__ */ jsx22(
+      "div",
+      {
+        ref,
+        className: clsx22("lds-page-header", `lds-page-header--${variant}`, className),
+        ...props,
+        children: isSecondary ? /* @__PURE__ */ jsxs20("div", { className: "lds-page-header__secondary-layout", children: [
+          /* @__PURE__ */ jsx22(
+            "button",
+            {
+              type: "button",
+              className: "lds-page-header__back-button",
+              onClick: onBackClick,
+              "aria-label": backButtonAriaLabel,
+              children: /* @__PURE__ */ jsx22(Icon, { name: "ic-arrow-left-l-line", "aria-hidden": "true" })
+            }
+          ),
+          /* @__PURE__ */ jsxs20("div", { className: "lds-page-header__content", children: [
+            /* @__PURE__ */ jsx22("h1", { className: "lds-page-header__title", children: title }),
+            tabs && /* @__PURE__ */ jsx22("div", { className: "lds-page-header__tabs", children: tabs })
+          ] })
+        ] }) : /* @__PURE__ */ jsxs20(Fragment4, { children: [
+          /* @__PURE__ */ jsx22("h1", { className: "lds-page-header__title", children: title }),
+          tabs && /* @__PURE__ */ jsx22("div", { className: "lds-page-header__tabs", children: tabs })
+        ] })
+      }
+    );
   }
 );
 PageHeader.displayName = "PageHeader";

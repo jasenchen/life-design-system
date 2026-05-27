@@ -491,6 +491,9 @@ declare const Menu: React.ForwardRefExoticComponent<MenuProps & React.RefAttribu
 interface PageHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
     title: string;
     tabs?: React.ReactNode;
+    variant?: 'primary' | 'secondary';
+    onBackClick?: React.MouseEventHandler<HTMLButtonElement>;
+    backButtonAriaLabel?: string;
 }
 declare const PageHeader: React.ForwardRefExoticComponent<PageHeaderProps & React.RefAttributes<HTMLDivElement>>;
 

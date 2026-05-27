@@ -3591,11 +3591,43 @@ var import_react22 = __toESM(require("react"));
 var import_clsx22 = require("clsx");
 var import_jsx_runtime22 = require("react/jsx-runtime");
 var PageHeader = import_react22.default.forwardRef(
-  ({ className, title, tabs, ...props }, ref) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { ref, className: (0, import_clsx22.clsx)("lds-page-header", className), ...props, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("h1", { className: "lds-page-header__title", children: title }),
-      tabs && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { className: "lds-page-header__tabs", children: tabs })
-    ] });
+  ({
+    className,
+    title,
+    tabs,
+    variant = "primary",
+    onBackClick,
+    backButtonAriaLabel = "\u8FD4\u56DE\u4E0A\u4E00\u9875",
+    ...props
+  }, ref) => {
+    const isSecondary = variant === "secondary";
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+      "div",
+      {
+        ref,
+        className: (0, import_clsx22.clsx)("lds-page-header", `lds-page-header--${variant}`, className),
+        ...props,
+        children: isSecondary ? /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "lds-page-header__secondary-layout", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+            "button",
+            {
+              type: "button",
+              className: "lds-page-header__back-button",
+              onClick: onBackClick,
+              "aria-label": backButtonAriaLabel,
+              children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Icon, { name: "ic-arrow-left-l-line", "aria-hidden": "true" })
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "lds-page-header__content", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("h1", { className: "lds-page-header__title", children: title }),
+            tabs && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { className: "lds-page-header__tabs", children: tabs })
+          ] })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(import_jsx_runtime22.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("h1", { className: "lds-page-header__title", children: title }),
+          tabs && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { className: "lds-page-header__tabs", children: tabs })
+        ] })
+      }
+    );
   }
 );
 PageHeader.displayName = "PageHeader";

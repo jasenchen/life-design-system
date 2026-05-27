@@ -82,6 +82,7 @@
 - UI中需要时间选择器时：[timepicker.md](timepicker.md)；
 - UI中需要搜索输入框时：[search.md](search.md)；
 - UI中需要标签页时：[tabs.md](tabs.md)；
+- UI中需要页面标题区、页面标题+页签，或二级页返回标题栏时：[pageheader.md](pageheader.md)；
 - UI中需要筛选器或筛选器组时：[filter.md](filter.md)；
 - UI中需要表格时：[table.md](table.md)；
 - UI中需要分页器时：[pagination.md](pagination.md)；

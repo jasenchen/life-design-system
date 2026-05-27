@@ -109,6 +109,7 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 - 单选框 ：[references/radio.md](references/radio.md)
 - 开关 ：[references/switch.md](references/switch.md)
 - 搜索框 ：[references/search.md](references/search.md)
+- 页面标题区 ：[references/pageheader.md](references/pageheader.md)
 - 抽屉 ：[references/drawer.md](references/drawer.md)
 - 表单 ：[references/form.md](references/form.md)
 

@@ -2138,6 +2138,78 @@ button.lds-filter {
   margin: 0;
 }
 
+.lds-page-header--secondary {
+  gap: 0;
+}
+
+.lds-page-header__secondary-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3x, 12px);
+  width: 100%;
+}
+
+.lds-page-header__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4x, 16px);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.lds-page-header__back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-9x, 36px);
+  height: var(--spacing-9x, 36px);
+  padding: var(--spacing-2x, 8px);
+  border: 1px solid var(--color-border-normal);
+  border-radius: 10px;
+  background-color: var(--color-bg-normal);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+  flex: 0 0 auto;
+}
+
+.lds-page-header__back-button:hover {
+  background-color: var(--color-fill-hover);
+}
+
+.lds-page-header__back-button:active {
+  background-color: var(--color-fill-active);
+  color: var(--color-primary-normal);
+  border-color: var(--color-primary-normal);
+}
+
+.lds-page-header__back-button:focus-visible {
+  outline: 2px solid var(--color-primary-normal);
+  outline-offset: 2px;
+}
+
+.lds-page-header__back-button:disabled {
+  color: var(--color-text-disable);
+  border-color: var(--color-border-disable);
+  cursor: not-allowed;
+}
+
+.lds-page-header__back-button .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.lds-page-header--secondary .lds-page-header__title {
+  font: var(--title-medium);
+  padding-block: 3px;
+  min-height: var(--spacing-9x, 36px);
+  box-sizing: border-box;
+}
+
 .lds-page-header__tabs {
   margin-top: 0;
 }

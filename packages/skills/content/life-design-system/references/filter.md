@@ -6,8 +6,8 @@
 
 - `Filter`：基础筛选触发器 / 输入态组件
 - `FilterSelect`：基于 `Filter + Popover` 的单选下拉筛选
-- `FilterDatePicker`：基于 `Filter + Popover` 的单日期筛选
-- `FilterTimePicker`：基于 `Filter + Popover` 的时间筛选
+- `FilterDatePicker`：基于 `Filter + Popover` 的日期筛选，支持单日期和日期区间
+- `FilterTimePicker`：基于 `Filter + Popover` 的时间筛选，支持单时间和时间区间
 - `FilterGroup`：筛选区容器，负责布局和查询 / 重置操作
 
 ## 默认选择
@@ -86,7 +86,9 @@ export function FilterGroupDemo() {
   const [keyword, setKeyword] = useState('');
   const [status, setStatus] = useState<string>();
   const [date, setDate] = useState<Date | null>(null);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
   const [time, setTime] = useState<string>();
+  const [timeRange, setTimeRange] = useState<[string | null, string | null]>([null, null]);
 
   return (
     <FilterGroup>
@@ -110,11 +112,25 @@ export function FilterGroupDemo() {
         value={date}
         onChange={setDate}
       />
+      <FilterDatePicker
+        picker="range"
+        label="日期区间"
+        placeholder="请选择"
+        value={dateRange}
+        onChange={(nextValue) => setDateRange(nextValue as [Date | null, Date | null])}
+      />
       <FilterTimePicker
         label="时间"
         placeholder="请选择"
         value={time}
         onChange={setTime}
+      />
+      <FilterTimePicker
+        picker="range"
+        label="时间区间"
+        placeholder="请选择"
+        value={timeRange}
+        onChange={(nextValue) => setTimeRange(nextValue as [string | null, string | null])}
       />
     </FilterGroup>
   );
@@ -138,7 +154,9 @@ export function FilterGroupWithActionsDemo() {
   const [status, setStatus] = useState<string>();
   const [type, setType] = useState<string>();
   const [date, setDate] = useState<Date | null>(null);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
   const [time, setTime] = useState<string>();
+  const [timeRange, setTimeRange] = useState<[string | null, string | null]>([null, null]);
 
   return (
     <FilterGroup
@@ -148,7 +166,9 @@ export function FilterGroupWithActionsDemo() {
         setStatus(undefined);
         setType(undefined);
         setDate(null);
+        setDateRange([null, null]);
         setTime(undefined);
+        setTimeRange([null, null]);
       }}
     >
       <Filter
@@ -186,11 +206,25 @@ export function FilterGroupWithActionsDemo() {
         value={date}
         onChange={setDate}
       />
+      <FilterDatePicker
+        picker="range"
+        label="日期区间"
+        placeholder="请选择"
+        value={dateRange}
+        onChange={(nextValue) => setDateRange(nextValue as [Date | null, Date | null])}
+      />
       <FilterTimePicker
         label="时间"
         placeholder="请选择"
         value={time}
         onChange={setTime}
+      />
+      <FilterTimePicker
+        picker="range"
+        label="时间区间"
+        placeholder="请选择"
+        value={timeRange}
+        onChange={(nextValue) => setTimeRange(nextValue as [string | null, string | null])}
       />
     </FilterGroup>
   );
@@ -253,51 +287,59 @@ export function FilterGroupWithActionsDemo() {
 
 ## FilterDatePicker 组件 API
 
-`FilterDatePicker` 是推荐的日期筛选组件，当前为单日期选择。
+`FilterDatePicker` 是推荐的日期筛选组件，支持单日期和日期区间两种模式。
 
 | 属性 | 类型 | 默认值 | 说明 |
 | :--- | :--- | :--- | :--- |
+| `picker` | `'date' \| 'range'` | `'date'` | 选择器类型，单日期或日期区间 |
 | `label` | `React.ReactNode` | - | 左侧字段标题 |
 | `placeholder` | `React.ReactNode` | `'请选择'` | 未选择时展示 |
+| `rangePlaceholder` | `[React.ReactNode, React.ReactNode]` | `['开始日期', '结束日期']` | 区间模式下的开始 / 结束占位内容 |
 | `size` | `'default-size' \| 'small'` | `'default-size'` | 尺寸 |
 | `disabled` | `boolean` | `false` | 禁用态 |
 | `isActive` | `boolean` | `false` | 强制 trigger 激活态 |
 | `filterClassName` | `string` | `undefined` | 透传给内部 `Filter` 的类名 |
 | `width` | `number \| string` | `294` | trigger 宽度 |
-| `value` | `Date \| null` | `undefined` | 受控值 |
-| `defaultValue` | `Date \| null` | `null` | 非受控默认值 |
+| `value` | `Date \| [Date \| null, Date \| null] \| null` | `undefined` | 受控值 |
+| `defaultValue` | `Date \| [Date \| null, Date \| null] \| null` | `null` | 非受控默认值 |
 | `open` | `boolean` | `undefined` | 受控展开态 |
 | `defaultOpen` | `boolean` | `false` | 非受控默认展开态 |
 | `onOpenChange` | `(open: boolean) => void` | `undefined` | 展开态回调 |
-| `onChange` | `(value: Date) => void` | `undefined` | 选中日期回调 |
+| `onChange` | `(value: Date \| [Date \| null, Date \| null] \| null) => void` | `undefined` | 值变化回调 |
 | `disabledDate` | `(date: Date) => boolean` | `undefined` | 自定义禁用日期 |
+| `maxRangeDays` | `number` | `undefined` | 区间模式下允许选择的最大天数 |
 
 当前实现说明：
 
-- 使用 `YYYY.MM.DD` 格式回显到 trigger
+- 单日期模式使用 `YYYY.MM.DD` 格式回显到 trigger
+- 日期区间模式使用 `YYYY/MM/DD ～ YYYY/MM/DD` 格式回显到 trigger
 - 支持月份切换、年份切换、跨月日期灰显
 - 日期网格单元尺寸为 `44 * 44`，网格间距为 `4`
-- 当前是**单日期选择**，暂不包含范围选择、快捷项、年月面板切换
+- 区间模式复用双月日期面板，支持开始已选、结束未选的中间态
+- 区间模式支持 `maxRangeDays`，超出范围的日期自动禁用
+- 当前暂不包含快捷项
 
 ## FilterTimePicker 组件 API
 
-`FilterTimePicker` 是推荐的时间筛选组件，当前为双列时 / 分选择。
+`FilterTimePicker` 是推荐的时间筛选组件，支持单时间和时间区间两种模式。
 
 | 属性 | 类型 | 默认值 | 说明 |
 | :--- | :--- | :--- | :--- |
+| `picker` | `'time' \| 'range'` | `'time'` | 选择器类型，单时间或时间区间 |
 | `label` | `React.ReactNode` | - | 左侧字段标题 |
 | `placeholder` | `React.ReactNode` | `'请选择'` | 未选择时展示 |
+| `rangePlaceholder` | `[React.ReactNode, React.ReactNode]` | `['开始时间', '结束时间']` | 区间模式下的开始 / 结束占位内容 |
 | `size` | `'default-size' \| 'small'` | `'default-size'` | 尺寸 |
 | `disabled` | `boolean` | `false` | 禁用态 |
 | `isActive` | `boolean` | `false` | 强制 trigger 激活态 |
 | `filterClassName` | `string` | `undefined` | 透传给内部 `Filter` 的类名 |
 | `width` | `number \| string` | `294` | trigger 宽度 |
-| `value` | `string` | `undefined` | 受控值，格式如 `09:30` |
-| `defaultValue` | `string` | `undefined` | 非受控默认值 |
+| `value` | `string \| [string \| null, string \| null] \| null` | `undefined` | 受控值 |
+| `defaultValue` | `string \| [string \| null, string \| null] \| null` | `undefined` | 非受控默认值 |
 | `open` | `boolean` | `undefined` | 受控展开态 |
 | `defaultOpen` | `boolean` | `false` | 非受控默认展开态 |
 | `onOpenChange` | `(open: boolean) => void` | `undefined` | 展开态回调 |
-| `onChange` | `(value: string) => void` | `undefined` | 选中时间回调 |
+| `onChange` | `(value: string \| [string \| null, string \| null] \| null) => void` | `undefined` | 值变化回调 |
 | `hourStep` | `number` | `1` | 小时步长 |
 | `minuteStep` | `number` | `1` | 分钟步长 |
 
@@ -307,13 +349,17 @@ export function FilterGroupWithActionsDemo() {
 - 两列滚动区域相互独立
 - 单个时间 cell 尺寸为 `44 * 32`
 - 面板高度约展示 8 个 cell
-- 当前为**时 / 分选择**，暂不包含秒、滚轮选时、自动滚动到已选项
+- 单时间模式使用时 / 分双列面板
+- 时间区间模式使用“开始时间 / 结束时间”双半区面板，每个半区内包含时 / 分两列
+- 时间区间支持开始已选、结束未选的中间态，并会自动收敛非法的先后顺序
+- 当前暂不包含秒、滚轮选时
 
 ## 注意事项
 
 - 默认用 `FilterGroup` 做容器，不要自己写 `display: grid` / `grid-template-columns` 去拼筛选区。
 - `Filter` 是基础触发器，不要误把它当作完整选择器使用。
 - `FilterSelect` / `FilterDatePicker` / `FilterTimePicker` 已经封装好了 `Popover`，业务层不要再额外包一层自定义浮层。
+- 日期区间和时间区间的弹层交互已经内置，不要在业务层再套额外的区间浮层。
 - **不要自己用 `<Button>` 实现“查询 / 重置”，必须使用 `FilterGroup` 自带的 `onQuery` / `onReset` 配置项。**
 - “查询 / 重置”仅在筛选项较多时启用；小于等于 3 个筛选项时一般不需要操作按钮。
 

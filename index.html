@@ -322,6 +322,7 @@
     <a href="#navbar" class="nav-item" data-target="navbar">Navbar</a>
     <a href="#menu" class="nav-item" data-target="menu">Menu</a>
     <a href="#pageheader" class="nav-item" data-target="pageheader">PageHeader</a>
+    <a href="#steps" class="nav-item" data-target="steps">Steps</a>
     <a href="#drawer" class="nav-item" data-target="drawer">Drawer</a>
     <a href="#dialog" class="nav-item" data-target="dialog">Dialog</a>
     <a href="#form" class="nav-item" data-target="form">Form</a>
@@ -1011,6 +1012,23 @@
         }
       ]
     },
+    steps: {
+      title: 'Steps (React Component)',
+      layout: 'full',
+      sizes: [{ id: 'default', label: 'Default', meta: 'Horizontal · Step count configurable · Supports optional description' }],
+      desc: 'A horizontal form stepper for multi-step flows. Supports completed / current / pending states, optional descriptions, and external previous / next controls.',
+      variants: [
+        {
+          title: 'Interactive Form Steps',
+          desc: 'Includes previous / next buttons so you can inspect transitions between completed, current and pending steps.',
+          render: (size, _state) => {
+            const id = `steps-demo-${size.id}`;
+            window.pendingReactRenders.push({ id, type: 'steps-demo' });
+            return `<div id="${id}"></div>`;
+          }
+        }
+      ]
+    },
     drawer: {
       title: 'Drawer (React Component)',
       layout: 'full',
@@ -1322,7 +1340,7 @@
     mainEl.innerHTML = html;
 
     // Trigger custom event so React script knows to mount
-    if (['button', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
+    if (['button', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }
@@ -1362,7 +1380,7 @@
 
   // Also trigger initial render in case it was already button
   setTimeout(() => {
-    if (['button', 'alert', 'message', 'radio', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
+    if (['button', 'alert', 'message', 'radio', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }, 200);
@@ -1381,7 +1399,7 @@
     Popover,
     Navbar,
     Menu,
-    PageHeader, Checkbox, Switch, Drawer, Dialog, Form, FormItem, Upload,
+    PageHeader, Steps, Checkbox, Switch, Drawer, Dialog, Form, FormItem, Upload,
     TableWrapper, Table, Thead, Tbody, Tr, Th, Td, TableCellProduct, TableCellAmount, TableCellOperation, TableCellAction,
     Tag,
     Pagination
@@ -2666,6 +2684,45 @@
             ) : null}
           />
         );
+      } else if (item.type === 'steps-demo') {
+        const StepsDemo = () => {
+          const [current, setCurrent] = React.useState(1);
+          const items = [
+            { title: '填写基础信息', description: '门店名称、经营主体与联系人信息' },
+            { title: '上传资质材料', description: '营业执照、许可证等必要资料' },
+            { title: '配置经营设置' },
+            { title: '提交审核', description: '确认无误后提交平台审核' },
+          ];
+
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%', maxWidth: 760 }}>
+              <Steps items={items} current={current} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                <Button
+                  variant="default"
+                  size="default-size"
+                  onClick={() => setCurrent(prev => Math.max(prev - 1, 0))}
+                  disabled={current === 0}
+                >
+                  上一步
+                </Button>
+                <Button
+                  variant="primary"
+                  size="default-size"
+                  onClick={() => setCurrent(prev => Math.min(prev + 1, items.length - 1))}
+                  disabled={current === items.length - 1}
+                >
+                  下一步
+                </Button>
+                <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                  当前处于第 {current + 1} 步，共 {items.length} 步。
+                </span>
+              </div>
+            </div>
+          );
+        };
+
+        root.render(<StepsDemo />);
       } else if (item.type === 'drawer-demo') {
         const DrawerDemo = () => {
           const [open, setOpen] = React.useState(false);

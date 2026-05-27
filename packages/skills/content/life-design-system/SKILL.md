@@ -101,6 +101,7 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 - 日期选择器 ：[references/datepicker.md](references/datepicker.md)
 - 时间选择器 ：[references/timepicker.md](references/timepicker.md)
 - 标签页 ：[references/tabs.md](references/tabs.md)
+- 步骤条 ：[references/steps.md](references/steps.md)
 - 分页器 ：[references/pagination.md](references/pagination.md)
 - 表格 ：[references/table.md](references/table.md)
 - 筛选器 ：[references/filter.md](references/filter.md)

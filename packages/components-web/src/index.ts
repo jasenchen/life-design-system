@@ -18,6 +18,7 @@ export * from './components/Tabs/Tabs';
 export * from './components/Navbar/Navbar';
 export * from './components/Menu/Menu';
 export * from './components/PageHeader/PageHeader';
+export * from './components/Steps/Steps';
 export * from './components/Table/Table';
 export * from './components/Checkbox/Checkbox';
 export * from './components/Switch/Switch';

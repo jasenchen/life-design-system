@@ -16,8 +16,8 @@
 - **优先使用 `@life-ds/components-web` 提供的 `<PageHeader>` 组件（React 项目中必须如此）。**
 - `PageHeader` 必须放在 `.app-content` 内部，不要放在 `.app-body` 直属层级。
 - 一级页使用默认样式：`variant="primary"`，展示大标题。
-- 从列表页或一级页进入的详情页、配置页、编辑页，使用 `variant="secondary"`，展示左侧返回按钮和较小标题。
-- `tabs` 仅承载页面级页签切换；筛选器、操作按钮、统计信息等业务内容应放在 `PageHeader` 下方，而不是塞进标题区内部。
+- 所有二级页都使用 `variant="secondary"`，展示左侧返回按钮和较小标题。
+- 页面级的 tab 可以放在 `PageHeader` 的 slot 区域；筛选器、操作按钮、统计信息等业务内容仍应放在 `PageHeader` 下方。
 - 二级页的返回行为通过 `onBackClick` 传入；如果只需要视觉展示，也可以不传。
 
 ## 常见布局

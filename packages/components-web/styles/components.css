@@ -2216,7 +2216,132 @@ button.lds-filter {
 
 /* PageHeader keeps top/right/bottom spacing while aligning the left edge to the content area. */
 
-/* 12. 气泡弹层组件 (Popover) */
+/* 12. 步骤条 (Steps) */
+.lds-steps {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2x, 8px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lds-step {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+}
+
+.lds-step.is-last {
+  flex: 0 1 auto;
+}
+
+.lds-step__main {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x, 8px);
+  width: 100%;
+}
+
+.lds-step__indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  font: var(--subtitle-medium);
+}
+
+.lds-step__indicator span {
+  line-height: 1;
+}
+
+.lds-step__check {
+  width: 14px;
+  height: 14px;
+}
+
+.lds-step__title {
+  min-width: 0;
+  color: var(--color-text-primary);
+  font: var(--subtitle-regular);
+  white-space: nowrap;
+}
+
+.lds-step__connector {
+  flex: 1 1 auto;
+  min-width: var(--spacing-10x, 40px);
+  height: 1px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-border-normal) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+.lds-step__description {
+  padding-left: var(--spacing-8x, 32px);
+  color: var(--color-text-secondary);
+  font: var(--caption-regular);
+  margin-top: var(--spacing-1x, 4px);
+}
+
+.lds-step.is-finish .lds-step__indicator {
+  background-color: var(--color-fill-primary);
+  color: var(--color-primary-normal);
+}
+
+.lds-step.is-process .lds-step__indicator {
+  background-color: var(--color-primary-normal);
+  color: var(--color-text-white);
+}
+
+.lds-step.is-process .lds-step__title {
+  font: var(--subtitle-medium);
+}
+
+.lds-step.is-wait .lds-step__indicator {
+  background-color: var(--color-fill-gray);
+  color: var(--color-text-secondary);
+}
+
+.lds-step.is-wait .lds-step__title {
+  color: var(--color-text-secondary);
+}
+
+.lds-step.is-wait .lds-step__description {
+  color: var(--color-text-secondary);
+}
+
+.lds-step.is-clickable {
+  cursor: pointer;
+  border-radius: var(--radius-s, 6px);
+  transition: opacity 0.2s ease;
+}
+
+.lds-step.is-clickable:hover:not(.is-disabled) {
+  opacity: 0.88;
+}
+
+.lds-step.is-clickable:focus-visible {
+  outline: 2px solid var(--color-primary-normal);
+  outline-offset: 2px;
+}
+
+.lds-step.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+/* 13. 气泡弹层组件 (Popover) */
 .lds-popover-anchor {
   display: inline-flex;
   max-width: 100%;

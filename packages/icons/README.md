@@ -80,7 +80,7 @@ import '@life-ds/icons';
 }
 
 .warning-icon {
-  color: var(--color-warning); /* 支持 CSS 变量，完美兼容主题切换！ */
+  color: var(--color-warning-normal); /* 支持 CSS 变量，完美兼容主题切换！ */
 }
 ```
 

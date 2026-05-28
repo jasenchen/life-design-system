@@ -30,7 +30,7 @@
        --------------------------------------------------- */
     :root {
       --doc-bg: var(--color-bg-normal);
-      --doc-sidebar-bg: var(--color-bg-sub);
+      --doc-sidebar-bg: var(--color-bg-gray);
       --doc-border: var(--color-border-normal);
       --doc-text-main: var(--color-text-primary);
       --doc-text-muted: var(--color-text-secondary);
@@ -50,6 +50,11 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
+    .doc-layout {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
 
     /* Sidebar Navigation */
     .doc-sidebar {
@@ -63,6 +68,9 @@
       overflow-y: auto;
       box-sizing: border-box;
     }
+    .doc-layout--sidebar-hidden .doc-sidebar {
+      display: none;
+    }
     .doc-logo {
       padding: 0 20px;
       font-size: 13px;
@@ -70,17 +78,40 @@
       letter-spacing: 1px;
       margin-bottom: 40px;
       color: var(--doc-text-main);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
     .theme-toggle {
       cursor: pointer;
-      font-size: 16px;
-      background: none;
-      border: none;
-      color: inherit;
-      padding: 0;
+      font: var(--body-medium);
+      background: var(--color-bg-popup);
+      border: 1px solid var(--color-border-normal);
+      color: var(--doc-text-main);
+      padding: 0 var(--spacing-4x);
+      height: var(--spacing-10x);
+      border-radius: var(--radius-m);
+      box-shadow: var(--shadow-small);
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .theme-toggle:hover {
+      background: var(--color-fill-hover);
+      border-color: var(--color-primary-normal);
+    }
+    .theme-toggle:active {
+      transform: translateY(1px);
+    }
+    .theme-toggle--global {
+      position: static;
+    }
+    .doc-global-actions {
+      position: fixed;
+      top: var(--spacing-6x);
+      right: var(--spacing-6x);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3x);
+    }
+    .doc-layout--home + .doc-global-actions .doc-global-home {
+      display: none;
     }
     .nav-group {
       font-size: 11px;
@@ -121,6 +152,10 @@
       max-width: 1200px;
       box-sizing: border-box;
     }
+    .doc-layout--sidebar-hidden .doc-main {
+      margin-left: 0;
+      width: 100%;
+    }
     .doc-main--home {
       max-width: 1120px;
     }
@@ -142,7 +177,25 @@
     
     .component-header {
       margin-bottom: 80px;
-      position: relative;
+    }
+    .header-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: var(--spacing-10x);
+      padding: 0 var(--spacing-4x);
+      border-radius: var(--radius-m);
+      background: var(--color-bg-popup);
+      border: 1px solid var(--color-border-normal);
+      color: var(--doc-text-main);
+      text-decoration: none;
+      font: var(--body-medium);
+      box-shadow: var(--shadow-small);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .header-link:hover {
+      background: var(--color-fill-hover);
+      border-color: var(--color-primary-normal);
     }
     .component-title {
       font-size: 56px;
@@ -194,7 +247,7 @@
       padding: var(--spacing-8x);
       color: var(--color-text-primary);
       text-decoration: none;
-      background: var(--color-bg-sub);
+      background: var(--color-bg-gray);
       border: 1px solid var(--color-border-normal);
       border-radius: var(--radius-xxl);
       box-sizing: border-box;
@@ -202,7 +255,7 @@
     }
     .home-entry-card:hover {
       transform: translateY(-2px);
-      background: var(--color-bg-container);
+      background: var(--color-bg-popup);
       border-color: var(--color-primary-normal);
     }
     .home-entry-card__meta {
@@ -266,7 +319,7 @@
       height: 84px;
       flex: 0 0 auto;
       border-radius: var(--radius-m);
-      background: var(--color-fill-tertiary);
+      background: var(--color-fill-gray);
       overflow: hidden;
     }
     .page-preview-hero__media img {
@@ -464,14 +517,9 @@
   <aside class="doc-sidebar">
     <div class="doc-logo">
       LIFE DESIGN
-      <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">🌙</button>
     </div>
-    <div class="nav-group">HOME</div>
-    <a href="#home" class="nav-item active" data-target="home">首页</a>
-    <div class="nav-group">PAGES</div>
-    <a href="#pages" class="nav-item" data-target="pages">典型页面</a>
     <div class="nav-group">COMPONENTS</div>
-    <a href="#button" class="nav-item" data-target="button">Button</a>
+    <a href="#button" class="nav-item active" data-target="button">Button</a>
     <a href="#alert" class="nav-item" data-target="alert">Alert</a>
     <a href="#message" class="nav-item" data-target="message">Message</a>
     <a href="#radio" class="nav-item" data-target="radio">Radio</a>
@@ -504,6 +552,10 @@
   <main class="doc-main" id="doc-main">
     <!-- View injected here -->
   </main>
+</div>
+<div class="doc-global-actions">
+  <a class="header-link doc-global-home" href="#home" data-global-target="home">返回首页</a>
+  <button class="theme-toggle theme-toggle--global" id="theme-toggle" title="切换主题">切换深色</button>
 </div>
 
 <!-- Icon sprite script -->
@@ -1571,18 +1623,33 @@
     mainEl.innerHTML = html;
 
     // Trigger custom event so React script knows to mount
-    if (['button', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(compId)) {
+    if (componentTargets.includes(compId)) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }
 
   // 3. Initialization and Event Listeners
+  const layoutEl = document.querySelector('.doc-layout');
   const navItems = document.querySelectorAll('.nav-item');
+  const componentTargets = ['button', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'];
 
-  function activateTarget(target) {
+  function updateLayoutForTarget(target) {
+    const showSidebar = componentTargets.includes(target);
+    layoutEl.classList.toggle('doc-layout--sidebar-hidden', !showSidebar);
+    layoutEl.classList.toggle('doc-layout--home', target === 'home');
+  }
+
+  function activateTarget(target, options = {}) {
+    const { updateHistory = true, resetScroll = true } = options;
+    updateLayoutForTarget(target);
     navItems.forEach(n => n.classList.toggle('active', n.getAttribute('data-target') === target));
     renderView(target);
-    window.location.hash = target;
+    if (updateHistory) {
+      window.history.pushState({ target }, '', `#${target}`);
+    }
+    if (resetScroll) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
   }
   
   function handleNavClick(e) {
@@ -1595,6 +1662,18 @@
 
   mainEl.addEventListener('click', (e) => {
     const targetEl = e.target instanceof Element ? e.target : e.target.parentElement;
+    const globalTarget = targetEl?.closest('[data-global-target]');
+    if (globalTarget) {
+      e.preventDefault();
+      activateTarget(globalTarget.getAttribute('data-global-target'));
+      return;
+    }
+    const navTarget = targetEl?.closest('[data-target]');
+    if (navTarget) {
+      e.preventDefault();
+      activateTarget(navTarget.getAttribute('data-target'));
+      return;
+    }
     const entry = targetEl?.closest('[data-home-target]');
     if (!entry) return;
     e.preventDefault();
@@ -1603,26 +1682,37 @@
 
   // Theme toggle
   const themeToggle = document.getElementById('theme-toggle');
+  const globalHomeLink = document.querySelector('.doc-global-home');
+  function syncThemeToggleLabel(theme) {
+    themeToggle.textContent = theme === 'dark' ? '切换浅色' : '切换深色';
+  }
+  syncThemeToggleLabel(document.documentElement.getAttribute('data-theme') || 'light');
+  globalHomeLink?.addEventListener('click', (e) => {
+    e.preventDefault();
+    activateTarget(globalHomeLink.getAttribute('data-global-target'));
+  });
   themeToggle.addEventListener('click', () => {
     const html = document.documentElement;
     const currentTheme = html.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', newTheme);
-    themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    syncThemeToggleLabel(newTheme);
   });
 
   // Handle URL hash on load
   const hash = window.location.hash.replace('#', '') || 'home';
-  const initNav = document.querySelector(`.nav-item[data-target="${hash}"]`);
-  if (initNav) {
-    initNav.click();
-  } else {
-    activateTarget('home');
-  }
+  activateTarget(['home', 'pages', ...componentTargets].includes(hash) ? hash : 'home', { updateHistory: false });
+
+  window.addEventListener('popstate', () => {
+    const currentTarget = window.location.hash.replace('#', '') || 'home';
+    activateTarget(['home', 'pages', ...componentTargets].includes(currentTarget) ? currentTarget : 'home', {
+      updateHistory: false,
+    });
+  });
 
   // Also trigger initial render in case it was already button
   setTimeout(() => {
-    if (['home', 'pages', 'button', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'].includes(hash) || !hash) {
+    if (['home', 'pages', ...componentTargets].includes(hash) || !hash) {
       window.dispatchEvent(new CustomEvent('renderReactButtons'));
     }
   }, 200);
@@ -2062,7 +2152,6 @@
                   <DatePicker
                     aria-label="日期面板示例"
                     defaultValue={singleDate}
-                    defaultOpen
                   />
                 </div>
 
@@ -2072,7 +2161,6 @@
                     picker="range"
                     defaultValue={[new Date(2025, 11, 8), null]}
                     maxRangeDays={7}
-                    defaultOpen
                   />
                 </div>
 
@@ -2245,7 +2333,6 @@
                   <TimePicker
                     aria-label="时间面板示例"
                     defaultValue={timeValue}
-                    defaultOpen
                   />
                 </div>
 
@@ -2254,7 +2341,6 @@
                     aria-label="时间区间面板示例"
                     picker="range"
                     defaultValue={timeRangeValue}
-                    defaultOpen
                   />
                 </div>
 
@@ -2579,7 +2665,6 @@
               clearable={item.clearable && value.length > 0}
               showCount={item.showCount}
               maxLength={item.maxLength}
-              autoFocus={item.isFocused}
               onChange={(event) => setValue(event.target.value)}
               onClear={() => setValue('')}
             />
@@ -2600,7 +2685,6 @@
               value={value}
               placeholder={item.placeholder}
               clearable={item.clearable}
-              autoFocus={item.isFocused}
               onChange={(event) => setValue(event.target.value)}
               onClear={() => setValue('')}
             />
@@ -2622,7 +2706,6 @@
               value={value}
               placeholder={item.placeholder}
               maxLength={item.maxLength}
-              autoFocus={item.isFocused}
               onChange={(event) => setValue(event.target.value)}
             />
           );
@@ -2657,7 +2740,6 @@
                 type="input"
                 value={val}
                 isActive={isActive}
-                inputProps={{ autoFocus: isActive }}
                 onChange={(next) => setVal(next)}
               />
             );
@@ -3289,6 +3371,14 @@
       } else if (item.type === 'page-gallery') {
         const PageGallery = () => {
           const [pageType, setPageType] = React.useState('list');
+
+          React.useEffect(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            const previewContent = document.querySelector('.page-preview-shell .app-content');
+            if (previewContent instanceof HTMLElement) {
+              previewContent.scrollTop = 0;
+            }
+          }, [pageType]);
 
           const productRows = [
             {

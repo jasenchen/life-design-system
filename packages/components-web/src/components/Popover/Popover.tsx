@@ -197,6 +197,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
 
     const isControlled = open !== undefined;
     const isOpen = isControlled ? open : uncontrolledOpen;
+    const wasOpenRef = useRef(isOpen);
 
     const setOpen = useCallback(
       (nextOpen: boolean) => {
@@ -268,6 +269,9 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     }, [matchTriggerWidth, offset, placement]);
 
     useEffect(() => {
+      const wasOpen = wasOpenRef.current;
+      wasOpenRef.current = isOpen;
+
       if (isOpen) {
         setShouldRender(true);
         setVisible(false);
@@ -288,6 +292,11 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       }
 
       setVisible(false);
+
+      if (!wasOpen) {
+        setShouldRender(false);
+        return undefined;
+      }
 
       const timer = window.setTimeout(() => {
         setShouldRender(false);

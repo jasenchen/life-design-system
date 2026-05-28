@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { clsx } from 'clsx';
 import { Icon } from '../Icon/Icon';
 import { Input } from '../Input/Input';
+import { Popover } from '../Popover/Popover';
 
 type PaginationItem = number | 'ellipsis';
 
@@ -158,6 +159,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       return defaultPageSize ?? pageSizeOptions[0] ?? 10;
     });
     const [jumpValue, setJumpValue] = useState<string>('');
+    const [sizeChangerOpen, setSizeChangerOpen] = useState(false);
 
     const effectivePageSize = isPageSizeControlled ? (pageSize as number) : innerPageSize;
     const totalPages = Math.max(1, Math.ceil(Math.max(0, total) / Math.max(1, effectivePageSize)));
@@ -170,6 +172,12 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [effectiveCurrent, isPageControlled, totalPages]);
+
+    useEffect(() => {
+      if (disabled && sizeChangerOpen) {
+        setSizeChangerOpen(false);
+      }
+    }, [disabled, sizeChangerOpen]);
 
     const items = useMemo(() => {
       return getPageItems(effectiveCurrent, totalPages, siblingCount);
@@ -276,23 +284,62 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
         </div>
 
         {showSizeChanger ? (
-          <div className="lds-pagination__size-changer">
-            <select
-              className="lds-pagination__size-select"
-              value={effectivePageSize}
-              onChange={(e) => setSize(Number(e.target.value))}
-              disabled={disabled}
-              aria-label="Page Size"
-            >
-              {pageSizeOptions.map((n) => (
-                <option key={n} value={n}>
-                  {n}条/页
-                </option>
-              ))}
-            </select>
-            <span className="lds-pagination__size-label">{effectivePageSize}条/页</span>
-            <Icon className="lds-pagination__size-icon" name="ic-arrow-down-line" aria-hidden="true" />
-          </div>
+          <Popover
+            open={sizeChangerOpen}
+            onOpenChange={(nextOpen) => {
+              if (disabled) return;
+              setSizeChangerOpen(nextOpen);
+            }}
+            matchTriggerWidth
+            closeOnClickOutside
+            closeOnEsc
+            contentRole="listbox"
+            contentClassName={clsx(
+              'lds-pagination__size-popover',
+              `lds-pagination__size-popover--${size}`
+            )}
+            trigger={(
+              <button
+                type="button"
+                className={clsx('lds-pagination__size-changer', sizeChangerOpen && 'is-open')}
+                disabled={disabled}
+                aria-label="Page Size"
+              >
+                <span className="lds-pagination__size-label">{effectivePageSize}条/页</span>
+                <Icon
+                  className="lds-pagination__size-icon"
+                  name={sizeChangerOpen ? 'ic-arrow-up-line' : 'ic-arrow-down-line'}
+                  aria-hidden="true"
+                />
+              </button>
+            )}
+          >
+            <div className="lds-pagination__size-options">
+              {pageSizeOptions.map((n) => {
+                const selected = n === effectivePageSize;
+                return (
+                  <button
+                    key={n}
+                    type="button"
+                    role="option"
+                    aria-selected={selected}
+                    className={clsx('lds-pagination__size-option', selected && 'is-selected')}
+                    onClick={() => {
+                      setSize(n);
+                      setSizeChangerOpen(false);
+                    }}
+                  >
+                    <span className="lds-pagination__size-option-label">{n}条/页</span>
+                    {selected ? (
+                      <span className="lds-pagination__size-option-check" aria-hidden="true">
+                        <Icon name="ic-finish-line" />
+                      </span>
+                    ) : null}
+                  </button>
+                );
+              })}
+            </div>
+          </Popover>
         ) : null}
 
         {showQuickJumper ? (

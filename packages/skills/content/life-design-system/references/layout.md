@@ -359,7 +359,7 @@ export function FormPageLayoutDemo() {
                 height: 84,
                 flex: '0 0 auto',
                 borderRadius: 'var(--radius-m)',
-                background: 'var(--color-fill-tertiary)',
+                background: 'var(--color-fill-gray)',
               }}
             />
             <div style={{ display: 'grid', gap: 'var(--spacing-2x)' }}>

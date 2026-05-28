@@ -845,6 +845,7 @@ var Popover = React10.forwardRef(
     });
     const isControlled = open !== void 0;
     const isOpen = isControlled ? open : uncontrolledOpen;
+    const wasOpenRef = useRef(isOpen);
     const setOpen = useCallback(
       (nextOpen) => {
         if (!isControlled) {
@@ -899,6 +900,8 @@ var Popover = React10.forwardRef(
       });
     }, [matchTriggerWidth, offset, placement]);
     useEffect(() => {
+      const wasOpen = wasOpenRef.current;
+      wasOpenRef.current = isOpen;
       if (isOpen) {
         setShouldRender(true);
         setVisible(false);
@@ -916,6 +919,10 @@ var Popover = React10.forwardRef(
         };
       }
       setVisible(false);
+      if (!wasOpen) {
+        setShouldRender(false);
+        return void 0;
+      }
       const timer = window.setTimeout(() => {
         var _a, _b;
         setShouldRender(false);
@@ -1772,9 +1779,11 @@ var scrollSelectedCellIntoView = (column, selectedValue) => {
   if (!column || !selectedValue) return;
   const selectedCell = column.querySelector(`[data-time-value="${selectedValue}"]`);
   if (!selectedCell) return;
-  selectedCell.scrollIntoView({
-    block: "center",
-    inline: "nearest",
+  const centeredTop = selectedCell.offsetTop - (column.clientHeight - selectedCell.offsetHeight) / 2;
+  const maxScrollTop = Math.max(column.scrollHeight - column.clientHeight, 0);
+  const nextScrollTop = Math.min(Math.max(centeredTop, 0), maxScrollTop);
+  column.scrollTo({
+    top: nextScrollTop,
     behavior: "auto"
   });
 };
@@ -2897,9 +2906,11 @@ var scrollSelectedCellIntoView2 = (column, selectedValue) => {
   if (!column || !selectedValue) return;
   const selectedCell = column.querySelector(`[data-time-value="${selectedValue}"]`);
   if (!selectedCell) return;
-  selectedCell.scrollIntoView({
-    block: "center",
-    inline: "nearest",
+  const centeredTop = selectedCell.offsetTop - (column.clientHeight - selectedCell.offsetHeight) / 2;
+  const maxScrollTop = Math.max(column.scrollHeight - column.clientHeight, 0);
+  const nextScrollTop = Math.min(Math.max(centeredTop, 0), maxScrollTop);
+  column.scrollTo({
+    top: nextScrollTop,
     behavior: "auto"
   });
 };
@@ -3982,6 +3993,7 @@ var Pagination = React28.forwardRef(
       return (_a = defaultPageSize != null ? defaultPageSize : pageSizeOptions[0]) != null ? _a : 10;
     });
     const [jumpValue, setJumpValue] = useState12("");
+    const [sizeChangerOpen, setSizeChangerOpen] = useState12(false);
     const effectivePageSize = isPageSizeControlled ? pageSize : innerPageSize;
     const totalPages = Math.max(1, Math.ceil(Math.max(0, total) / Math.max(1, effectivePageSize)));
     const effectiveCurrent = clampInt(isPageControlled ? current : innerCurrent, 1, totalPages);
@@ -3990,6 +4002,11 @@ var Pagination = React28.forwardRef(
         setInnerCurrent(effectiveCurrent);
       }
     }, [effectiveCurrent, isPageControlled, totalPages]);
+    useEffect4(() => {
+      if (disabled && sizeChangerOpen) {
+        setSizeChangerOpen(false);
+      }
+    }, [disabled, sizeChangerOpen]);
     const items = useMemo8(() => {
       return getPageItems(effectiveCurrent, totalPages, siblingCount);
     }, [effectiveCurrent, totalPages, siblingCount]);
@@ -4081,27 +4098,71 @@ var Pagination = React28.forwardRef(
               }
             )
           ] }),
-          showSizeChanger ? /* @__PURE__ */ jsxs26("div", { className: "lds-pagination__size-changer", children: [
-            /* @__PURE__ */ jsx28(
-              "select",
-              {
-                className: "lds-pagination__size-select",
-                value: effectivePageSize,
-                onChange: (e) => setSize(Number(e.target.value)),
-                disabled,
-                "aria-label": "Page Size",
-                children: pageSizeOptions.map((n) => /* @__PURE__ */ jsxs26("option", { value: n, children: [
-                  n,
-                  "\u6761/\u9875"
-                ] }, n))
-              }
-            ),
-            /* @__PURE__ */ jsxs26("span", { className: "lds-pagination__size-label", children: [
-              effectivePageSize,
-              "\u6761/\u9875"
-            ] }),
-            /* @__PURE__ */ jsx28(Icon, { className: "lds-pagination__size-icon", name: "ic-arrow-down-line", "aria-hidden": "true" })
-          ] }) : null,
+          showSizeChanger ? /* @__PURE__ */ jsx28(
+            Popover,
+            {
+              open: sizeChangerOpen,
+              onOpenChange: (nextOpen) => {
+                if (disabled) return;
+                setSizeChangerOpen(nextOpen);
+              },
+              matchTriggerWidth: true,
+              closeOnClickOutside: true,
+              closeOnEsc: true,
+              contentRole: "listbox",
+              contentClassName: clsx28(
+                "lds-pagination__size-popover",
+                `lds-pagination__size-popover--${size}`
+              ),
+              trigger: /* @__PURE__ */ jsxs26(
+                "button",
+                {
+                  type: "button",
+                  className: clsx28("lds-pagination__size-changer", sizeChangerOpen && "is-open"),
+                  disabled,
+                  "aria-label": "Page Size",
+                  children: [
+                    /* @__PURE__ */ jsxs26("span", { className: "lds-pagination__size-label", children: [
+                      effectivePageSize,
+                      "\u6761/\u9875"
+                    ] }),
+                    /* @__PURE__ */ jsx28(
+                      Icon,
+                      {
+                        className: "lds-pagination__size-icon",
+                        name: sizeChangerOpen ? "ic-arrow-up-line" : "ic-arrow-down-line",
+                        "aria-hidden": "true"
+                      }
+                    )
+                  ]
+                }
+              ),
+              children: /* @__PURE__ */ jsx28("div", { className: "lds-pagination__size-options", children: pageSizeOptions.map((n) => {
+                const selected = n === effectivePageSize;
+                return /* @__PURE__ */ jsxs26(
+                  "button",
+                  {
+                    type: "button",
+                    role: "option",
+                    "aria-selected": selected,
+                    className: clsx28("lds-pagination__size-option", selected && "is-selected"),
+                    onClick: () => {
+                      setSize(n);
+                      setSizeChangerOpen(false);
+                    },
+                    children: [
+                      /* @__PURE__ */ jsxs26("span", { className: "lds-pagination__size-option-label", children: [
+                        n,
+                        "\u6761/\u9875"
+                      ] }),
+                      selected ? /* @__PURE__ */ jsx28("span", { className: "lds-pagination__size-option-check", "aria-hidden": "true", children: /* @__PURE__ */ jsx28(Icon, { name: "ic-finish-line" }) }) : null
+                    ]
+                  },
+                  n
+                );
+              }) })
+            }
+          ) : null,
           showQuickJumper ? /* @__PURE__ */ jsxs26("div", { className: "lds-pagination__quick-jumper", children: [
             /* @__PURE__ */ jsx28("span", { className: "lds-pagination__quick-text", children: "\u8DF3\u81F3" }),
             /* @__PURE__ */ jsx28("span", { className: "lds-pagination__quick-input", children: /* @__PURE__ */ jsx28(

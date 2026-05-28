@@ -98,9 +98,12 @@ const scrollSelectedCellIntoView = (
   const selectedCell = column.querySelector<HTMLElement>(`[data-time-value="${selectedValue}"]`);
   if (!selectedCell) return;
 
-  selectedCell.scrollIntoView({
-    block: 'center',
-    inline: 'nearest',
+  const centeredTop = selectedCell.offsetTop - (column.clientHeight - selectedCell.offsetHeight) / 2;
+  const maxScrollTop = Math.max(column.scrollHeight - column.clientHeight, 0);
+  const nextScrollTop = Math.min(Math.max(centeredTop, 0), maxScrollTop);
+
+  column.scrollTo({
+    top: nextScrollTop,
     behavior: 'auto',
   });
 };

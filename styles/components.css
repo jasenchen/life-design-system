@@ -5,7 +5,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-1x);
+  gap: var(--spacing-base);
   box-sizing: border-box;
   min-width: 88px;
   font-family: var(--font-normal);
@@ -43,7 +43,7 @@
 
 /* Button Sizes */
 .lds-btn--large {
-  height: var(--spacing-12x);
+  height: calc(var(--spacing-10x) + var(--spacing-2x));
   padding: 0 var(--spacing-5x);
   font: var(--subtitle-medium);
   border-radius: var(--radius-m);
@@ -172,7 +172,7 @@
 
 /* 覆盖不同尺寸下的宽度，使其成为正方形 */
 .lds-btn--large.lds-btn--icon {
-  width: var(--spacing-12x);
+  width: calc(var(--spacing-10x) + var(--spacing-2x));
 }
 .lds-btn--large.lds-btn--icon .icon {
   width: 28px;
@@ -232,7 +232,7 @@
 
 /* Capsule Sizes */
 .lds-capsule--large {
-  height: var(--spacing-12x);
+  height: calc(var(--spacing-10x) + var(--spacing-2x));
   padding: 0 var(--spacing-5x);
   font: var(--subtitle-regular);
 }
@@ -331,7 +331,7 @@
 
 /* Input Sizes */
 .lds-input-wrapper--large {
-  height: var(--spacing-12x);
+  height: calc(var(--spacing-10x) + var(--spacing-2x));
   padding: 0 var(--spacing-4x);
   border-radius: 16px;
 }
@@ -413,7 +413,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-placeholder);
+  color: var(--color-text-caption);
   cursor: pointer;
   margin-left: 8px;
   transition: color 0.2s;
@@ -433,7 +433,7 @@
   font-family: var(--font-normal);
   font: var(--body-regular);
   color: var(--color-text-primary);
-  background-color: var(--color-bg-normal);
+  background-color: var(--color-fill-normal);
   box-shadow: inset 0 0 0 1px var(--color-border-normal);
   border-radius: 12px; /* Figma */
   border: none;
@@ -446,7 +446,7 @@
 /* Reset native button appearance for non-input types */
 button.lds-filter {
   appearance: none;
-  background: var(--color-bg-normal);
+  background: var(--color-fill-normal);
   text-align: left;
 }
 
@@ -936,7 +936,7 @@ button.lds-filter {
   background: linear-gradient(135deg, #d71d2a 0%, #a90d20 100%);
   border: none;
   color: #ffffff;
-  font: var(--title-small);
+  font-family: var(--font-normal);
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
@@ -1543,11 +1543,12 @@ button.lds-filter {
 
 /* Page size changer (visual wrapper + native select overlay) */
 .lds-pagination__size-changer {
-  position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-3x);
   height: var(--lds-pagination-item-size);
+  min-width: 88px;
   padding: 0 var(--spacing-3x);
   box-sizing: border-box;
   border: 1px solid var(--color-border-normal);
@@ -1555,16 +1556,17 @@ button.lds-filter {
   background-color: var(--color-fill-normal);
   color: var(--color-text-primary);
   user-select: none;
-}
-
-.lds-pagination__size-select {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
   cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.lds-pagination__size-select:disabled {
+.lds-pagination__size-changer:hover:not(:disabled),
+.lds-pagination__size-changer.is-open {
+  background-color: var(--color-fill-hover);
+}
+
+.lds-pagination__size-changer:disabled {
+  color: var(--color-text-disable);
   cursor: not-allowed;
 }
 
@@ -1576,6 +1578,79 @@ button.lds-filter {
   width: var(--spacing-4x);
   height: var(--spacing-4x);
   color: var(--color-text-caption);
+}
+
+.lds-pagination__size-popover {
+  padding: var(--spacing-2x);
+}
+
+.lds-pagination__size-popover--default-size {
+  min-width: 88px;
+}
+
+.lds-pagination__size-popover--small {
+  min-width: 76px;
+}
+
+.lds-pagination__size-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base);
+}
+
+.lds-pagination__size-option {
+  min-height: 40px;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x);
+  padding: 9px var(--spacing-2x);
+  font: var(--body-regular);
+  font-family: var(--font-normal);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.lds-pagination__size-popover--small .lds-pagination__size-option {
+  min-height: 36px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  font: var(--caption-regular);
+}
+
+.lds-pagination__size-option:hover,
+.lds-pagination__size-option:focus-visible,
+.lds-pagination__size-option.is-selected {
+  background: var(--color-fill-hover);
+}
+
+.lds-pagination__size-option:focus-visible {
+  outline: none;
+}
+
+.lds-pagination__size-option-label {
+  min-width: 0;
+  flex: 1;
+}
+
+.lds-pagination__size-option-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--color-primary-normal);
+}
+
+.lds-pagination__size-option-check .icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* Quick jumper */

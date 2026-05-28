@@ -917,6 +917,7 @@ var Popover = import_react10.default.forwardRef(
     });
     const isControlled = open !== void 0;
     const isOpen = isControlled ? open : uncontrolledOpen;
+    const wasOpenRef = (0, import_react10.useRef)(isOpen);
     const setOpen = (0, import_react10.useCallback)(
       (nextOpen) => {
         if (!isControlled) {
@@ -971,6 +972,8 @@ var Popover = import_react10.default.forwardRef(
       });
     }, [matchTriggerWidth, offset, placement]);
     (0, import_react10.useEffect)(() => {
+      const wasOpen = wasOpenRef.current;
+      wasOpenRef.current = isOpen;
       if (isOpen) {
         setShouldRender(true);
         setVisible(false);
@@ -988,6 +991,10 @@ var Popover = import_react10.default.forwardRef(
         };
       }
       setVisible(false);
+      if (!wasOpen) {
+        setShouldRender(false);
+        return void 0;
+      }
       const timer = window.setTimeout(() => {
         var _a, _b;
         setShouldRender(false);
@@ -1844,9 +1851,11 @@ var scrollSelectedCellIntoView = (column, selectedValue) => {
   if (!column || !selectedValue) return;
   const selectedCell = column.querySelector(`[data-time-value="${selectedValue}"]`);
   if (!selectedCell) return;
-  selectedCell.scrollIntoView({
-    block: "center",
-    inline: "nearest",
+  const centeredTop = selectedCell.offsetTop - (column.clientHeight - selectedCell.offsetHeight) / 2;
+  const maxScrollTop = Math.max(column.scrollHeight - column.clientHeight, 0);
+  const nextScrollTop = Math.min(Math.max(centeredTop, 0), maxScrollTop);
+  column.scrollTo({
+    top: nextScrollTop,
     behavior: "auto"
   });
 };
@@ -2969,9 +2978,11 @@ var scrollSelectedCellIntoView2 = (column, selectedValue) => {
   if (!column || !selectedValue) return;
   const selectedCell = column.querySelector(`[data-time-value="${selectedValue}"]`);
   if (!selectedCell) return;
-  selectedCell.scrollIntoView({
-    block: "center",
-    inline: "nearest",
+  const centeredTop = selectedCell.offsetTop - (column.clientHeight - selectedCell.offsetHeight) / 2;
+  const maxScrollTop = Math.max(column.scrollHeight - column.clientHeight, 0);
+  const nextScrollTop = Math.min(Math.max(centeredTop, 0), maxScrollTop);
+  column.scrollTo({
+    top: nextScrollTop,
     behavior: "auto"
   });
 };
@@ -4054,6 +4065,7 @@ var Pagination = import_react28.default.forwardRef(
       return (_a = defaultPageSize != null ? defaultPageSize : pageSizeOptions[0]) != null ? _a : 10;
     });
     const [jumpValue, setJumpValue] = (0, import_react28.useState)("");
+    const [sizeChangerOpen, setSizeChangerOpen] = (0, import_react28.useState)(false);
     const effectivePageSize = isPageSizeControlled ? pageSize : innerPageSize;
     const totalPages = Math.max(1, Math.ceil(Math.max(0, total) / Math.max(1, effectivePageSize)));
     const effectiveCurrent = clampInt(isPageControlled ? current : innerCurrent, 1, totalPages);
@@ -4062,6 +4074,11 @@ var Pagination = import_react28.default.forwardRef(
         setInnerCurrent(effectiveCurrent);
       }
     }, [effectiveCurrent, isPageControlled, totalPages]);
+    (0, import_react28.useEffect)(() => {
+      if (disabled && sizeChangerOpen) {
+        setSizeChangerOpen(false);
+      }
+    }, [disabled, sizeChangerOpen]);
     const items = (0, import_react28.useMemo)(() => {
       return getPageItems(effectiveCurrent, totalPages, siblingCount);
     }, [effectiveCurrent, totalPages, siblingCount]);
@@ -4153,27 +4170,71 @@ var Pagination = import_react28.default.forwardRef(
               }
             )
           ] }),
-          showSizeChanger ? /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "lds-pagination__size-changer", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-              "select",
-              {
-                className: "lds-pagination__size-select",
-                value: effectivePageSize,
-                onChange: (e) => setSize(Number(e.target.value)),
-                disabled,
-                "aria-label": "Page Size",
-                children: pageSizeOptions.map((n) => /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("option", { value: n, children: [
-                  n,
-                  "\u6761/\u9875"
-                ] }, n))
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("span", { className: "lds-pagination__size-label", children: [
-              effectivePageSize,
-              "\u6761/\u9875"
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(Icon, { className: "lds-pagination__size-icon", name: "ic-arrow-down-line", "aria-hidden": "true" })
-          ] }) : null,
+          showSizeChanger ? /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+            Popover,
+            {
+              open: sizeChangerOpen,
+              onOpenChange: (nextOpen) => {
+                if (disabled) return;
+                setSizeChangerOpen(nextOpen);
+              },
+              matchTriggerWidth: true,
+              closeOnClickOutside: true,
+              closeOnEsc: true,
+              contentRole: "listbox",
+              contentClassName: (0, import_clsx28.clsx)(
+                "lds-pagination__size-popover",
+                `lds-pagination__size-popover--${size}`
+              ),
+              trigger: /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
+                "button",
+                {
+                  type: "button",
+                  className: (0, import_clsx28.clsx)("lds-pagination__size-changer", sizeChangerOpen && "is-open"),
+                  disabled,
+                  "aria-label": "Page Size",
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("span", { className: "lds-pagination__size-label", children: [
+                      effectivePageSize,
+                      "\u6761/\u9875"
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+                      Icon,
+                      {
+                        className: "lds-pagination__size-icon",
+                        name: sizeChangerOpen ? "ic-arrow-up-line" : "ic-arrow-down-line",
+                        "aria-hidden": "true"
+                      }
+                    )
+                  ]
+                }
+              ),
+              children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "lds-pagination__size-options", children: pageSizeOptions.map((n) => {
+                const selected = n === effectivePageSize;
+                return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
+                  "button",
+                  {
+                    type: "button",
+                    role: "option",
+                    "aria-selected": selected,
+                    className: (0, import_clsx28.clsx)("lds-pagination__size-option", selected && "is-selected"),
+                    onClick: () => {
+                      setSize(n);
+                      setSizeChangerOpen(false);
+                    },
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("span", { className: "lds-pagination__size-option-label", children: [
+                        n,
+                        "\u6761/\u9875"
+                      ] }),
+                      selected ? /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "lds-pagination__size-option-check", "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(Icon, { name: "ic-finish-line" }) }) : null
+                    ]
+                  },
+                  n
+                );
+              }) })
+            }
+          ) : null,
           showQuickJumper ? /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "lds-pagination__quick-jumper", children: [
             /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "lds-pagination__quick-text", children: "\u8DF3\u81F3" }),
             /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "lds-pagination__quick-input", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(

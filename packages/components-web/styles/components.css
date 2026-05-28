@@ -3674,20 +3674,29 @@ button.lds-filter {
 .lds-message-viewport__item {
   width: max-content;
   max-width: 100%;
-  max-height: 0;
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-normal);
   margin-bottom: 0;
   opacity: 0;
-  overflow: hidden;
   transition:
-    max-height 0.2s cubic-bezier(0.22, 1, 0.36, 1),
     margin-bottom 0.2s cubic-bezier(0.22, 1, 0.36, 1),
     opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.lds-message-viewport__item-inner {
+  box-sizing: border-box;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .lds-message-viewport__item.is-visible {
-  max-height: 80px;
   margin-bottom: var(--spacing-3x);
   opacity: 1;
+}
+
+.lds-message-viewport__item.is-visible .lds-message-viewport__item-inner {
+  max-height: 80px;
 }
 
 .lds-message-viewport__item:last-child {
@@ -3708,7 +3717,6 @@ button.lds-filter {
   border: 1px solid var(--lds-message-border);
   border-radius: var(--radius-m);
   background-color: var(--lds-message-bg);
-  box-shadow: var(--shadow-normal);
   color: var(--color-text-primary);
   font: var(--body-medium);
   font-family: var(--font-normal);
@@ -3807,6 +3815,10 @@ button.lds-filter {
 
 @media (prefers-reduced-motion: reduce) {
   .lds-message-viewport__item {
+    transition: none;
+  }
+
+  .lds-message-viewport__item-inner {
     transition: none;
   }
 

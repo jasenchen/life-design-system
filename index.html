@@ -1983,13 +1983,6 @@
         ];
 
         const MessageDemo = () => {
-          const triggerMessage = (callback) => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            window.setTimeout(() => {
-              callback();
-            }, 220);
-          };
-
           React.useEffect(() => {
             return () => {
               message.destroy();
@@ -2007,14 +2000,12 @@
                     variant="default"
                     size="default-size"
                     onClick={() =>
-                      triggerMessage(() =>
-                        message.open({
-                          key: 'message-custom-duration',
-                          variant: 'info',
-                          content: '将在 5 秒后自动消失',
-                          duration: 5000,
-                        })
-                      )
+                      message.open({
+                        key: 'message-custom-duration',
+                        variant: 'info',
+                        content: '将在 5 秒后自动消失',
+                        duration: 5000,
+                      })
                     }
                   >
                     5 秒提示
@@ -2023,15 +2014,13 @@
                     variant="default"
                     size="default-size"
                     onClick={() =>
-                      triggerMessage(() =>
-                        message.open({
-                          key: 'message-closable',
-                          variant: 'warning',
-                          content: '请尽快处理待办事项',
-                          duration: 0,
-                          closable: true,
-                        })
-                      )
+                      message.open({
+                        key: 'message-closable',
+                        variant: 'warning',
+                        content: '请尽快处理待办事项',
+                        duration: 0,
+                        closable: true,
+                      })
                     }
                   >
                     常驻可关闭
@@ -2051,7 +2040,7 @@
           return (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
-                用下面的按钮触发全局轻提示；点击后页面会自动回到顶部，方便直接看到真实展示效果。
+                用下面的按钮触发全局轻提示；提示固定出现在页面顶部，但不应改变当前页面滚动位置。
               </span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
                 {semanticMessageConfigs.map((config) => (
@@ -2060,12 +2049,10 @@
                     variant="default"
                     size="default-size"
                     onClick={() =>
-                      triggerMessage(() =>
-                        message.open({
-                          variant: config.variant,
-                          content: config.text,
-                        })
-                      )
+                      message.open({
+                        variant: config.variant,
+                        content: config.text,
+                      })
                     }
                   >
                     {config.label}提示

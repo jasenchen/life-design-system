@@ -302,7 +302,7 @@ var MessageViewport = ({ messages: messages2, onClose }) => {
     "div",
     {
       className: clsx4("lds-message-viewport__item", message2.visible && "is-visible"),
-      children: /* @__PURE__ */ jsx4(
+      children: /* @__PURE__ */ jsx4("div", { className: "lds-message-viewport__item-inner", children: /* @__PURE__ */ jsx4(
         Message,
         {
           className: message2.className,
@@ -315,7 +315,7 @@ var MessageViewport = ({ messages: messages2, onClose }) => {
           visible: message2.visible,
           onClose: () => onClose(message2.key)
         }
-      )
+      ) })
     },
     message2.key
   )) });

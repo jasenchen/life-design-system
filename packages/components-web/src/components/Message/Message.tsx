@@ -305,17 +305,19 @@ const MessageViewport = ({ messages, onClose }: MessageViewportProps) => {
           key={message.key}
           className={clsx('lds-message-viewport__item', message.visible && 'is-visible')}
         >
-          <Message
-            className={message.className}
-            content={message.content}
-            variant={message.variant}
-            icon={message.icon}
-            style={message.style}
-            closable={message.closable}
-            closeLabel={message.closeLabel}
-            visible={message.visible}
-            onClose={() => onClose(message.key)}
-          />
+          <div className="lds-message-viewport__item-inner">
+            <Message
+              className={message.className}
+              content={message.content}
+              variant={message.variant}
+              icon={message.icon}
+              style={message.style}
+              closable={message.closable}
+              closeLabel={message.closeLabel}
+              visible={message.visible}
+              onClose={() => onClose(message.key)}
+            />
+          </div>
         </div>
       ))}
     </div>

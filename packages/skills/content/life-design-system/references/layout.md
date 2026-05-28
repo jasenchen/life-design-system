@@ -261,7 +261,8 @@ export function ListPageLayoutDemo() {
 │       │       ├── .form-page-hero__title (重点标题)
 │       │       └── .form-page-hero__meta (关键辅助信息)
 │       ├── .form-page-divider (可选：统领信息区和下方内容之间的分割线)
-│       ├── <Steps /> (步骤条，可选)
+│       ├── .form-page-steps (步骤条容器，可选，父容器内居中)
+│       │   └── <Steps /> (保持组件默认宽度，不拉伸到父容器)
 │       └── .form-page-form (表单区)
 │           ├── .form-page-section (表单分组)
 │           │   ├── .form-page-section__title (分组标题)
@@ -281,9 +282,9 @@ export function ListPageLayoutDemo() {
 1. **导航区**：必须使用 `<PageHeader variant="secondary" />`，标题描述当前表单动作，如“新建团购商品”“编辑门店信息”“提交资质材料”；返回行为通过 `onBackClick` 传入。
 2. **内容宽度**：`PageHeader` 下方的表单页内容需要放入独立内容容器，宽度根据内容设定，不随页面拉伸；最大宽度 872px，最小宽度 648px，并在内容区内水平居中。该内容容器需补充固定上下间距：上间距使用 `var(--spacing-2x)`（8px），下间距使用 `var(--spacing-8x)`（32px）。
 3. **统领信息区**：用于承载当前表单最重要的上下文信息，例如业务对象名称、主体名称、编号、金额、审核对象或关键状态；可以是图文样式，也可以是纯文本样式。
-4. **步骤条**：仅当表单存在明确先后顺序、多阶段填写或“上一步 / 下一步 / 提交审核”语义时使用 `<Steps />`；平级切换不要使用步骤条，应使用 `Tabs`。
+4. **步骤条**：仅当表单存在明确先后顺序、多阶段填写或“上一步 / 下一步 / 提交审核”语义时使用 `<Steps />`；平级切换不要使用步骤条，应使用 `Tabs`。步骤条在表单页中应保持组件默认宽度，不要拉伸到表单内容容器整行；实现上建议额外包一层 `.form-page-steps` 容器，在父容器内水平居中对齐。
 5. **表单区**：字段必须使用 `Form` + `FormItem` 组织；如果存在多个业务主题，应拆成多个分组，每组由“分组标题 + Form 组件”组成。
-6. **全局操作区**：放置影响整个表单的操作按钮组，也可放置协议同意勾选；该区域在表单页中通常为吸底布局，固定贴在内容区底部。实现上优先作为 `.app-body` 下、`.app-content` 外的兄弟节点，而不是放进滚动容器内部，这样可以保留基础框架的底部内边距且不会出现露底问题。操作区背景需使用 `var(--color-bg-normal)`，顶部与正文之间的分割线使用 `var(--color-divider-normal)`。操作区内部内容仍需使用独立容器居中，宽度与表单内容容器保持一致；按钮组间距使用 `var(--spacing-3x)`，同一区域最多一个 `primary` 按钮。
+6. **全局操作区**：放置影响整个表单的操作按钮组，也可放置协议同意勾选；该区域在表单页中通常为吸底布局，固定贴在 `app-body` 底部。实现上优先作为 `.app-body` 下、`.app-content` 外的兄弟节点，而不是放进滚动容器内部，这样可以保留基础框架的底部内边距且不会出现露底问题。操作区背景需使用 `var(--color-bg-normal)`，顶部与正文之间的分割线使用 `var(--color-divider-normal)`。操作区内部内容仍需使用独立容器居中，宽度与表单内容容器保持一致；按钮组间距使用 `var(--spacing-3x)`，同一区域最多一个 `primary` 按钮。
 7. **块间距**：统领信息区、步骤条、表单区、全局操作区这些页面级块之间的垂直间距统一使用 `var(--spacing-8x)`，即 32px。
 8. **聚合区分割线**：统领信息区下方一般会有一根虚线分割线，用于和后续步骤条或表单区分隔；分割线与上方、下方内容之间的间距都使用 `var(--spacing-8x)`，也遵循页面级块间距规则。分割线颜色使用 `var(--color-border-normal)`。
 
@@ -388,8 +389,15 @@ export function FormPageLayoutDemo() {
             }}
           />
 
-          <div style={{ marginBottom: 'var(--spacing-8x)' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginBottom: 'var(--spacing-8x)',
+            }}
+          >
             <Steps
+              style={{ width: 'fit-content', maxWidth: '100%' }}
               current={0}
               items={[
                 { title: '填写基础信息' },
@@ -451,6 +459,251 @@ export function FormPageLayoutDemo() {
         }}
       >
         <div style={{ width: 872, minWidth: 648, maxWidth: 872, margin: '0 auto', display: 'grid', justifyContent: 'center', gap: 'var(--spacing-4x)' }}>
+          <Checkbox
+            size="default-size"
+            showLabel
+            label="请先阅读同意《抖音生活服务合作协议》后提交"
+          />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 'var(--spacing-3x)' }}>
+            <Button variant="default">取消</Button>
+            <Button variant="secondary">保存草稿</Button>
+            <Button variant="primary">提交审核</Button>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+```
+
+### 表单页 - 带预览图 (Form Page With Preview)
+
+适用场景：当表单在填写过程中需要同步预览用户端或素材端的最终展示效果时使用，例如商品卡、门店卡、详情头图、海报预览等。这类页面本质上仍然属于表单页，但右侧会增加一个独立预览区。
+
+- 适用于“左侧填写配置，右侧实时预览”的场景，例如商品装修、投放素材配置、卡片样式配置、详情头图配置；
+- 页面基础框架、导航区、统领信息区、步骤条、表单区、全局操作区仍然遵循 [表单页 (Form Page)](#表单页-form-page) 的基础规则；
+- 与普通表单页不同的是，表单正文阶段需要额外引入预览区：左侧为窄表单内容区，右侧为预览图区域，两者放在同一个父容器中两端对齐。
+
+#### 页面结构层级 (Tree Structure)
+
+以下是一个典型的带预览图表单页结构层级：
+
+```text
+.app-body (表单页主容器)
+├── .app-content (页面滚动内容区)
+│   ├── <PageHeader variant="secondary" /> (导航区，必选)
+│   └── .form-page-preview-layout (表单 + 预览图联合容器)
+│       ├── .form-page-content (左侧窄表单内容区，宽度 648px)
+│       │   ├── .form-page-hero (统领信息区，可选但常用，直接平铺展示)
+│       │   ├── .form-page-divider (可选：统领信息区和下方内容之间的分割线)
+│       │   ├── .form-page-steps (步骤条容器，可选，父容器内居中)
+│       │   │   └── <Steps /> (保持组件默认宽度，不拉伸到父容器)
+│       │   └── .form-page-form (表单区)
+│       │       ├── .form-page-section (表单分组)
+│       │       └── .form-page-section (其他表单分组，可选)
+│       └── .form-page-preview
+│           ├── .form-page-preview__header
+│           │   ├── .form-page-preview__title (预览区标题)
+│           │   └── .form-page-preview__desc (附属说明，标题右侧)
+│           ├── <Tabs variant="capsule" size="small" /> (可选：多预览图切换，保持组件自身宽度)
+│           └── .form-page-preview__device
+│               └── <img /> (预览图本体，裁切进圆角设备外轮廓中)
+└── .form-page-actions (全局操作区，吸底)
+    └── .form-page-actions__inner (内容始终居中，宽度 648px)
+        ├── <Checkbox /> (协议同意，可选)
+        └── .form-page-actions__buttons
+            ├── <Button variant="default" />
+            ├── <Button variant="secondary" />
+            └── <Button variant="primary" />
+```
+
+#### 区域规则
+
+1. **联合容器**：左侧表单区与右侧预览区必须包裹在同一个父容器中，两端对齐展示；联合容器左侧需要额外留出 `var(--spacing-12x)`（48px）的空间，用于与页面整体版心保持更舒展的视觉关系。
+2. **左右间距**：左侧窄表单区与右侧预览区之间的水平间距使用 `var(--spacing-10x)`（40px），不要再使用 32px 或其他任意值。
+3. **左侧表单宽度**：左侧表单内容区固定为 648px 宽，不再沿用普通表单页的 648px ~ 872px 浮动区间；统领信息区、分割线、步骤条、表单分组和上下间距规则与普通表单页保持一致。
+4. **预览区标题**：预览区标题与附属说明需要同一行展示，并使用文字基线对齐；标题与说明之间的水平间距使用 `var(--spacing-3x)`（12px）。
+5. **附属说明**：附属说明用于解释预览区的操作语义，例如“点击图片对应区域可直接修改”；说明文案应简短，不要写成长段解释。
+6. **预览区 Tabs**：如果存在多个预览图切换，可使用 `Tabs variant="capsule" size="small"`；Tabs 一般按照组件自身内容宽度渲染，不要主动拉伸到预览区整行，也不要和预览图再包成额外卡片。
+7. **预览图本体**：预览图区域不需要外层卡片包裹；如果是手机端截图类预览，建议使用一个圆角矩形设备外轮廓承载图片，外轮廓描边为 6px，图片本体裁切在轮廓内部，不允许露出四角。
+8. **全局操作区**：即使页面上半部分是“双栏布局”，底部全局操作区内容也始终保持居中，不要对齐到左侧表单列。
+
+#### 预览区规范
+
+- 预览区用于辅助用户校验“填写结果在消费端如何展示”，不要把普通帮助提示、说明文档、字段备注塞进这里。
+- 标题建议使用 `font: var(--title-medium)`；附属说明建议使用 `font: var(--body-regular)` 和较低强调文字色。
+- 标题区、Tabs、预览图本体应共享同一左边界；预览图不要额外居中偏移。
+- 如果预览内容只是展示单张图，直接使用一张图片即可，不需要额外模拟完整页面细节。
+- 如果需要多图切换，建议维持 2 到 3 个 Tab；超过 3 个时优先审视是否应该拆成独立预览场景。
+
+#### 标准结构示例
+
+```tsx
+import React from 'react';
+import {
+  Button,
+  Checkbox,
+  Form,
+  FormItem,
+  Input,
+  PageHeader,
+  Steps,
+  Tab,
+  Tabs,
+  Textarea,
+} from '@life-ds/components-web';
+
+export function FormPageWithPreviewDemo() {
+  return (
+    <div className="app-body">
+      <div className="app-content">
+        <PageHeader
+          variant="secondary"
+          title="新建团购商品"
+          onBackClick={() => window.history.back()}
+        />
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: 'var(--spacing-10x)',
+            paddingLeft: 'var(--spacing-12x)',
+            boxSizing: 'border-box',
+          }}
+        >
+          <div
+            style={{
+              width: 648,
+              minWidth: 648,
+              maxWidth: 648,
+              paddingTop: 'var(--spacing-2x)',
+              paddingBottom: 'var(--spacing-8x)',
+              boxSizing: 'border-box',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginBottom: 'var(--spacing-8x)',
+              }}
+            >
+              <Steps
+                style={{ width: 'fit-content', maxWidth: '100%' }}
+                current={1}
+                items={[
+                  { title: '填写基础信息' },
+                  { title: '配置预览素材' },
+                  { title: '提交审核' },
+                ]}
+              />
+            </div>
+
+            <main style={{ display: 'grid', gap: 'var(--spacing-8x)' }}>
+              <section>
+                <h2
+                  style={{
+                    margin: '0 0 var(--spacing-5x)',
+                    font: 'var(--title-medium)',
+                    color: 'var(--color-text-primary)',
+                  }}
+                >
+                  基础信息
+                </h2>
+                <Form labelWidth={120}>
+                  <FormItem label="商品名称" htmlFor="name" required>
+                    <Input id="name" placeholder="请输入商品名称" />
+                  </FormItem>
+                  <FormItem label="附属说明" htmlFor="summary">
+                    <Textarea id="summary" placeholder="请输入附属说明" />
+                  </FormItem>
+                </Form>
+              </section>
+            </main>
+          </div>
+
+          <aside
+            style={{
+              width: 360,
+              flex: '0 0 360px',
+              display: 'grid',
+              gap: 'var(--spacing-4x)',
+              paddingTop: 'var(--spacing-2x)',
+              boxSizing: 'border-box',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                gap: 'var(--spacing-3x)',
+              }}
+            >
+              <h2 style={{ margin: 0, font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+                商品预览图
+              </h2>
+              <p style={{ margin: 0, font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                点击图片对应区域可直接修改
+              </p>
+            </div>
+
+            <div style={{ width: 'fit-content', maxWidth: '100%' }}>
+              <Tabs variant="capsule" size="small" defaultValue="cover">
+                <Tab value="cover">商品卡</Tab>
+                <Tab value="store">门店卡</Tab>
+              </Tabs>
+            </div>
+
+            <div
+              style={{
+                width: '100%',
+                maxWidth: 304,
+                border: '6px solid #0c0d0f',
+                borderRadius: 42,
+                background: '#0c0d0f',
+                overflow: 'hidden',
+                boxSizing: 'border-box',
+              }}
+            >
+              <div
+                style={{
+                  aspectRatio: '292 / 632',
+                  borderRadius: 36,
+                  overflow: 'hidden',
+                  background: 'var(--color-fill-gray)',
+                }}
+              >
+                <img
+                  src="./assets/shangpin.png"
+                  alt="商品卡预览"
+                  style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <footer
+        style={{
+          padding: 'var(--spacing-5x) var(--spacing-8x)',
+          borderTop: '1px solid var(--color-divider-normal)',
+          background: 'var(--color-bg-normal)',
+        }}
+      >
+        <div
+          style={{
+            width: 648,
+            minWidth: 648,
+            maxWidth: 648,
+            margin: '0 auto',
+            display: 'grid',
+            justifyContent: 'center',
+            gap: 'var(--spacing-4x)',
+          }}
+        >
           <Checkbox
             size="default-size"
             showLabel

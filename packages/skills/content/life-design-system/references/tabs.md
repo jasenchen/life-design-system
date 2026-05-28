@@ -19,6 +19,8 @@
 - 选项卡数量通常建议在 2 到 6 个之间。如果超过 6 个，应考虑在末尾使用“更多”下拉菜单，或者支持横向滚动。
 - 确保切换选项卡时，仅更新对应的内容区域，而不刷新整个页面。
 - 如果选项卡包含未读信息，可在标签文本旁边附加一个小型的徽标（Badge）或红点。
+- 默认情况下，`Tabs` 应按组件自身内容宽度渲染；除非明确存在整行导航需求，否则不要主动把 `Tabs` 拉伸到父容器整行。
+- 在表单页右侧预览区、局部切换区或胶囊切换场景中，优先保持 `Tabs` 的组件宽度，并与同组标题、说明、预览内容共享同一左边界。
 
 ## 常见布局与层级样式
 
@@ -80,11 +82,13 @@ export default function Demo() {
       </Tabs>
 
       {/* 2) Capsule：胶囊切换 */}
-      <Tabs variant="capsule" size="small" defaultValue="all">
-        <Tab value="all">全部</Tab>
-        <Tab value="online">线上</Tab>
-        <Tab value="offline">线下</Tab>
-      </Tabs>
+      <div style={{ width: 'fit-content', maxWidth: '100%' }}>
+        <Tabs variant="capsule" size="small" defaultValue="all">
+          <Tab value="all">全部</Tab>
+          <Tab value="online">线上</Tab>
+          <Tab value="offline">线下</Tab>
+        </Tabs>
+      </div>
 
       {/* 3) Filter：快筛标签 */}
       <Tabs variant="filter" size="small" defaultValue="all">

@@ -247,7 +247,7 @@
       padding: var(--spacing-8x);
       color: var(--color-text-primary);
       text-decoration: none;
-      background: var(--color-bg-gray);
+      background: var(--color-fill-normal);
       border: 1px solid var(--color-border-normal);
       border-radius: var(--radius-xxl);
       box-sizing: border-box;
@@ -314,6 +314,15 @@
       margin: var(--spacing-8x) 0;
       border-top: 1px dashed var(--color-border-normal);
     }
+    .page-preview-steps {
+      display: flex;
+      justify-content: center;
+      margin-bottom: var(--spacing-8x);
+    }
+    .page-preview-steps .lds-steps {
+      width: auto;
+      max-width: 100%;
+    }
     .page-preview-hero__media {
       width: 84px;
       height: 84px;
@@ -359,6 +368,125 @@
       display: flex;
       justify-content: center;
       gap: var(--spacing-3x);
+    }
+    .page-preview-stack {
+      display: grid;
+      gap: var(--spacing-6x);
+    }
+    .page-preview-example-meta {
+      display: grid;
+      gap: var(--spacing-base);
+    }
+    .page-preview-example-meta__title {
+      margin: 0;
+      font: var(--title-medium);
+      color: var(--color-text-primary);
+    }
+    .page-preview-example-meta__desc {
+      margin: 0;
+      font: var(--body-regular);
+      color: var(--color-text-secondary);
+    }
+    .page-preview-form-layout--with-preview {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--spacing-10x);
+      padding-left: calc(var(--spacing-10x) + var(--spacing-2x));
+      box-sizing: border-box;
+    }
+    .page-preview-form-content--compact {
+      width: 648px;
+      min-width: 648px;
+      max-width: 648px;
+      margin: 0;
+    }
+    .page-preview-side-preview {
+      width: 360px;
+      flex: 0 0 360px;
+      display: grid;
+      gap: var(--spacing-4x);
+      padding-top: var(--spacing-2x);
+      box-sizing: border-box;
+    }
+    .page-preview-side-preview__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: flex-start;
+      gap: var(--spacing-3x);
+    }
+    .page-preview-side-preview__title {
+      margin: 0;
+      flex: 0 0 auto;
+      font: var(--title-medium);
+      color: var(--color-text-primary);
+    }
+    .page-preview-side-preview__desc {
+      margin: 0;
+      flex: 0 1 auto;
+      font: var(--body-regular);
+      color: var(--color-text-secondary);
+    }
+    .page-preview-side-preview__card {
+      display: grid;
+      justify-items: start;
+      gap: var(--spacing-4x);
+      box-sizing: border-box;
+    }
+    .page-preview-side-preview__tabs {
+      width: fit-content;
+      max-width: 100%;
+    }
+    .page-preview-side-preview__device {
+      width: 100%;
+      max-width: 304px;
+      margin: 0;
+      border: 6px solid #0c0d0f;
+      border-radius: 42px;
+      background: #0c0d0f;
+      overflow: hidden;
+      box-shadow: 0 16px 32px rgba(12, 13, 15, 0.14);
+      box-sizing: border-box;
+    }
+    .page-preview-side-preview__device::before {
+      content: none;
+    }
+    .page-preview-side-preview__device::after {
+      content: none;
+    }
+    .page-preview-side-preview__scene {
+      aspect-ratio: 292 / 632;
+      border-radius: 36px;
+      overflow: hidden;
+      background: var(--color-fill-gray);
+    }
+    .page-preview-side-preview__scene--cover {
+      display: block;
+    }
+    .page-preview-side-preview__scene--poster {
+      display: block;
+    }
+    .page-preview-side-preview__scene--detail {
+      display: block;
+    }
+    .page-preview-side-preview__image-frame {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      overflow: hidden;
+      background: var(--color-fill-gray);
+    }
+    .page-preview-side-preview__image-frame img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .page-preview-actions__inner--with-preview {
+      width: 648px;
+      min-width: 648px;
+      max-width: 648px;
+      margin: 0 auto;
     }
     @media (max-width: 960px) {
       .home-entry-grid {
@@ -3374,10 +3502,11 @@
 
           React.useEffect(() => {
             window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-            const previewContent = document.querySelector('.page-preview-shell .app-content');
-            if (previewContent instanceof HTMLElement) {
-              previewContent.scrollTop = 0;
-            }
+            document.querySelectorAll('.page-preview-shell .app-content').forEach((node) => {
+              if (node instanceof HTMLElement) {
+                node.scrollTop = 0;
+              }
+            });
           }, [pageType]);
 
           const productRows = [
@@ -3570,8 +3699,9 @@
 
                         <div className="page-preview-hero-divider" aria-hidden="true" />
 
-                        <div style={{ marginBottom: 'var(--spacing-8x)' }}>
+                        <div className="page-preview-steps">
                           <Steps
+                            style={{ width: 'fit-content', maxWidth: '100%' }}
                             current={0}
                             items={[
                               { title: '填写基础信息' },
@@ -3650,6 +3780,171 @@
             </div>
           );
 
+          const FormPagePreviewWithSidePreview = () => {
+            const [previewTab, setPreviewTab] = React.useState('cover');
+
+            const renderPreviewScene = () => {
+              const previewAltMap = {
+                cover: '商品卡预览',
+                poster: '门店卡预览',
+                detail: '详情头图预览',
+              };
+              return (
+                <div className="page-preview-side-preview__device">
+                  <div className={`page-preview-side-preview__scene page-preview-side-preview__scene--${previewTab}`}>
+                    <div className="page-preview-side-preview__image-frame">
+                      <img src="./assets/shangpin.png" alt={previewAltMap[previewTab]} />
+                    </div>
+                  </div>
+                </div>
+              );
+            };
+
+            return (
+              <div className="page-preview-shell">
+                <div className="app-container">
+                  <header className="app-navbar">
+                    <Navbar />
+                  </header>
+                  <div className="app-main-wrapper">
+                    <aside className="app-sidebar">
+                      <div className="app-sidebar__menu">
+                        <Menu />
+                      </div>
+                    </aside>
+                    <div className="app-body">
+                      <div className="app-content">
+                        <PageHeader
+                          variant="secondary"
+                          title="新建团购商品"
+                          onBackClick={() => setPageType('list')}
+                        />
+
+                        <div className="page-preview-form-layout--with-preview">
+                          <div className="page-preview-form-content page-preview-form-content--compact">
+                            <section className="page-preview-hero">
+                              <div className="page-preview-hero__media">
+                                <img src="./assets/shangpin.png" alt="商品缩略图" />
+                              </div>
+                              <div style={{ display: 'grid', gap: 'var(--spacing-2x)' }}>
+                                <h2 style={{ margin: 0, font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+                                  资生堂烫染护理团购
+                                </h2>
+                                <div style={{ display: 'grid', gap: 'var(--spacing-base)', font: 'var(--body-regular)' }}>
+                                  <div>
+                                    <span style={{ color: 'var(--color-text-caption)' }}>商品编号：</span>
+                                    <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-number)' }}>2137279250</span>
+                                  </div>
+                                  <div>
+                                    <span style={{ color: 'var(--color-text-caption)' }}>经营主体：</span>
+                                    <span style={{ color: 'var(--color-text-primary)' }}>瑞幸咖啡（中国）有限公司</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </section>
+
+                            <div className="page-preview-hero-divider" aria-hidden="true" />
+
+                            <div className="page-preview-steps">
+                              <Steps
+                                style={{ width: 'fit-content', maxWidth: '100%' }}
+                                current={1}
+                                items={[
+                                  { title: '填写基础信息' },
+                                  { title: '配置预览素材' },
+                                  { title: '提交审核' }
+                                ]}
+                              />
+                            </div>
+
+                            <main>
+                              <section className="page-preview-section">
+                                <h2 className="page-preview-section__title">基础信息</h2>
+                                <Form labelWidth={120}>
+                                  <FormItem label="商品名称" htmlFor="page-product-name-preview" required description="建议控制在 20 个字以内">
+                                    <Input id="page-product-name-preview" placeholder="请输入商品名称" defaultValue="资生堂烫染护理团购" />
+                                  </FormItem>
+                                  <FormItem label="经营类目" required description="选择商品所属经营类目，便于平台审核和用户检索">
+                                    <Select width="100%" options={categoryOptions} defaultValue="beauty" placeholder="请选择经营类目" />
+                                  </FormItem>
+                                  <FormItem label="商品卖点" htmlFor="page-product-summary-preview">
+                                    <Textarea id="page-product-summary-preview" placeholder="请输入商品卖点" maxLength={200} defaultValue="节假日通用，含洗护、烫染护理和造型服务。" />
+                                  </FormItem>
+                                </Form>
+                              </section>
+
+                              <section className="page-preview-section">
+                                <h2 className="page-preview-section__title">预览素材</h2>
+                                <Form labelWidth={120}>
+                                  <FormItem label="主图标题" htmlFor="page-preview-title" required description="将同步展示在右侧预览区域标题位。">
+                                    <Input id="page-preview-title" placeholder="请输入预览图标题" defaultValue="资生堂烫染护理团购" />
+                                  </FormItem>
+                                  <FormItem label="附属说明" htmlFor="page-preview-desc" description="支持填写一句辅助说明，便于校验用户端最终露出效果。">
+                                    <Textarea id="page-preview-desc" placeholder="请输入预览说明" maxLength={80} defaultValue="节假日通用，支持洗护、烫染护理和造型服务。" />
+                                  </FormItem>
+                                  <FormItem label="预览素材" htmlFor="page-preview-upload" required description="右侧支持多张预览图切换查看。">
+                                    <Upload
+                                      inputId="page-preview-upload"
+                                      value={[
+                                        { id: 'preview-product-cover', name: '主图', url: './assets/shangpin.png' },
+                                        { id: 'preview-product-poster', name: '海报', url: './assets/shangpin.png' }
+                                      ]}
+                                      maxCount={6}
+                                    />
+                                  </FormItem>
+                                </Form>
+                              </section>
+                            </main>
+                          </div>
+
+                          <aside className="page-preview-side-preview">
+                            <div className="page-preview-side-preview__header">
+                              <h2 className="page-preview-side-preview__title">商品预览图</h2>
+                              <p className="page-preview-side-preview__desc">点击图片对应区域可直接修改</p>
+                            </div>
+
+                            <div className="page-preview-side-preview__card">
+                              <div className="page-preview-side-preview__tabs">
+                                <Tabs variant="capsule" size="small" value={previewTab} onChange={setPreviewTab}>
+                                  <Tab value="cover">商品卡</Tab>
+                                  <Tab value="poster">门店卡</Tab>
+                                  <Tab value="detail">详情头图</Tab>
+                                </Tabs>
+                              </div>
+                              {renderPreviewScene()}
+                            </div>
+                          </aside>
+                        </div>
+                      </div>
+                      <footer className="page-preview-actions">
+                        <div className="page-preview-actions__inner page-preview-actions__inner--with-preview">
+                          <Checkbox
+                            size="default-size"
+                            showLabel
+                            label={
+                              <span>
+                                请先阅读同意
+                                <a href="javascript:void(0)" style={{ color: 'var(--color-primary-normal)', textDecoration: 'none' }}>
+                                  《抖音生活服务合作协议》
+                                </a>
+                                后提交
+                              </span>
+                            }
+                          />
+                          <div className="page-preview-actions__buttons">
+                            <Button variant="default">取消</Button>
+                            <Button variant="secondary">保存草稿</Button>
+                            <Button variant="primary">提交审核</Button>
+                          </div>
+                        </div>
+                      </footer>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          };
+
           return (
             <div style={{ display: 'grid', gap: 'var(--spacing-6x)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 'var(--spacing-5x)', flexWrap: 'wrap' }}>
@@ -3661,7 +3956,26 @@
                   使用标准基础框架，支持在页面类型间切换查看。
                 </span>
               </div>
-              {pageType === 'list' ? <ListPagePreview /> : <FormPagePreview />}
+              {pageType === 'list' ? (
+                <ListPagePreview />
+              ) : (
+                <div className="page-preview-stack">
+                  <div className="page-preview-example-meta">
+                    <h2 className="page-preview-example-meta__title">基础表单页</h2>
+                    <p className="page-preview-example-meta__desc">
+                      默认表单页遵循窄内容区居中布局，适合不需要同步展示预览素材的创建和编辑场景。
+                    </p>
+                  </div>
+                  <FormPagePreview />
+                  <div className="page-preview-example-meta">
+                    <h2 className="page-preview-example-meta__title">右侧带预览图的表单页</h2>
+                    <p className="page-preview-example-meta__desc">
+                      当页面右侧需要承载预览图时，左侧窄表单与右侧预览区放入同一父容器，两端对齐，父容器左侧额外预留 48px 间距。
+                    </p>
+                  </div>
+                  <FormPagePreviewWithSidePreview />
+                </div>
+              )}
             </div>
           );
         };

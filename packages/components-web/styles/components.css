@@ -2236,6 +2236,52 @@ button.lds-filter {
 
 /* PageHeader keeps top/right/bottom spacing while aligning the left edge to the content area. */
 
+/* 11.1 状态组件 (Status) */
+.lds-status {
+  --lds-status-title-color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-2x);
+}
+
+.lds-status__title {
+  margin: 0;
+  font: var(--display-medium);
+  color: var(--lds-status-title-color);
+}
+
+.lds-status__description {
+  margin: 0;
+  font: var(--body-regular);
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.lds-status--blue {
+  --lds-status-title-color: var(--color-primary-normal);
+}
+
+.lds-status--green {
+  --lds-status-title-color: var(--color-success-normal);
+}
+
+.lds-status--orange {
+  --lds-status-title-color: var(--color-warning-normal);
+}
+
+.lds-status--red {
+  --lds-status-title-color: var(--color-danger-normal);
+}
+
+.lds-status--gray {
+  --lds-status-title-color: var(--color-text-caption);
+}
+
+.lds-status--black {
+  --lds-status-title-color: var(--color-text-primary);
+}
+
 /* 12. 步骤条 (Steps) */
 .lds-steps {
   display: flex;

@@ -664,6 +664,7 @@
     <a href="#navbar" class="nav-item" data-target="navbar">Navbar</a>
     <a href="#menu" class="nav-item" data-target="menu">Menu</a>
     <a href="#pageheader" class="nav-item" data-target="pageheader">PageHeader</a>
+    <a href="#status" class="nav-item" data-target="status">Status</a>
     <a href="#steps" class="nav-item" data-target="steps">Steps</a>
     <a href="#drawer" class="nav-item" data-target="drawer">Drawer</a>
     <a href="#dialog" class="nav-item" data-target="dialog">Dialog</a>
@@ -1358,6 +1359,23 @@
         }
       ]
     },
+    status: {
+      title: 'Status (React Component)',
+      layout: 'full',
+      sizes: [{ id: 'default', label: 'Default', meta: '420px 示例宽度 · Display Medium / Body Regular' }],
+      desc: 'A lightweight status summary used in the top overview area of detail pages. Supports a large semantic title, two-line helper copy, and six color tones from the Figma spec.',
+      variants: [
+        {
+          title: 'Semantic Tones',
+          desc: 'Covers blue, green, orange, red, gray and black status presentations for detail-page summary headers.',
+          render: (size, _state) => {
+            const id = `status-${size.id}`;
+            window.pendingReactRenders.push({ id, type: 'status-demo' });
+            return `<div id="${id}"></div>`;
+          }
+        }
+      ]
+    },
     steps: {
       title: 'Steps (React Component)',
       layout: 'full',
@@ -1757,7 +1775,7 @@
   // 3. Initialization and Event Listeners
   const layoutEl = document.querySelector('.doc-layout');
   const navItems = document.querySelectorAll('.nav-item');
-  const componentTargets = ['button', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'];
+  const componentTargets = ['button', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'status', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'];
 
   function updateLayoutForTarget(target) {
     const showSidebar = componentTargets.includes(target);
@@ -1857,7 +1875,7 @@
     Popover,
     Navbar,
     Menu,
-    PageHeader, Steps, Checkbox, Switch, Drawer, Dialog, Form, FormItem, Upload,
+    PageHeader, Status, Steps, Checkbox, Switch, Drawer, Dialog, Form, FormItem, Upload,
     TableWrapper, Table, Thead, Tbody, Tr, Th, Td, TableCellProduct, TableCellAmount, TableCellOperation, TableCellAction,
     Tag,
     Pagination
@@ -3120,6 +3138,64 @@
               </Tabs>
             ) : null}
           />
+        );
+      } else if (item.type === 'status-demo') {
+        const statusConfigs = [
+          {
+            key: 'blue',
+            color: 'blue',
+            title: '审核中',
+            description: <>当前详情正在平台审核中，请耐心等待，支持 <strong>重点文案加粗</strong> 提示。</>
+          },
+          {
+            key: 'green',
+            color: 'green',
+            title: '已完成',
+            description: '当前任务已全部完成，可继续执行后续操作或返回上一层页面。'
+          },
+          {
+            key: 'orange',
+            color: 'orange',
+            title: '待处理',
+            description: '仍有部分信息待补充，建议优先检查必填项与异常项。'
+          },
+          {
+            key: 'red',
+            color: 'red',
+            title: '已失败',
+            description: '执行过程发生异常，请根据失败原因修正后再次提交。'
+          },
+          {
+            key: 'gray',
+            color: 'gray',
+            title: '未开始',
+            description: '当前状态尚未启动，适用于草稿、待发起或未激活等场景。'
+          },
+          {
+            key: 'black',
+            color: 'black',
+            title: '已发布',
+            description: '适用于强调当前主状态本身，而不额外传达强烈风险或成功语义。'
+          }
+        ];
+
+        root.render(
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+              典型用于详情页头部的统领状态展示区域，主文案使用 `display-medium`，副文案支持最多两行的补充说明。
+            </span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {statusConfigs.map((config) => (
+                <div key={config.key} style={{ width: 420, maxWidth: '100%' }}>
+                  <Status
+                    color={config.color}
+                    title={config.title}
+                    description={config.description}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         );
       } else if (item.type === 'steps-demo') {
         const StepsDemo = () => {

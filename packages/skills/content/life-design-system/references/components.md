@@ -49,6 +49,7 @@
 - 筛选器 (Filter)
 - 筛选器组 (FilterGroup)
 - 页面标题区 (PageHeader)
+- 状态 (Status)
 - 表格 (Table)
 - 分页器 (Pagination)
 - 标签 (Tag)
@@ -84,6 +85,7 @@
 - UI中需要标签页时：[tabs.md](tabs.md)；
 - UI中需要表单向导、多步骤进度展示或流程阶段导航时：[steps.md](steps.md)；
 - UI中需要页面标题区、页面标题+页签，或二级页返回标题栏时：[pageheader.md](pageheader.md)；
+- UI中需要详情页头部的统领状态展示、主状态+副文案摘要时：[status.md](status.md)；
 - UI中需要筛选器或筛选器组时：[filter.md](filter.md)；
 - UI中需要表格时：[table.md](table.md)；
 - UI中需要分页器时：[pagination.md](pagination.md)；

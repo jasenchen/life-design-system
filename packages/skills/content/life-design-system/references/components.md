@@ -36,6 +36,7 @@
 
 - 按钮 (Button)
 - 提示条 (Alert)
+- 卡片 (Card)
 - 全局提示 (Message)
 - 图标 (Icon)
 - 顶部导航栏 (Navbar)
@@ -76,6 +77,7 @@
 
 - UI中需要按钮时：[button.md](button.md)；
 - UI中需要提示、公告或状态反馈条时：[alert.md](alert.md)；
+- UI中需要卡片容器、信息卡、入口卡或指标卡时：[card.md](card.md)；
 - UI中需要顶部轻提示、自动消失反馈或全局短通知时：[message.md](message.md)；
 - UI中需要图标时：[icon.md](icon.md)；
 - UI中需要选择器时：[select.md](select.md)；

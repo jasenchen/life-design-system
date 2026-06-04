@@ -1,5 +1,6 @@
 export * from './components/Button/Button';
 export * from './components/Alert/Alert';
+export * from './components/Card/Card';
 export * from './components/Message/Message';
 export * from './components/Icon/Icon';
 export * from './components/Radio/Radio';

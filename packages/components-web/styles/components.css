@@ -3739,7 +3739,248 @@ button.lds-filter {
   height: 16px;
 }
 
-/* 19. 全局提示 Message */
+/* 19. 卡片 Card */
+.lds-card {
+  --lds-card-padding: var(--spacing-5x);
+  --lds-card-radius: var(--radius-xl);
+  --lds-card-gap: var(--spacing-4x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--lds-card-gap);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--lds-card-padding);
+  border: 1px solid var(--color-border-normal);
+  border-radius: var(--lds-card-radius);
+  background-color: var(--color-fill-normal);
+  color: var(--color-text-primary);
+  transition:
+    box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.lds-card--small {
+  --lds-card-radius: var(--radius-xl);
+}
+
+.lds-card--large {
+  --lds-card-radius: var(--radius-xxl);
+}
+
+.lds-card--interactive {
+  cursor: pointer;
+}
+
+.lds-card--interactive:hover {
+  box-shadow: var(--shadow-normal);
+}
+
+.lds-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-3x);
+}
+
+.lds-card__header-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3x);
+}
+
+.lds-card__header-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lds-card__header-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base);
+}
+
+.lds-card__title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-base);
+}
+
+.lds-card__title {
+  margin: 0;
+  font: var(--subtitle-medium);
+  color: var(--color-text-primary);
+}
+
+.lds-card__title-addon {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-base);
+}
+
+.lds-card__description {
+  margin: 0;
+  font: var(--caption-regular);
+  color: var(--color-text-secondary);
+}
+
+.lds-card__header-extra {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-2x);
+}
+
+.lds-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3x);
+  min-width: 0;
+}
+
+.lds-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3x);
+  min-width: 0;
+}
+
+.lds-card__divider {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--color-divider-normal);
+}
+
+.lds-card__divider--dashed {
+  border-top-style: dashed;
+}
+
+.lds-card__metrics {
+  --lds-card-metrics-columns: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--lds-card-metrics-columns), minmax(0, 1fr));
+  gap: var(--spacing-4x);
+}
+
+.lds-card__metrics--divided {
+  gap: 0;
+}
+
+.lds-card__metrics--divided .lds-card__metric {
+  padding: 0 var(--spacing-4x);
+  border-left: 1px solid var(--color-divider-normal);
+}
+
+.lds-card__metrics--divided .lds-card__metric:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.lds-card__metrics--divided .lds-card__metric:last-child {
+  padding-right: 0;
+}
+
+.lds-card__metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2x);
+  min-width: 0;
+}
+
+.lds-card__metric-head {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  min-width: 0;
+}
+
+.lds-card__metric-label,
+.lds-card__metric-extra,
+.lds-card__metric-description,
+.lds-card__metric-suffix,
+.lds-card__metric-trend-label,
+.lds-card__metric-trend-value {
+  font: var(--caption-regular);
+}
+
+.lds-card__metric-label,
+.lds-card__metric-description {
+  color: var(--color-text-secondary);
+}
+
+.lds-card__metric-extra {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: var(--color-text-caption);
+}
+
+.lds-card__metric-value-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-base);
+  min-width: 0;
+}
+
+.lds-card__metric-value {
+  min-width: 0;
+  font: var(--display-medium);
+  font-family: var(--font-number);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.lds-card__metric-suffix {
+  color: var(--color-text-secondary);
+}
+
+.lds-card__metric-trend {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x);
+  min-width: 0;
+}
+
+.lds-card__metric-trend-label {
+  color: var(--color-text-caption);
+}
+
+.lds-card__metric-trend-value {
+  font: var(--caption-medium);
+}
+
+.lds-card__metric-trend--up .lds-card__metric-trend-value {
+  color: var(--color-success-normal);
+}
+
+.lds-card__metric-trend--down .lds-card__metric-trend-value {
+  color: var(--color-danger-normal);
+}
+
+.lds-card__metric-trend--neutral .lds-card__metric-trend-value {
+  color: var(--color-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lds-card {
+    transition: none;
+  }
+}
+
+/* 20. 全局提示 Message */
 .lds-message-viewport {
   position: fixed;
   top: var(--spacing-4x);

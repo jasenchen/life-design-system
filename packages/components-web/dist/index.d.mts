@@ -75,6 +75,106 @@ interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>
 }
 declare const Alert: React.ForwardRefExoticComponent<AlertProps & React.RefAttributes<HTMLDivElement>>;
 
+type CardSize = 'small' | 'large';
+type CardDividerVariant = 'solid' | 'dashed';
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+    /**
+     * 卡片尺寸
+     * @default 'small'
+     */
+    size?: CardSize;
+    /**
+     * 是否启用交互态
+     * 开启后 hover 会出现投影
+     * @default false
+     */
+    interactive?: boolean;
+}
+interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+    /**
+     * 标题
+     */
+    title?: React.ReactNode;
+    /**
+     * 描述文案
+     */
+    description?: React.ReactNode;
+    /**
+     * 标题附加内容，常用于状态标签
+     */
+    addon?: React.ReactNode;
+    /**
+     * 头部右侧扩展区
+     */
+    extra?: React.ReactNode;
+    /**
+     * 左侧图标或插画
+     */
+    icon?: React.ReactNode;
+}
+interface CardDividerProps extends React.HTMLAttributes<HTMLHRElement> {
+    /**
+     * 分隔线样式
+     * @default 'solid'
+     */
+    variant?: CardDividerVariant;
+}
+interface CardMetricsProps extends React.HTMLAttributes<HTMLDivElement> {
+    /**
+     * 指标列数
+     */
+    columns?: number;
+    /**
+     * 是否显示指标之间的分割线
+     * @default false
+     */
+    divided?: boolean;
+}
+interface CardMetricProps extends React.HTMLAttributes<HTMLDivElement> {
+    /**
+     * 指标标题
+     */
+    label?: React.ReactNode;
+    /**
+     * 指标值
+     */
+    value?: React.ReactNode;
+    /**
+     * 指标值后缀
+     */
+    suffix?: React.ReactNode;
+    /**
+     * 指标右上角补充信息
+     */
+    extra?: React.ReactNode;
+    /**
+     * 指标补充说明
+     */
+    description?: React.ReactNode;
+    /**
+     * 趋势说明标签，如“较昨日”
+     */
+    trendLabel?: React.ReactNode;
+    /**
+     * 趋势值，如“+22.56%”
+     */
+    trendValue?: React.ReactNode;
+    /**
+     * 趋势方向
+     * @default 'neutral'
+     */
+    trendDirection?: 'up' | 'down' | 'neutral';
+}
+declare const Card: React.ForwardRefExoticComponent<CardProps & React.RefAttributes<HTMLDivElement>>;
+declare const CardHeader: React.ForwardRefExoticComponent<CardHeaderProps & React.RefAttributes<HTMLDivElement>>;
+declare const CardTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+declare const CardDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+declare const CardBody: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+declare const CardFooter: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+declare const CardDivider: React.ForwardRefExoticComponent<CardDividerProps & React.RefAttributes<HTMLHRElement>>;
+declare const CardMetrics: React.ForwardRefExoticComponent<CardMetricsProps & React.RefAttributes<HTMLDivElement>>;
+declare const CardMetric: React.ForwardRefExoticComponent<CardMetricProps & React.RefAttributes<HTMLDivElement>>;
+
 type MessageVariant = 'info' | 'success' | 'warning' | 'error';
 interface MessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'content'> {
     /**
@@ -1053,4 +1153,4 @@ interface UploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChan
 }
 declare const Upload: React.ForwardRefExoticComponent<UploadProps & React.RefAttributes<HTMLDivElement>>;
 
-export { Alert, type AlertProps, type AlertVariant, Button, type ButtonProps, type ButtonSize, type ButtonVariant, Checkbox, type CheckboxProps, DatePicker, type DatePickerProps, type DatePickerSize, type DatePickerType, type DatePickerValue, type DateRangeValue, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, type FilterDatePickerType, type FilterDatePickerValue, type FilterDateRangeValue, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterTimePickerType, type FilterTimePickerValue, type FilterTimeRangeValue, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, type IconVariant, Input, type InputProps, Menu, type MenuProps, Message, type MessageOptions, type MessageProps, type MessageVariant, Navbar, type NavbarProps, type NavbarTheme, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Radio, type RadioProps, type RadioSize, type RadioVariant, Search, type SearchProps, Select, type SelectOption, type SelectProps, type SelectSize, Status, type StatusColor, type StatusProps, type StepItem, Steps, type StepsProps, Switch, type SwitchProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, TimePicker, type TimePickerProps, type TimePickerSize, type TimePickerType, type TimePickerValue, type TimeRangeValue, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, message, useFormItemStatus };
+export { Alert, type AlertProps, type AlertVariant, Button, type ButtonProps, type ButtonSize, type ButtonVariant, Card, CardBody, CardDescription, CardDivider, type CardDividerProps, type CardDividerVariant, CardFooter, CardHeader, type CardHeaderProps, CardMetric, type CardMetricProps, CardMetrics, type CardMetricsProps, type CardProps, type CardSize, CardTitle, Checkbox, type CheckboxProps, DatePicker, type DatePickerProps, type DatePickerSize, type DatePickerType, type DatePickerValue, type DateRangeValue, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, type FilterDatePickerType, type FilterDatePickerValue, type FilterDateRangeValue, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterTimePickerType, type FilterTimePickerValue, type FilterTimeRangeValue, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, type IconVariant, Input, type InputProps, Menu, type MenuProps, Message, type MessageOptions, type MessageProps, type MessageVariant, Navbar, type NavbarProps, type NavbarTheme, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Radio, type RadioProps, type RadioSize, type RadioVariant, Search, type SearchProps, Select, type SelectOption, type SelectProps, type SelectSize, Status, type StatusColor, type StatusProps, type StepItem, Steps, type StepsProps, Switch, type SwitchProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, TimePicker, type TimePickerProps, type TimePickerSize, type TimePickerType, type TimePickerValue, type TimeRangeValue, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, message, useFormItemStatus };

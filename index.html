@@ -648,6 +648,7 @@
     <a href="#button" class="nav-item active" data-target="button">Button</a>
     <a href="#icon" class="nav-item" data-target="icon">Icon</a>
     <a href="#alert" class="nav-item" data-target="alert">Alert</a>
+    <a href="#card" class="nav-item" data-target="card">Card</a>
     <a href="#message" class="nav-item" data-target="message">Message</a>
     <a href="#radio" class="nav-item" data-target="radio">Radio</a>
     <a href="#checkbox" class="nav-item" data-target="checkbox">Checkbox</a>
@@ -845,6 +846,35 @@
           render: (_size, _state) => {
             const id = 'alert-closable';
             window.pendingReactRenders.push({ id, type: 'alert-demo', mode: 'closable' });
+            return `<div id="${id}"></div>`;
+          }
+        }
+      ]
+    },
+    card: {
+      title: 'Card (React Component)',
+      layout: 'full',
+      sizes: [
+        { id: 'small', label: '小尺寸', meta: '20px Padding · 20px 圆角 · fill + border' },
+        { id: 'large', label: '大尺寸', meta: '20px Padding · 24px 圆角 · hover 有投影' }
+      ],
+      desc: 'Card is a structured container with fill-normal background and border. The Figma cases cover standard info cards and metric cards, where one or many metrics are grouped inside the same card.',
+      variants: [
+        {
+          title: '标准信息卡',
+          desc: '标题、说明、标签、分割线和底部操作组成的典型信息卡结构。',
+          render: (size, _state) => {
+            const id = `card-standard-${size.id}`;
+            window.pendingReactRenders.push({ id, type: 'card-demo', mode: 'standard', size: size.id });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: '数据指标卡',
+          desc: '单个指标和多个指标都应包裹在同一个 Card 内，避免把每个指标拆成独立卡片。',
+          render: (size, _state) => {
+            const id = `card-metrics-${size.id}`;
+            window.pendingReactRenders.push({ id, type: 'card-demo', mode: 'metrics', size: size.id });
             return `<div id="${id}"></div>`;
           }
         }
@@ -1802,7 +1832,7 @@
   // 3. Initialization and Event Listeners
   const layoutEl = document.querySelector('.doc-layout');
   const navItems = document.querySelectorAll('.nav-item');
-  const componentTargets = ['button', 'icon', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'status', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'];
+  const componentTargets = ['button', 'icon', 'alert', 'card', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'status', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'];
 
   function updateLayoutForTarget(target) {
     const showSidebar = componentTargets.includes(target);
@@ -1893,7 +1923,7 @@
   import React from 'react';
   import { createRoot } from 'react-dom/client';
   import { 
-    Button, Alert, Message, message, Icon, Radio, Input, Search, Select, DatePicker, TimePicker, Textarea, Tabs, Tab,
+    Button, Alert, Card, CardHeader, CardBody, CardFooter, CardDivider, CardMetrics, CardMetric, Message, message, Icon, Radio, Input, Search, Select, DatePicker, TimePicker, Textarea, Tabs, Tab,
     Filter,
     FilterSelect,
     FilterDatePicker,
@@ -2119,6 +2149,164 @@
         };
 
         root.render(<AlertDemo />);
+      } else if (item.type === 'card-demo') {
+        const cardSize = item.size === 'large' ? 'large' : 'small';
+        const StandardCardDemo = () => {
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                这里把设计稿中更常见的内容卡案例集中展示出来，覆盖小尺寸入口卡、可交互卡和大尺寸活动卡。
+              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ width: 361 }}>
+                  <Card size="small">
+                    <CardHeader
+                      title="风险防护"
+                      addon={<Tag size="small" variant="light" color="orange">待开启</Tag>}
+                      description="卡片说明文案"
+                      extra={<Icon name="ic-3dl-safe" variant="3dl" style={{ width: 40, height: 40 }} />}
+                    />
+
+                    <CardBody>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        <Tag size="small" variant="outline" color="gray">tag</Tag>
+                        <Tag size="small" variant="outline" color="gray">tag</Tag>
+                      </div>
+                    </CardBody>
+
+                    <CardDivider variant="dashed" />
+
+                    <CardFooter>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+                        <span style={{ font: 'var(--caption-regular)', color: 'var(--color-text-secondary)' }}>已护航</span>
+                        <span style={{ font: 'var(--caption-medium)', color: 'var(--color-primary-normal)' }}>3</span>
+                        <span style={{ font: 'var(--caption-regular)', color: 'var(--color-text-secondary)' }}>次 / 12次</span>
+                      </div>
+
+                      <Button variant="default" size="small">
+                        行动按钮
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </div>
+
+                <div style={{ width: 361 }}>
+                  <Card size="small" interactive>
+                    <CardHeader
+                      style={{ alignItems: 'center' }}
+                      title="门店经营诊断"
+                      addon={<Tag size="small" variant="light" color="green">进行中</Tag>}
+                      description="查看当前门店经营数据并获取优化建议"
+                      extra={<Icon name="ic-3dl-shop" variant="3dl" style={{ width: 40, height: 40 }} />}
+                    />
+                  </Card>
+                </div>
+
+                <div style={{ width: 424 }}>
+                  <Card size="large" interactive>
+                    <CardHeader
+                      title="旅游卡 - 招品非策略立减金额"
+                      addon={<Tag size="default-size" variant="light" color="green">活动进行中</Tag>}
+                      description="2026/06/30 ～ 2026/12/30"
+                    />
+
+                    <CardBody>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        <Tag size="small" variant="outline" color="gray">平台商家联合出资</Tag>
+                        <Tag size="small" variant="outline" color="gray">长期活动</Tag>
+                      </div>
+                    </CardBody>
+
+                    <CardDivider variant="dashed" />
+
+                    <CardFooter>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                          <Icon name="ic-finish-round-fill" style={{ width: 16, height: 16, color: 'var(--color-success-normal)' }} />
+                          <span style={{ font: 'var(--body-regular)' }}>可报名</span>
+                        </div>
+                        <span style={{ font: 'var(--body-regular)' }}>2026/12/30 截止</span>
+                      </div>
+
+                      <Button variant="secondary" size="small">
+                        立即报名
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        const MetricCardDemo = () => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+              指标卡除了单指标和多指标并列外，也展示了上涨、下降两种趋势表达，便于对照设计稿核验颜色与位置。
+            </span>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <Card size={cardSize}>
+                <CardMetrics columns={1}>
+                  <CardMetric
+                    label="累计成交金额"
+                    extra={<Icon name="ic-help-line" style={{ width: 20, height: 20, color: 'var(--color-text-caption)' }} />}
+                    value="¥32,234.32"
+                    suffix="万"
+                    trendLabel="较昨日"
+                    trendValue="+22.56%"
+                    trendDirection="up"
+                  />
+                </CardMetrics>
+              </Card>
+
+              <Card size={cardSize}>
+                <CardMetrics columns={1}>
+                  <CardMetric
+                    label="累计核销量"
+                    extra={<Icon name="ic-help-line" style={{ width: 20, height: 20, color: 'var(--color-text-caption)' }} />}
+                    value="12,480"
+                    suffix="单"
+                    trendLabel="较昨日"
+                    trendValue="-8.21%"
+                    trendDirection="down"
+                  />
+                </CardMetrics>
+              </Card>
+
+              <Card size={cardSize}>
+                <CardMetrics columns={3} divided>
+                  <CardMetric
+                    label="累计成交金额"
+                    value="¥32,234.32"
+                    suffix="万"
+                    trendLabel="较昨日"
+                    trendValue="+22.56%"
+                    trendDirection="up"
+                  />
+                  <CardMetric
+                    label="支付笔数"
+                    value="5,248"
+                    suffix="单"
+                    trendLabel="较昨日"
+                    trendValue="-6.42%"
+                    trendDirection="down"
+                  />
+                  <CardMetric
+                    label="客单价"
+                    value="243"
+                    suffix="元"
+                    trendLabel="较昨日"
+                    trendValue="+1.40%"
+                    trendDirection="up"
+                  />
+                </CardMetrics>
+              </Card>
+            </div>
+          </div>
+        );
+
+        root.render(item.mode === 'metrics' ? <MetricCardDemo /> : <StandardCardDemo />);
       } else if (item.type === 'message-demo') {
         const semanticMessageConfigs = [
           { key: 'info', label: '信息', variant: 'info', text: '已更新筛选条件' },

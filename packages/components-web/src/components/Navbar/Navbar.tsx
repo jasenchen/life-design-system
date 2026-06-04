@@ -3,9 +3,20 @@ import { clsx } from 'clsx';
 import { Icon } from '../Icon/Icon';
 import { Input } from '../Input/Input';
 
-export const Navbar = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={clsx('lds-navbar', className)} {...props}>
+export type NavbarTheme = 'light' | 'dark';
+
+export interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
+  theme?: NavbarTheme;
+}
+
+export const Navbar = React.forwardRef<HTMLDivElement, NavbarProps>(
+  ({ className, theme, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={clsx('lds-navbar', theme && `lds-navbar--${theme}`, className)}
+      data-theme={theme}
+      {...props}
+    >
       <div className="lds-navbar__left">
         <div className="lds-navbar__logo" aria-label="来客 Logo">
           <span className="lds-navbar__logo-image" aria-hidden="true" />

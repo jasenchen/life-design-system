@@ -646,6 +646,7 @@
     </div>
     <div class="nav-group">COMPONENTS</div>
     <a href="#button" class="nav-item active" data-target="button">Button</a>
+    <a href="#icon" class="nav-item" data-target="icon">Icon</a>
     <a href="#alert" class="nav-item" data-target="alert">Alert</a>
     <a href="#message" class="nav-item" data-target="message">Message</a>
     <a href="#radio" class="nav-item" data-target="radio">Radio</a>
@@ -795,6 +796,32 @@
             window.pendingReactRenders.push({ id, variant: 'icon', size: size.id, className, disabled: state.props.includes('disabled'), iconName: 'ic-add-round-line' });
             return `<div id="${id}" style="width: 100%; flex: 1 1 auto; min-width: 0;"></div>`;
         }}
+      ]
+    },
+    icon: {
+      title: 'Icon (React Component)',
+      layout: 'full',
+      sizes: [{ id: 'default', label: '默认规格', meta: '默认 Sprite 图标 + 轻 3D 图标风格' }],
+      desc: 'The Icon component supports the injected SVG sprite by default, and now also supports a light 3D visual style via `variant="3dl"`.',
+      variants: [
+        {
+          title: 'Sprite Icons',
+          desc: 'Default icons keep using the injected sprite system. The preview lays out the full icon set directly from the injected sprite registry.',
+          render: (_size, _state) => {
+            const id = 'icon-sprite-gallery';
+            window.pendingReactRenders.push({ id, type: 'icon-demo', mode: 'sprite' });
+            return `<div id="${id}"></div>`;
+          }
+        },
+        {
+          title: 'Light 3D Icons',
+          desc: 'This new asset set is suitable for overview cards, feature entry points, or other decorative icon-first scenarios.',
+          render: (_size, _state) => {
+            const id = 'icon-3dl-gallery';
+            window.pendingReactRenders.push({ id, type: 'icon-demo', mode: '3dl' });
+            return `<div id="${id}"></div>`;
+          }
+        }
       ]
     },
     alert: {
@@ -1775,7 +1802,7 @@
   // 3. Initialization and Event Listeners
   const layoutEl = document.querySelector('.doc-layout');
   const navItems = document.querySelectorAll('.nav-item');
-  const componentTargets = ['button', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'status', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'];
+  const componentTargets = ['button', 'icon', 'alert', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'status', 'steps', 'drawer', 'dialog', 'form', 'upload', 'table', 'tag', 'pagination'];
 
   function updateLayoutForTarget(target) {
     const showSidebar = componentTargets.includes(target);
@@ -1907,6 +1934,108 @@
             {item.text}
           </Button>
         );
+      } else if (item.type === 'icon-demo') {
+        const spriteIcons = Array.from(document.querySelectorAll('symbol[id^="ic-"]'))
+          .map((symbol) => symbol.id)
+          .filter((name, index, arr) => arr.indexOf(name) === index)
+          .filter((name) => /^ic-[a-z0-9-]+$/.test(name))
+          .sort((a, b) => a.localeCompare(b));
+        const icon3dlConfigs = [
+          { name: 'ic-3dl-shop', label: '门店' },
+          { name: 'ic-3dl-money', label: '金额' },
+          { name: 'ic-3dl-rating', label: '评分' },
+          { name: 'ic-3dl-safe', label: '安全' },
+          { name: 'ic-3dl-decorate', label: '装修' },
+          { name: 'ic-3dl-write-off', label: '核销' }
+        ];
+
+        if (item.mode === 'sprite') {
+          root.render(
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                默认风格继续使用注入式 SVG Sprite，适合与文字同行、按钮、表单前后缀和表格操作区等高频 UI 场景。下面直接铺开当前 sprite 中全部有效图标。
+              </span>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                  gap: 16,
+                }}
+              >
+                {spriteIcons.map((iconName) => (
+                  <div
+                    key={iconName}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 12,
+                      padding: 'var(--spacing-6x)',
+                      border: '1px solid var(--color-divider-normal)',
+                      borderRadius: 'var(--radius-xl)',
+                      background: 'var(--color-bg-normal)',
+                    }}
+                  >
+                    <Icon
+                      name={iconName}
+                      style={{ width: 24, height: 24 }}
+                      aria-hidden="true"
+                    />
+                    <code
+                      style={{
+                        font: 'var(--caption-regular)',
+                        color: 'var(--color-text-caption)',
+                        textAlign: 'center',
+                        wordBreak: 'break-all',
+                      }}
+                    >
+                      {iconName}
+                    </code>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        } else {
+          root.render(
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <span style={{ font: 'var(--body-regular)', color: 'var(--color-text-secondary)' }}>
+                轻 3D 风格适合概览卡片、能力入口或强调型装饰场景。当前资源原稿为 120px，示例按 56px 展示，不建议与正文文字同行混排。
+              </span>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+                  gap: 16,
+                }}
+              >
+                {icon3dlConfigs.map((iconConfig) => (
+                  <div
+                    key={iconConfig.name}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 12,
+                      padding: 'var(--spacing-6x)',
+                      border: '1px solid var(--color-divider-normal)',
+                      borderRadius: 'var(--radius-xl)',
+                      background: 'var(--color-bg-normal)',
+                    }}
+                  >
+                    <Icon name={iconConfig.name} variant="3dl" style={{ width: 56, height: 56 }} aria-hidden="true" />
+                    <span style={{ font: 'var(--body-medium)', color: 'var(--color-text-primary)' }}>
+                      {iconConfig.label}
+                    </span>
+                    <code style={{ font: 'var(--caption-regular)', color: 'var(--color-text-caption)' }}>
+                      {iconConfig.name}
+                    </code>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
       } else if (item.type === 'alert-demo') {
         const semanticAlertConfigs = [
           {

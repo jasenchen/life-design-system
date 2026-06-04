@@ -2,6 +2,27 @@
 
 当任务需要使用 `@life-ds/icons` 选择或实现图标时，请参考此文件。
 
+## React 组件用法
+
+在 React 项目中，优先直接使用 `@life-ds/components-web` 提供的 `<Icon />` 组件，而不是手写 `<svg><use /></svg>`。
+
+```tsx
+import React from 'react';
+import { Icon } from '@life-ds/components-web';
+
+export default function IconExamples() {
+  return (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <Icon name="ic-arrow-right-line" style={{ width: 16, height: 16 }} aria-hidden="true" />
+      <Icon name="ic-warning-round-line" style={{ width: 20, height: 20 }} aria-hidden="true" />
+      <Icon name="ic-3dl-shop" variant="3dl" style={{ width: 56, height: 56 }} aria-hidden="true" />
+    </div>
+  );
+}
+```
+
+`Icon` 默认使用注入式 SVG Sprite；当需要轻 3D 风格时，显式传入 `variant="3dl"`。
+
 ## 引入模式
 
 在使用 `@life-ds/icons` 时，请务必注意**不能直接通过静态文件路径引用 SVG Sprite**，因为跨域或代理拦截会导致图标无法渲染。正确的做法是通过包注入脚本，将所有图标集合直接注入到 HTML 的 `<body>` 中。
@@ -44,6 +65,10 @@ import '@life-ds/icons';
 • 优先使用标准的 `lds-icon` 类名来控制图标的样式和尺寸。
 
 • 常规情况下，均使用线性图标，只有当图标尺寸很小的时候，才会使用对应的面性图标，若线性图标没有对应的面性图标，则使用线性图标
+
+• 轻 3D icon 仅用于装饰型或强调型场景，如概览卡片、能力入口、结果页插图，不要与正文文字同行混排。
+
+• 当前轻 3D 资源原稿均为 `120 x 120`，推荐展示尺寸控制在 `40-64px` 区间，由外层样式显式设置宽高。
 
 ## 命名规则
 
@@ -101,6 +126,34 @@ import '@life-ds/icons';
 
 <br />
 
+## 轻 3D 图标
+
+当页面需要更强的装饰感和入口感时，可使用 `variant="3dl"` 的轻 3D icon。此类 icon 不走 SVG sprite，而是由 `@life-ds/components-web` 内置资源直接渲染。
+
+| 图标名称 | 推荐用途 |
+| --- | --- |
+| `ic-3dl-shop` | 门店、商家、店铺入口 |
+| `ic-3dl-money` | 金额、收益、结算 |
+| `ic-3dl-rating` | 评分、口碑、评价 |
+| `ic-3dl-safe` | 安全、保障、风控 |
+| `ic-3dl-decorate` | 装修、搭建、布置 |
+| `ic-3dl-write-off` | 核销、验券、到店使用 |
+
+```tsx
+// ✅ 适合：入口卡片、概览区、能力导航
+<Icon name="ic-3dl-shop" variant="3dl" style={{ width: 56, height: 56 }} aria-hidden="true" />
+
+// ❌ 不建议：把 3D icon 当作正文里的小尺寸行内图标
+<span>
+  <Icon name="ic-3dl-shop" variant="3dl" style={{ width: 16, height: 16 }} />
+  门店管理
+</span>
+```
+
+如果只是在按钮、表格、输入框前后缀或标题旁做辅助表达，仍应优先回退到普通 sprite icon。
+
+<br />
+
 ## 选择指南
 
 优先根据意图选择图标：
@@ -118,4 +171,3 @@ import '@life-ds/icons';
 1. 仓库其他地方已在使用的图标
 2. 功能语义更清晰的图标
 3. 视觉上更简洁的图标
-

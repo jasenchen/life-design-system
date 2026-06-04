@@ -161,6 +161,12 @@
   vertical-align: -0.15em;
 }
 
+.icon--3dl {
+  display: inline-block;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
 /* 5. 图标按钮 Icon (Square) */
 .lds-btn--icon {
   padding: 0;
@@ -839,10 +845,21 @@ button.lds-filter {
   height: 44px;
   display: block;
   flex-shrink: 0;
-  background-image: url('../assets/logo-laike.svg');
+  background-image: url('../assets/logo-laike-light.png');
   background-repeat: no-repeat;
   background-position: left center;
   background-size: contain;
+}
+
+.lds-navbar--light .lds-navbar__logo-image,
+.lds-navbar[data-theme='light'] .lds-navbar__logo-image {
+  background-image: url('../assets/logo-laike-light.png');
+}
+
+.lds-navbar--dark .lds-navbar__logo-image,
+.lds-navbar[data-theme='dark'] .lds-navbar__logo-image,
+[data-theme='dark'] .lds-navbar:not(.lds-navbar--light) .lds-navbar__logo-image {
+  background-image: url('../assets/logo-laike-dark.png');
 }
 
 .lds-navbar__logo img,

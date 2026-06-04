@@ -69,8 +69,18 @@ async function main() {
   const baseSrc = resolvePackagePath('@life-ds/components-web', 'styles/base.css') || path.join(__dirname, '../styles/base.css');
   const componentsSrc = resolvePackagePath('@life-ds/components-web', 'styles/components.css') || path.join(__dirname, '../styles/components.css');
   const logoSrc = resolvePackagePath('@life-ds/components-web', 'assets/logo-laike.svg') || path.join(__dirname, '../assets/logo-laike.svg');
+  const logoLightSrc = resolvePackagePath('@life-ds/components-web', 'assets/logo-laike-light.png') || path.join(__dirname, '../assets/logo-laike-light.png');
+  const logoDarkSrc = resolvePackagePath('@life-ds/components-web', 'assets/logo-laike-dark.png') || path.join(__dirname, '../assets/logo-laike-dark.png');
 
-  if (!(await fileExists(tokensSrc)) || !(await fileExists(iconsSrc)) || !(await fileExists(baseSrc)) || !(await fileExists(componentsSrc)) || !(await fileExists(logoSrc))) {
+  if (
+    !(await fileExists(tokensSrc)) ||
+    !(await fileExists(iconsSrc)) ||
+    !(await fileExists(baseSrc)) ||
+    !(await fileExists(componentsSrc)) ||
+    !(await fileExists(logoSrc)) ||
+    !(await fileExists(logoLightSrc)) ||
+    !(await fileExists(logoDarkSrc))
+  ) {
     console.error('❌ 无法找到所需的设计资产文件，请确保 npm 依赖已正确安装。');
     process.exit(1);
   }
@@ -115,6 +125,12 @@ async function main() {
 
     await fs.copyFile(logoSrc, path.join(assetsDestDir, 'logo-laike.svg'));
     console.log(`   ✅ 提取: ${path.relative(cwd, path.join(assetsDestDir, 'logo-laike.svg'))}`);
+
+    await fs.copyFile(logoLightSrc, path.join(assetsDestDir, 'logo-laike-light.png'));
+    console.log(`   ✅ 提取: ${path.relative(cwd, path.join(assetsDestDir, 'logo-laike-light.png'))}`);
+
+    await fs.copyFile(logoDarkSrc, path.join(assetsDestDir, 'logo-laike-dark.png'));
+    console.log(`   ✅ 提取: ${path.relative(cwd, path.join(assetsDestDir, 'logo-laike-dark.png'))}`);
   }
 
   console.log('\n🎉 Life Design System 初始化完成！');

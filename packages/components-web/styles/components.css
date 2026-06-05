@@ -3181,6 +3181,233 @@ button.lds-filter {
   color: var(--color-danger-normal);
 }
 
+/* 键值对组件 (KeyValue) */
+.lds-key-value {
+  display: grid;
+  grid-template-columns: repeat(var(--lds-key-value-columns, 2), minmax(0, 1fr));
+  gap: var(--spacing-4x) var(--spacing-8x);
+  width: 100%;
+}
+
+.lds-key-value__item {
+  grid-column: span var(--lds-key-value-item-span, 1);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4x);
+  width: 100%;
+  min-width: 0;
+  font-family: var(--font-normal);
+}
+
+.lds-key-value__item--vertical {
+  flex-direction: column;
+  gap: var(--spacing-2x);
+}
+
+.lds-key-value__label {
+  width: max(var(--lds-key-value-label-width, 84px), 70px);
+  min-width: 70px;
+  flex: 0 0 max(var(--lds-key-value-label-width, 84px), 70px);
+}
+
+.lds-key-value__item--vertical .lds-key-value__label {
+  width: 100%;
+  min-width: 0;
+  flex: none;
+}
+
+.lds-key-value__label-inner {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-start;
+  gap: var(--spacing-base);
+  color: var(--color-text-caption);
+  font: var(--body-regular);
+}
+
+.lds-key-value__label-text {
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.lds-key-value__tooltip {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--color-text-caption);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.lds-key-value__tooltip:hover {
+  color: var(--color-text-secondary);
+  background: var(--color-fill-hover);
+}
+
+.lds-key-value__tooltip:active {
+  color: var(--color-text-primary);
+  background: var(--color-fill-active);
+}
+
+.lds-key-value__tooltip:focus-visible {
+  outline: 2px solid var(--color-primary-normal);
+  outline-offset: 2px;
+}
+
+.lds-key-value__tooltip .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.lds-key-value__value {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-primary);
+  font: var(--body-regular);
+}
+
+.lds-key-value__item--numeric .lds-key-value__value {
+  font-family: var(--font-number);
+}
+
+.lds-key-value__value.is-empty {
+  color: var(--color-text-caption);
+}
+
+.lds-key-value-text {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-2x);
+  min-width: 0;
+}
+
+.lds-key-value-text__value {
+  min-width: 0;
+  word-break: break-word;
+}
+
+.lds-key-value-text__value.is-ellipsis {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lds-key-value-text__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-primary-normal);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.lds-key-value-text__link:hover {
+  color: var(--color-primary-hover);
+}
+
+.lds-key-value-text__link:active {
+  color: var(--color-primary-active);
+}
+
+.lds-key-value-text__link:focus-visible,
+.lds-key-value-text__icon-action:focus-visible {
+  outline: 2px solid var(--color-primary-normal);
+  outline-offset: 2px;
+}
+
+.lds-key-value-text__icon,
+.lds-key-value-text__icon-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-caption);
+}
+
+.lds-key-value-text__icon-action {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-s);
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.lds-key-value-text__icon-action:hover {
+  color: var(--color-text-secondary);
+}
+
+.lds-key-value-text__icon-action:active {
+  color: var(--color-text-primary);
+}
+
+.lds-key-value-text__icon .icon,
+.lds-key-value-text__icon-action .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.lds-key-value-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2x);
+}
+
+.lds-key-value-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3x);
+}
+
+.lds-key-value-image {
+  display: grid;
+  gap: var(--spacing-2x);
+  width: 76px;
+}
+
+.lds-key-value-image__frame {
+  width: 76px;
+  height: 76px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--color-fill-gray);
+}
+
+.lds-key-value-image__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lds-key-value-image__label {
+  color: var(--color-text-secondary);
+  font: var(--caption-regular);
+  text-align: center;
+}
+
 /* 15. 图片上传组件 (Upload) */
 .lds-upload {
   width: 100%;

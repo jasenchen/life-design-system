@@ -30,4 +30,5 @@ export * from './components/Popover/Popover';
 export * from './components/Drawer/Drawer';
 export * from './components/Dialog/Dialog';
 export * from './components/Form/Form';
+export * from './components/KeyValue/KeyValue';
 export * from './components/Upload/Upload';

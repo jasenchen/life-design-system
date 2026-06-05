@@ -724,3 +724,430 @@ export function FormPageWithPreviewDemo() {
   );
 }
 ```
+
+### 详情页 (Detail Page)
+
+适用场景：详情页用于浏览已经录入完成的结构化信息，常见于从列表页点击“查看详情”后进入的二级页面。
+
+- 当用户明确提出是详情页、查看页、结果页、审核详情页、配置详情页、资质详情页时使用此类型；
+- 详情页整体布局与 [表单页 (Form Page)](#表单页-form-page) 高度相似，仍然遵循“页面基础框架 + 二级页 PageHeader + 统领信息区 + 分组内容区 + 可选全局操作区”的结构；
+- 与表单页最大的区别在于：编辑控件全部转为浏览态内容展示，输入框、下拉框、日期控件、时间控件等都不再出现；
+- 页面底层背景仍然默认沿用 [页面基础框架](#页面基础框架) 中的 `var(--color-bg-gray)`，右侧内容主画布 `.app-body` 继续使用 `var(--color-bg-normal)`。
+
+#### 页面结构层级 (Tree Structure)
+
+以下是一个典型的详情页结构层级：
+
+```text
+.app-body (详情页主容器)
+├── .app-content (页面滚动内容区)
+│   ├── <PageHeader variant="secondary" /> (导航区，必选)
+│   └── .detail-page-content (详情页内容容器，居中，宽度 648px ~ 872px)
+│       ├── .detail-page-hero (统领信息区，可选但常用，直接平铺展示)
+│       │   ├── .detail-page-hero__media (可选：图片、图标、对象缩略图)
+│       │   └── .detail-page-hero__content
+│       │       ├── .detail-page-hero__title
+│       │       └── .detail-page-hero__meta
+│       ├── .detail-page-divider (可选：与正文之间的分割线)
+│       └── .detail-page-sections
+│           ├── .detail-page-section
+│           │   ├── .detail-page-section__title
+│           │   └── <KeyValue /> / <Card /> / <TableWrapper />
+│           └── .detail-page-section (其他业务分组，可选)
+└── .detail-page-actions (全局操作区，可选)
+    └── .detail-page-actions__inner
+        ├── <Button variant="default" />
+        ├── <Button variant="secondary" />
+        └── <Button variant="primary" />
+```
+
+#### 区域规则
+
+1. **导航区**：详情页属于二级页面，必须使用 `<PageHeader variant="secondary" />`。
+2. **内容宽度**：详情页正文沿用表单页的版心范围，最大宽度 872px，最小宽度 648px，在内容区内水平居中；上间距使用 `var(--spacing-2x)`，下间距使用 `var(--spacing-8x)`。
+3. **统领信息区**：仍然需要“先告诉用户正在查看什么”，可以展示对象名称、编号、主体名称、金额、门店、时间范围等关键摘要信息；不要直接把普通字段堆进这个区域。
+4. **字段展示方式**：原本在表单页中由 `Input`、`Select`、`DatePicker`、`TimePicker`、`Textarea` 承担的字段，在详情页里统一转为 key value 浏览态展示，并优先使用 [keyvalue.md](keyvalue.md) 中定义的 `KeyValue` 组件族搭建。
+5. **key value 结构**：详情页里的 key value 默认沿用表单页的左右结构，即左侧固定标签区、右侧为值区；只有在字段容器明显过窄或卡片内补充信息位等窄场景，才切换为上下结构。不要手写一套临时的详情页字段样式。
+6. **双列展示**：如果单个字段信息量不大，优先使用双列 `KeyValue` 布局，提高信息密度；如果字段值较长，如地址、规则说明、卖点描述，可让该项跨两列单独展示。
+7. **复杂信息**：如果内容更适合结构化组合，可在 `KeyValueItem` 的 `value` 区中承载 `Card`；如果只是普通说明文案，直接使用文本块，不要为了形式统一强行塞进 `Card`。
+8. **表格信息**：列表型从属信息仍然使用 `Table` 展示，但一般不再放行内编辑、上传入口、下拉切换等操作；默认按只读模式处理。
+9. **图片信息**：表单页中的上传组件进入详情页后，应转为上传完成后的图片展示；展示时依旧遵循 key value 结构，只是 `value` 区从纯文本变为图片组。优先使用 `KeyValueImages` / `KeyValueImage`，图片尺寸按 [keyvalue.md](keyvalue.md) 中的规则根据内容类型调整。
+10. **块间距**：统领信息区、分组区、表格区、Card 区、图片区这些页面级块之间的垂直间距统一使用 `var(--spacing-8x)`。
+11. **全局操作区**：详情页底部全局操作区是可选的。仅当页面存在“返回列表”“复制配置”“刷新状态”“再次提交”等整页级动作时才展示。
+
+#### key value 展示规范
+
+- 详情页中的结构化字段展示，请先阅读 [keyvalue.md](keyvalue.md)，并优先使用 `<KeyValue />`、`<KeyValueItem />`、`<KeyValueText />`、`<KeyValueImages />` 等现成组件。
+- 标签文案（key）使用 `font: var(--body-regular)` + `var(--color-text-caption)`。
+- 内容文案（value）使用 `font: var(--body-regular)` + `var(--color-text-primary)`。
+- 默认采用“左 key / 右 value”的横向结构，建议标签区宽度与表单页 label 宽度保持相近，形成稳定对齐关系。
+- 仅当单元本身很窄，或值区本身是小体量补充信息时，才允许改为上下结构。
+- 金额、编号、库存等数字型重点内容可使用 `font-family: var(--font-number)`。
+- 不要使用只读的 `Input disabled` 或只读的 `Select` 来伪装详情态；详情页就是普通文本，不是禁用表单。
+- 当一个值可能换行时，允许自动换行；不要为了对齐把值截断成单行。
+
+#### 标准结构示例
+
+```tsx
+import React from 'react';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  KeyValue,
+  KeyValueImage,
+  KeyValueImages,
+  KeyValueItem,
+  KeyValueText,
+  PageHeader,
+  Table,
+  Tag,
+  TableWrapper,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '@life-ds/components-web';
+
+export function DetailPageLayoutDemo() {
+  return (
+    <div className="app-body">
+      <div className="app-content">
+        <PageHeader
+          variant="secondary"
+          title="团购商品详情"
+          onBackClick={() => window.history.back()}
+        />
+
+        <div
+          style={{
+            width: 872,
+            minWidth: 648,
+            maxWidth: 872,
+            margin: '0 auto',
+            paddingTop: 'var(--spacing-2x)',
+            paddingBottom: 'var(--spacing-8x)',
+            boxSizing: 'border-box',
+          }}
+        >
+          <section
+            style={{
+              display: 'flex',
+              gap: 'var(--spacing-5x)',
+            }}
+          >
+            <div
+              style={{
+                width: 84,
+                height: 84,
+                borderRadius: 'var(--radius-m)',
+                overflow: 'hidden',
+                background: 'var(--color-fill-gray)',
+              }}
+            >
+              <img
+                src="./assets/shangpin.png"
+                alt="商品缩略图"
+                style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
+
+            <div style={{ display: 'grid', gap: 'var(--spacing-2x)' }}>
+              <h2 style={{ margin: 0, font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+                资生堂烫染护理团购
+              </h2>
+              <div style={{ display: 'grid', gap: 'var(--spacing-base)', font: 'var(--body-regular)' }}>
+                <div>
+                  <span style={{ color: 'var(--color-text-caption)' }}>商品编号：</span>
+                  <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-number)' }}>
+                    2137279250
+                  </span>
+                </div>
+                <div>
+                  <span style={{ color: 'var(--color-text-caption)' }}>经营主体：</span>
+                  <span style={{ color: 'var(--color-text-primary)' }}>瑞幸咖啡（中国）有限公司</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div
+            style={{
+              margin: 'var(--spacing-8x) 0',
+              borderTop: '1px dashed var(--color-border-normal)',
+            }}
+          />
+
+          <main style={{ display: 'grid', gap: 'var(--spacing-8x)' }}>
+            <section>
+              <h2 style={{ margin: '0 0 var(--spacing-5x)', font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+                基础信息
+              </h2>
+              <KeyValue columns={2}>
+                <KeyValueItem label="商品名称" value={<KeyValueText value="资生堂烫染护理团购" />} />
+                <KeyValueItem label="经营类目" value={<KeyValueText value="丽人 / 美发" />} />
+                <KeyValueItem label="创建人" value={<KeyValueText value="王小美" />} />
+                <KeyValueItem label="创建时间" value={<KeyValueText value="2026.06.08 14:30" />} />
+                <KeyValueItem
+                  label="商品卖点"
+                  span={2}
+                  value={<KeyValueText value="节假日通用，含洗护、烫染护理和造型服务，支持提前一天预约。" />}
+                />
+              </KeyValue>
+            </section>
+
+            <section>
+              <h2 style={{ margin: '0 0 var(--spacing-5x)', font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+                服务说明
+              </h2>
+              <Card size="small">
+                <CardHeader
+                  title="套餐服务摘要"
+                  addon={<Tag size="small" variant="light" color="green">可预约</Tag>}
+                  description="复杂说明信息优先通过 Card 承载，组合展示标签、摘要和后续动作。"
+                />
+                <CardBody>
+                  <div style={{ display: 'grid', gap: 'var(--spacing-4x)' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2x)' }}>
+                      <Tag size="small" variant="outline" color="gray">节假日通用</Tag>
+                      <Tag size="small" variant="outline" color="gray">支持提前预约</Tag>
+                      <Tag size="small" variant="outline" color="gray">随时退款</Tag>
+                    </div>
+                    <ul style={{ margin: 0, paddingLeft: 20, display: 'grid', gap: 'var(--spacing-2x)' }}>
+                      <li>服务内容包含洗护、烫染护理和基础造型设计。</li>
+                      <li>至少提前 1 天预约，支持门店核销后立即使用。</li>
+                      <li>已预约订单请至少提前 2 小时联系门店修改时间。</li>
+                    </ul>
+                  </div>
+                </CardBody>
+                <CardFooter>
+                  <Button variant="secondary">查看完整规则</Button>
+                </CardFooter>
+              </Card>
+            </section>
+
+            <section>
+              <h2 style={{ margin: '0 0 var(--spacing-5x)', font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+                商品素材
+              </h2>
+              <KeyValue columns={1}>
+                <KeyValueItem
+                  label="商品图片"
+                  value={
+                    <KeyValueImages>
+                      {['商品主图', '服务环境图', '套餐说明图'].map((item) => (
+                        <KeyValueImage key={item} src="./assets/shangpin.png" alt={item} label={item} />
+                      ))}
+                    </KeyValueImages>
+                  }
+                />
+              </KeyValue>
+            </section>
+
+            <section>
+              <h2 style={{ margin: '0 0 var(--spacing-5x)', font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+                适用门店
+              </h2>
+              <TableWrapper>
+                <Table>
+                  <Thead>
+                    <Tr>
+                      <Th>门店名称</Th>
+                      <Th>城市</Th>
+                      <Th>售卖周期</Th>
+                      <Th>分配库存</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    <Tr>
+                      <Td>朝阳大悦城店</Td>
+                      <Td>北京</Td>
+                      <Td>2026.06.01 - 2026.06.30</Td>
+                      <Td>500</Td>
+                    </Tr>
+                  </Tbody>
+                </Table>
+              </TableWrapper>
+            </section>
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### 详情页 - 带状态 (Detail Page With Status)
+
+适用场景：当详情页需要在顶部统领区域强调“审核中 / 已通过 / 已驳回 / 已发布 / 已失效”等总体状态时，使用带状态详情页。
+
+- 这类页面本质上仍然是详情页，只是在 `PageHeader` 下方增加了 `Status` 作为统领状态展示；
+- 状态表达优先使用 [status.md](status.md) 中定义的 `Status` 组件，而不是放大版 `Tag`；
+- 除状态区外，其余内容区仍然遵循普通详情页的 key value、Card、Table、图片展示等规则；
+- 若页面存在“返回列表”“刷新状态”“再次提交”“催审提醒”等整页级动作，可增加底部全局操作区。
+
+#### 页面结构层级 (Tree Structure)
+
+```text
+.app-body (带状态详情页主容器)
+├── .app-content (页面滚动内容区)
+│   ├── <PageHeader variant="secondary" /> (导航区)
+│   └── .detail-page-content
+│       ├── <Status /> (统领状态区，必选)
+│       └── .detail-page-sections
+│           ├── .detail-page-section (<KeyValue /> 承载基础信息)
+│           ├── .detail-page-section (<KeyValue /> + <KeyValueImages /> 承载资质材料)
+│           ├── .detail-page-section (正文文本块承载审核说明)
+│           └── .detail-page-section (<TableWrapper /> 承载审核记录)
+└── .detail-page-actions (可选)
+    └── .detail-page-actions__inner
+```
+
+#### 区域规则
+
+1. **状态区位置**：`Status` 必须位于 `PageHeader` 下方、正文内容区最上方，承担统领状态表达职责。
+2. **状态区样式**：默认不加卡片、不加底色、不加描边；如果视觉上需要更多留白，应由外层布局间距解决，而不是给 `Status` 本身加容器。
+3. **颜色选择**：进行中、审核中优先使用 `color="blue"` 或 `color="orange"`；通过使用 `green`；失败、驳回使用 `red`；中性状态使用 `gray` 或 `black`。
+4. **描述长度**：`Status` 的 `description` 控制在两行左右的信息量，用于解释当前结果、下一步动作或失败原因。
+5. **复杂说明**：审核关注点、驳回原因、整改建议等长文本说明，不要全部塞进 `Status description`；如果内容更适合结构化组合，可用 `Card` 承载，如果只是普通说明文案，直接使用正文文本块即可。
+6. **表格只读**：表格中可以展示审核记录、绑定门店、操作留痕等内容，但不再放置编辑、删除、上传等交互单元。
+7. **底部操作区**：如果存在状态相关动作，按钮组间距统一使用 `var(--spacing-3x)`，最多一个 `primary` 按钮。
+
+#### 标准结构示例
+
+```tsx
+import React from 'react';
+import {
+  Button,
+  KeyValue,
+  KeyValueImage,
+  KeyValueImages,
+  KeyValueItem,
+  KeyValueText,
+  PageHeader,
+  Status,
+  Table,
+  TableWrapper,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '@life-ds/components-web';
+
+export function DetailPageWithStatusDemo() {
+  return (
+    <div className="app-body">
+      <div className="app-content">
+        <PageHeader
+          variant="secondary"
+          title="资质详情"
+          onBackClick={() => window.history.back()}
+        />
+
+        <div
+          style={{
+            width: 872,
+            minWidth: 648,
+            maxWidth: 872,
+            margin: '0 auto',
+            paddingTop: 'var(--spacing-2x)',
+            paddingBottom: 'var(--spacing-8x)',
+            boxSizing: 'border-box',
+            display: 'grid',
+            gap: 'var(--spacing-8x)',
+          }}
+        >
+          <Status
+            color="orange"
+            title="审核中"
+            description="当前门店资质信息已提交平台审核，预计 1 个工作日内返回结果，如需补件将通过站内消息通知。"
+          />
+
+          <section>
+            <h2 style={{ margin: '0 0 var(--spacing-5x)', font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+              基础信息
+            </h2>
+            <KeyValue columns={2}>
+              <KeyValueItem label="主体名称" value={<KeyValueText value="瑞幸咖啡（中国）有限公司" />} />
+              <KeyValueItem label="提交时间" value={<KeyValueText value="2026.06.08 16:30" />} />
+            </KeyValue>
+          </section>
+
+          <section>
+            <h2 style={{ margin: '0 0 var(--spacing-5x)', font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+              资质材料
+            </h2>
+            <KeyValue columns={1}>
+              <KeyValueItem
+                label="资质图片"
+                value={
+                  <KeyValueImages>
+                    <KeyValueImage src="./assets/shangpin.png" alt="营业执照" label="营业执照" />
+                    <KeyValueImage src="./assets/shangpin.png" alt="品牌授权书" label="品牌授权书" />
+                  </KeyValueImages>
+                }
+              />
+            </KeyValue>
+          </section>
+
+          <section>
+            <h2 style={{ margin: '0 0 var(--spacing-5x)', font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+              审核说明
+            </h2>
+            <div style={{ display: 'grid', gap: 'var(--spacing-3x)' }}>
+              <p style={{ margin: 0, font: 'var(--body-regular)', color: 'var(--color-text-primary)' }}>
+                1. 请确认营业执照主体名称与门店签约主体保持一致。
+              </p>
+              <p style={{ margin: 0, font: 'var(--body-regular)', color: 'var(--color-text-primary)' }}>
+                2. 若为加盟门店，请补充上传最新品牌授权书，确保在有效期内。
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 style={{ margin: '0 0 var(--spacing-5x)', font: 'var(--title-medium)', color: 'var(--color-text-primary)' }}>
+              审核记录
+            </h2>
+            <TableWrapper>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>材料名称</Th>
+                    <Th>提交时间</Th>
+                    <Th>审核结果</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr>
+                    <Td>营业执照</Td>
+                    <Td>2026.06.08 16:30</Td>
+                    <Td>审核通过</Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableWrapper>
+          </section>
+        </div>
+      </div>
+
+      <footer
+        style={{
+          padding: 'var(--spacing-5x) var(--spacing-8x)',
+          borderTop: '1px solid var(--color-divider-normal)',
+          background: 'var(--color-bg-normal)',
+        }}
+      >
+        <div style={{ width: 872, minWidth: 648, maxWidth: 872, margin: '0 auto', display: 'flex', justifyContent: 'center', gap: 'var(--spacing-3x)' }}>
+          <Button variant="default">返回列表</Button>
+          <Button variant="secondary">刷新状态</Button>
+          <Button variant="primary">催审提醒</Button>
+        </div>
+      </footer>
+    </div>
+  );
+}
+```

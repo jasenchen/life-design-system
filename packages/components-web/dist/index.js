@@ -54,6 +54,12 @@ __export(index_exports, {
   FormItem: () => FormItem,
   Icon: () => Icon,
   Input: () => Input,
+  KeyValue: () => KeyValue,
+  KeyValueImage: () => KeyValueImage,
+  KeyValueImages: () => KeyValueImages,
+  KeyValueItem: () => KeyValueItem,
+  KeyValueTags: () => KeyValueTags,
+  KeyValueText: () => KeyValueText,
   Menu: () => Menu,
   Message: () => Message,
   Navbar: () => Navbar,
@@ -4763,10 +4769,187 @@ var Dialog = import_react32.default.forwardRef(
 );
 Dialog.displayName = "Dialog";
 
-// src/components/Upload/Upload.tsx
+// src/components/KeyValue/KeyValue.tsx
 var import_react33 = __toESM(require("react"));
 var import_clsx33 = require("clsx");
 var import_jsx_runtime33 = require("react/jsx-runtime");
+function toCssSize5(value) {
+  if (value === void 0) {
+    return void 0;
+  }
+  return typeof value === "number" ? `${value}px` : value;
+}
+var DEFAULT_LABEL_WIDTH2 = "84px";
+var DEFAULT_LAYOUT2 = "horizontal";
+var KeyValueContext = import_react33.default.createContext({
+  labelWidth: DEFAULT_LABEL_WIDTH2,
+  layout: DEFAULT_LAYOUT2
+});
+var KeyValue = import_react33.default.forwardRef(
+  ({ className, style, columns = 2, labelWidth = 84, layout = DEFAULT_LAYOUT2, ...props }, ref) => {
+    var _a;
+    const mergedStyle = {
+      ...style,
+      ["--lds-key-value-columns"]: String(Math.max(columns, 1)),
+      ...layout === "horizontal" ? {
+        ["--lds-key-value-label-width"]: (_a = toCssSize5(labelWidth)) != null ? _a : DEFAULT_LABEL_WIDTH2
+      } : null
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(KeyValueContext.Provider, { value: { labelWidth, layout }, children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+      "div",
+      {
+        ref,
+        className: (0, import_clsx33.clsx)("lds-key-value", `lds-key-value--${layout}`, className),
+        style: mergedStyle,
+        ...props
+      }
+    ) });
+  }
+);
+KeyValue.displayName = "KeyValue";
+var KeyValueItem = import_react33.default.forwardRef(
+  ({
+    className,
+    label,
+    value,
+    span = 1,
+    layout,
+    labelWidth,
+    tooltip,
+    onTooltipClick,
+    tooltipAriaLabel = "\u67E5\u770B\u5B57\u6BB5\u8BF4\u660E",
+    numeric = false,
+    emptyFallback = "--",
+    children,
+    style,
+    ...props
+  }, ref) => {
+    var _a;
+    const context = import_react33.default.useContext(KeyValueContext);
+    const resolvedLayout = layout != null ? layout : context.layout;
+    const resolvedValue = (_a = value != null ? value : children) != null ? _a : emptyFallback;
+    const isEmpty = resolvedValue === emptyFallback;
+    const shouldRenderTooltip = Boolean(tooltip) || Boolean(onTooltipClick);
+    const mergedStyle = {
+      ...style,
+      ["--lds-key-value-item-span"]: String(Math.max(span, 1)),
+      ...labelWidth !== void 0 ? {
+        ["--lds-key-value-label-width"]: toCssSize5(labelWidth)
+      } : null
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
+      "div",
+      {
+        ref,
+        className: (0, import_clsx33.clsx)(
+          "lds-key-value__item",
+          `lds-key-value__item--${resolvedLayout}`,
+          numeric && "lds-key-value__item--numeric",
+          className
+        ),
+        style: mergedStyle,
+        ...props,
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { className: "lds-key-value__label", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("div", { className: "lds-key-value__label-inner", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("span", { className: "lds-key-value__label-text", children: label }),
+            shouldRenderTooltip ? /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+              "button",
+              {
+                type: "button",
+                className: "lds-key-value__tooltip",
+                title: tooltip,
+                "aria-label": tooltipAriaLabel,
+                onClick: onTooltipClick,
+                children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(Icon, { name: "ic-help-line", "aria-hidden": "true" })
+              }
+            ) : null
+          ] }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { className: (0, import_clsx33.clsx)("lds-key-value__value", isEmpty && "is-empty"), children: resolvedValue })
+        ]
+      }
+    );
+  }
+);
+KeyValueItem.displayName = "KeyValueItem";
+var KeyValueText = import_react33.default.forwardRef(
+  ({
+    className,
+    value,
+    linkText,
+    href,
+    onLinkClick,
+    target,
+    rel,
+    icon,
+    onIconClick,
+    iconAriaLabel = "\u6267\u884C\u9644\u52A0\u64CD\u4F5C",
+    ellipsis = false,
+    ...props
+  }, ref) => {
+    const textNode = /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("span", { className: (0, import_clsx33.clsx)("lds-key-value-text__value", ellipsis && "is-ellipsis"), children: value });
+    let linkNode = null;
+    if (linkText !== void 0) {
+      if (href) {
+        linkNode = /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+          "a",
+          {
+            className: "lds-key-value-text__link",
+            href,
+            target,
+            rel: rel != null ? rel : target === "_blank" ? "noreferrer noopener" : void 0,
+            onClick: onLinkClick,
+            children: linkText
+          }
+        );
+      } else {
+        linkNode = /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+          "button",
+          {
+            type: "button",
+            className: "lds-key-value-text__link lds-key-value-text__link--button",
+            onClick: onLinkClick,
+            children: linkText
+          }
+        );
+      }
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("div", { ref, className: (0, import_clsx33.clsx)("lds-key-value-text", className), ...props, children: [
+      textNode,
+      linkNode,
+      icon ? onIconClick ? /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+        "button",
+        {
+          type: "button",
+          className: "lds-key-value-text__icon-action",
+          "aria-label": iconAriaLabel,
+          onClick: onIconClick,
+          children: icon
+        }
+      ) : /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("span", { className: "lds-key-value-text__icon", children: icon }) : null
+    ] });
+  }
+);
+KeyValueText.displayName = "KeyValueText";
+var KeyValueTags = import_react33.default.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { ref, className: (0, import_clsx33.clsx)("lds-key-value-tags", className), ...props })
+);
+KeyValueTags.displayName = "KeyValueTags";
+var KeyValueImages = import_react33.default.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { ref, className: (0, import_clsx33.clsx)("lds-key-value-images", className), ...props })
+);
+KeyValueImages.displayName = "KeyValueImages";
+var KeyValueImage = import_react33.default.forwardRef(
+  ({ className, src, alt, label, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("div", { ref, className: (0, import_clsx33.clsx)("lds-key-value-image", className), ...props, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { className: "lds-key-value-image__frame", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("img", { className: "lds-key-value-image__img", src, alt }) }),
+    label !== void 0 ? /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { className: "lds-key-value-image__label", children: label }) : null
+  ] })
+);
+KeyValueImage.displayName = "KeyValueImage";
+
+// src/components/Upload/Upload.tsx
+var import_react34 = __toESM(require("react"));
+var import_clsx34 = require("clsx");
+var import_jsx_runtime34 = require("react/jsx-runtime");
 var DEFAULT_TRIGGER_TEXT = "\u4E0A\u4F20";
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -4779,7 +4962,7 @@ function readFileAsDataUrl(file) {
     reader.readAsDataURL(file);
   });
 }
-var Upload = import_react33.default.forwardRef(
+var Upload = import_react34.default.forwardRef(
   ({
     className,
     value,
@@ -4801,15 +4984,15 @@ var Upload = import_react33.default.forwardRef(
   }, ref) => {
     var _a;
     const { hasError } = useFormItemStatus();
-    const inputRef = import_react33.default.useRef(null);
+    const inputRef = import_react34.default.useRef(null);
     const isControlled = value !== void 0;
-    const [innerValue, setInnerValue] = import_react33.default.useState(defaultValue);
+    const [innerValue, setInnerValue] = import_react34.default.useState(defaultValue);
     const mergedValue = (_a = isControlled ? value : innerValue) != null ? _a : [];
     const visibleItems = mergedValue.slice(0, maxCount);
     const shouldRenderTrigger = visibleItems.length < maxCount;
     const mergedError = error != null ? error : hasError;
     const mergedVisualState = mergedError ? "error" : visualState;
-    const updateValue = import_react33.default.useCallback(
+    const updateValue = import_react34.default.useCallback(
       (nextValue) => {
         const normalized = nextValue.slice(0, maxCount);
         if (!isControlled) {
@@ -4819,7 +5002,7 @@ var Upload = import_react33.default.forwardRef(
       },
       [isControlled, maxCount, onChange]
     );
-    const handleSelectFiles = import_react33.default.useCallback(
+    const handleSelectFiles = import_react34.default.useCallback(
       async (event) => {
         var _a2;
         const files = Array.from((_a2 = event.target.files) != null ? _a2 : []);
@@ -4844,21 +5027,21 @@ var Upload = import_react33.default.forwardRef(
       },
       [maxCount, updateValue, visibleItems]
     );
-    const handleRemove = import_react33.default.useCallback(
+    const handleRemove = import_react34.default.useCallback(
       (index) => {
         const nextItems = visibleItems.filter((_, currentIndex) => currentIndex !== index);
         updateValue(nextItems);
       },
       [updateValue, visibleItems]
     );
-    return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(
       "div",
       {
         ref,
-        className: (0, import_clsx33.clsx)("lds-upload", disabled && "is-disabled", className),
+        className: (0, import_clsx34.clsx)("lds-upload", disabled && "is-disabled", className),
         ...props,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
             "input",
             {
               ref: inputRef,
@@ -4872,15 +5055,15 @@ var Upload = import_react33.default.forwardRef(
               onChange: handleSelectFiles
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("div", { className: "lds-upload__list", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)("div", { className: "lds-upload__list", children: [
             visibleItems.map((item, index) => {
               var _a2, _b, _c;
-              return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
+              return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(
                 "div",
                 {
                   className: "lds-upload__item",
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
                       "img",
                       {
                         className: "lds-upload__image",
@@ -4888,14 +5071,14 @@ var Upload = import_react33.default.forwardRef(
                         alt: (_c = item.name) != null ? _c : `\u5DF2\u4E0A\u4F20\u56FE\u7247 ${index + 1}`
                       }
                     ),
-                    !disabled ? /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+                    !disabled ? /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
                       "button",
                       {
                         type: "button",
                         className: "lds-upload__remove",
                         "aria-label": removeAriaLabel,
                         onClick: () => handleRemove(index),
-                        children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(Icon, { name: "ic-error-line", "aria-hidden": "true" })
+                        children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Icon, { name: "ic-error-line", "aria-hidden": "true" })
                       }
                     ) : null
                   ]
@@ -4903,11 +5086,11 @@ var Upload = import_react33.default.forwardRef(
                 (_b = (_a2 = item.id) != null ? _a2 : item.url) != null ? _b : `${index}`
               );
             }),
-            shouldRenderTrigger ? /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
+            shouldRenderTrigger ? /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(
               "button",
               {
                 type: "button",
-                className: (0, import_clsx33.clsx)(
+                className: (0, import_clsx34.clsx)(
                   "lds-upload__trigger",
                   mergedVisualState === "hover" && "is-hover",
                   mergedVisualState === "active" && "is-active",
@@ -4920,13 +5103,13 @@ var Upload = import_react33.default.forwardRef(
                 },
                 "aria-label": triggerAriaLabel,
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(Icon, { name: "ic-add-line", "aria-hidden": "true" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("span", { className: "lds-upload__text", children: triggerText })
+                  /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Icon, { name: "ic-add-line", "aria-hidden": "true" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("span", { className: "lds-upload__text", children: triggerText })
                 ]
               }
             ) : null
           ] }),
-          children ? /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { className: "lds-upload__extra", children }) : null
+          children ? /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("div", { className: "lds-upload__extra", children }) : null
         ]
       }
     );
@@ -4959,6 +5142,12 @@ Upload.displayName = "Upload";
   FormItem,
   Icon,
   Input,
+  KeyValue,
+  KeyValueImage,
+  KeyValueImages,
+  KeyValueItem,
+  KeyValueTags,
+  KeyValueText,
   Menu,
   Message,
   Navbar,

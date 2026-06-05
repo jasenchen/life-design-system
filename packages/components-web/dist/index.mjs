@@ -4681,10 +4681,187 @@ var Dialog = React32.forwardRef(
 );
 Dialog.displayName = "Dialog";
 
-// src/components/Upload/Upload.tsx
+// src/components/KeyValue/KeyValue.tsx
 import React33 from "react";
 import { clsx as clsx33 } from "clsx";
 import { jsx as jsx33, jsxs as jsxs31 } from "react/jsx-runtime";
+function toCssSize5(value) {
+  if (value === void 0) {
+    return void 0;
+  }
+  return typeof value === "number" ? `${value}px` : value;
+}
+var DEFAULT_LABEL_WIDTH2 = "84px";
+var DEFAULT_LAYOUT2 = "horizontal";
+var KeyValueContext = React33.createContext({
+  labelWidth: DEFAULT_LABEL_WIDTH2,
+  layout: DEFAULT_LAYOUT2
+});
+var KeyValue = React33.forwardRef(
+  ({ className, style, columns = 2, labelWidth = 84, layout = DEFAULT_LAYOUT2, ...props }, ref) => {
+    var _a;
+    const mergedStyle = {
+      ...style,
+      ["--lds-key-value-columns"]: String(Math.max(columns, 1)),
+      ...layout === "horizontal" ? {
+        ["--lds-key-value-label-width"]: (_a = toCssSize5(labelWidth)) != null ? _a : DEFAULT_LABEL_WIDTH2
+      } : null
+    };
+    return /* @__PURE__ */ jsx33(KeyValueContext.Provider, { value: { labelWidth, layout }, children: /* @__PURE__ */ jsx33(
+      "div",
+      {
+        ref,
+        className: clsx33("lds-key-value", `lds-key-value--${layout}`, className),
+        style: mergedStyle,
+        ...props
+      }
+    ) });
+  }
+);
+KeyValue.displayName = "KeyValue";
+var KeyValueItem = React33.forwardRef(
+  ({
+    className,
+    label,
+    value,
+    span = 1,
+    layout,
+    labelWidth,
+    tooltip,
+    onTooltipClick,
+    tooltipAriaLabel = "\u67E5\u770B\u5B57\u6BB5\u8BF4\u660E",
+    numeric = false,
+    emptyFallback = "--",
+    children,
+    style,
+    ...props
+  }, ref) => {
+    var _a;
+    const context = React33.useContext(KeyValueContext);
+    const resolvedLayout = layout != null ? layout : context.layout;
+    const resolvedValue = (_a = value != null ? value : children) != null ? _a : emptyFallback;
+    const isEmpty = resolvedValue === emptyFallback;
+    const shouldRenderTooltip = Boolean(tooltip) || Boolean(onTooltipClick);
+    const mergedStyle = {
+      ...style,
+      ["--lds-key-value-item-span"]: String(Math.max(span, 1)),
+      ...labelWidth !== void 0 ? {
+        ["--lds-key-value-label-width"]: toCssSize5(labelWidth)
+      } : null
+    };
+    return /* @__PURE__ */ jsxs31(
+      "div",
+      {
+        ref,
+        className: clsx33(
+          "lds-key-value__item",
+          `lds-key-value__item--${resolvedLayout}`,
+          numeric && "lds-key-value__item--numeric",
+          className
+        ),
+        style: mergedStyle,
+        ...props,
+        children: [
+          /* @__PURE__ */ jsx33("div", { className: "lds-key-value__label", children: /* @__PURE__ */ jsxs31("div", { className: "lds-key-value__label-inner", children: [
+            /* @__PURE__ */ jsx33("span", { className: "lds-key-value__label-text", children: label }),
+            shouldRenderTooltip ? /* @__PURE__ */ jsx33(
+              "button",
+              {
+                type: "button",
+                className: "lds-key-value__tooltip",
+                title: tooltip,
+                "aria-label": tooltipAriaLabel,
+                onClick: onTooltipClick,
+                children: /* @__PURE__ */ jsx33(Icon, { name: "ic-help-line", "aria-hidden": "true" })
+              }
+            ) : null
+          ] }) }),
+          /* @__PURE__ */ jsx33("div", { className: clsx33("lds-key-value__value", isEmpty && "is-empty"), children: resolvedValue })
+        ]
+      }
+    );
+  }
+);
+KeyValueItem.displayName = "KeyValueItem";
+var KeyValueText = React33.forwardRef(
+  ({
+    className,
+    value,
+    linkText,
+    href,
+    onLinkClick,
+    target,
+    rel,
+    icon,
+    onIconClick,
+    iconAriaLabel = "\u6267\u884C\u9644\u52A0\u64CD\u4F5C",
+    ellipsis = false,
+    ...props
+  }, ref) => {
+    const textNode = /* @__PURE__ */ jsx33("span", { className: clsx33("lds-key-value-text__value", ellipsis && "is-ellipsis"), children: value });
+    let linkNode = null;
+    if (linkText !== void 0) {
+      if (href) {
+        linkNode = /* @__PURE__ */ jsx33(
+          "a",
+          {
+            className: "lds-key-value-text__link",
+            href,
+            target,
+            rel: rel != null ? rel : target === "_blank" ? "noreferrer noopener" : void 0,
+            onClick: onLinkClick,
+            children: linkText
+          }
+        );
+      } else {
+        linkNode = /* @__PURE__ */ jsx33(
+          "button",
+          {
+            type: "button",
+            className: "lds-key-value-text__link lds-key-value-text__link--button",
+            onClick: onLinkClick,
+            children: linkText
+          }
+        );
+      }
+    }
+    return /* @__PURE__ */ jsxs31("div", { ref, className: clsx33("lds-key-value-text", className), ...props, children: [
+      textNode,
+      linkNode,
+      icon ? onIconClick ? /* @__PURE__ */ jsx33(
+        "button",
+        {
+          type: "button",
+          className: "lds-key-value-text__icon-action",
+          "aria-label": iconAriaLabel,
+          onClick: onIconClick,
+          children: icon
+        }
+      ) : /* @__PURE__ */ jsx33("span", { className: "lds-key-value-text__icon", children: icon }) : null
+    ] });
+  }
+);
+KeyValueText.displayName = "KeyValueText";
+var KeyValueTags = React33.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx33("div", { ref, className: clsx33("lds-key-value-tags", className), ...props })
+);
+KeyValueTags.displayName = "KeyValueTags";
+var KeyValueImages = React33.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx33("div", { ref, className: clsx33("lds-key-value-images", className), ...props })
+);
+KeyValueImages.displayName = "KeyValueImages";
+var KeyValueImage = React33.forwardRef(
+  ({ className, src, alt, label, ...props }, ref) => /* @__PURE__ */ jsxs31("div", { ref, className: clsx33("lds-key-value-image", className), ...props, children: [
+    /* @__PURE__ */ jsx33("div", { className: "lds-key-value-image__frame", children: /* @__PURE__ */ jsx33("img", { className: "lds-key-value-image__img", src, alt }) }),
+    label !== void 0 ? /* @__PURE__ */ jsx33("div", { className: "lds-key-value-image__label", children: label }) : null
+  ] })
+);
+KeyValueImage.displayName = "KeyValueImage";
+
+// src/components/Upload/Upload.tsx
+import React34 from "react";
+import { clsx as clsx34 } from "clsx";
+import { jsx as jsx34, jsxs as jsxs32 } from "react/jsx-runtime";
 var DEFAULT_TRIGGER_TEXT = "\u4E0A\u4F20";
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -4697,7 +4874,7 @@ function readFileAsDataUrl(file) {
     reader.readAsDataURL(file);
   });
 }
-var Upload = React33.forwardRef(
+var Upload = React34.forwardRef(
   ({
     className,
     value,
@@ -4719,15 +4896,15 @@ var Upload = React33.forwardRef(
   }, ref) => {
     var _a;
     const { hasError } = useFormItemStatus();
-    const inputRef = React33.useRef(null);
+    const inputRef = React34.useRef(null);
     const isControlled = value !== void 0;
-    const [innerValue, setInnerValue] = React33.useState(defaultValue);
+    const [innerValue, setInnerValue] = React34.useState(defaultValue);
     const mergedValue = (_a = isControlled ? value : innerValue) != null ? _a : [];
     const visibleItems = mergedValue.slice(0, maxCount);
     const shouldRenderTrigger = visibleItems.length < maxCount;
     const mergedError = error != null ? error : hasError;
     const mergedVisualState = mergedError ? "error" : visualState;
-    const updateValue = React33.useCallback(
+    const updateValue = React34.useCallback(
       (nextValue) => {
         const normalized = nextValue.slice(0, maxCount);
         if (!isControlled) {
@@ -4737,7 +4914,7 @@ var Upload = React33.forwardRef(
       },
       [isControlled, maxCount, onChange]
     );
-    const handleSelectFiles = React33.useCallback(
+    const handleSelectFiles = React34.useCallback(
       async (event) => {
         var _a2;
         const files = Array.from((_a2 = event.target.files) != null ? _a2 : []);
@@ -4762,21 +4939,21 @@ var Upload = React33.forwardRef(
       },
       [maxCount, updateValue, visibleItems]
     );
-    const handleRemove = React33.useCallback(
+    const handleRemove = React34.useCallback(
       (index) => {
         const nextItems = visibleItems.filter((_, currentIndex) => currentIndex !== index);
         updateValue(nextItems);
       },
       [updateValue, visibleItems]
     );
-    return /* @__PURE__ */ jsxs31(
+    return /* @__PURE__ */ jsxs32(
       "div",
       {
         ref,
-        className: clsx33("lds-upload", disabled && "is-disabled", className),
+        className: clsx34("lds-upload", disabled && "is-disabled", className),
         ...props,
         children: [
-          /* @__PURE__ */ jsx33(
+          /* @__PURE__ */ jsx34(
             "input",
             {
               ref: inputRef,
@@ -4790,15 +4967,15 @@ var Upload = React33.forwardRef(
               onChange: handleSelectFiles
             }
           ),
-          /* @__PURE__ */ jsxs31("div", { className: "lds-upload__list", children: [
+          /* @__PURE__ */ jsxs32("div", { className: "lds-upload__list", children: [
             visibleItems.map((item, index) => {
               var _a2, _b, _c;
-              return /* @__PURE__ */ jsxs31(
+              return /* @__PURE__ */ jsxs32(
                 "div",
                 {
                   className: "lds-upload__item",
                   children: [
-                    /* @__PURE__ */ jsx33(
+                    /* @__PURE__ */ jsx34(
                       "img",
                       {
                         className: "lds-upload__image",
@@ -4806,14 +4983,14 @@ var Upload = React33.forwardRef(
                         alt: (_c = item.name) != null ? _c : `\u5DF2\u4E0A\u4F20\u56FE\u7247 ${index + 1}`
                       }
                     ),
-                    !disabled ? /* @__PURE__ */ jsx33(
+                    !disabled ? /* @__PURE__ */ jsx34(
                       "button",
                       {
                         type: "button",
                         className: "lds-upload__remove",
                         "aria-label": removeAriaLabel,
                         onClick: () => handleRemove(index),
-                        children: /* @__PURE__ */ jsx33(Icon, { name: "ic-error-line", "aria-hidden": "true" })
+                        children: /* @__PURE__ */ jsx34(Icon, { name: "ic-error-line", "aria-hidden": "true" })
                       }
                     ) : null
                   ]
@@ -4821,11 +4998,11 @@ var Upload = React33.forwardRef(
                 (_b = (_a2 = item.id) != null ? _a2 : item.url) != null ? _b : `${index}`
               );
             }),
-            shouldRenderTrigger ? /* @__PURE__ */ jsxs31(
+            shouldRenderTrigger ? /* @__PURE__ */ jsxs32(
               "button",
               {
                 type: "button",
-                className: clsx33(
+                className: clsx34(
                   "lds-upload__trigger",
                   mergedVisualState === "hover" && "is-hover",
                   mergedVisualState === "active" && "is-active",
@@ -4838,13 +5015,13 @@ var Upload = React33.forwardRef(
                 },
                 "aria-label": triggerAriaLabel,
                 children: [
-                  /* @__PURE__ */ jsx33(Icon, { name: "ic-add-line", "aria-hidden": "true" }),
-                  /* @__PURE__ */ jsx33("span", { className: "lds-upload__text", children: triggerText })
+                  /* @__PURE__ */ jsx34(Icon, { name: "ic-add-line", "aria-hidden": "true" }),
+                  /* @__PURE__ */ jsx34("span", { className: "lds-upload__text", children: triggerText })
                 ]
               }
             ) : null
           ] }),
-          children ? /* @__PURE__ */ jsx33("div", { className: "lds-upload__extra", children }) : null
+          children ? /* @__PURE__ */ jsx34("div", { className: "lds-upload__extra", children }) : null
         ]
       }
     );
@@ -4876,6 +5053,12 @@ export {
   FormItem,
   Icon,
   Input,
+  KeyValue,
+  KeyValueImage,
+  KeyValueImages,
+  KeyValueItem,
+  KeyValueTags,
+  KeyValueText,
   Menu,
   Message,
   Navbar,

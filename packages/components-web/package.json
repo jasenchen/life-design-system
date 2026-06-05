@@ -1,6 +1,6 @@
 {
   "name": "@life-ds/components-web",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Life Design System Web Components & React Components",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -37,7 +37,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@life-ds/tokens": "^1.0.7",
+    "@life-ds/tokens": "^1.2.0",
     "@life-ds/icons": "^1.0.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.3.0"

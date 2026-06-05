@@ -1078,6 +1078,140 @@ interface FormItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'titl
 declare const Form: React.ForwardRefExoticComponent<FormProps & React.RefAttributes<HTMLDivElement>>;
 declare const FormItem: React.ForwardRefExoticComponent<FormItemProps & React.RefAttributes<HTMLDivElement>>;
 
+type KeyValueLayout = 'horizontal' | 'vertical';
+interface KeyValueProps extends React.HTMLAttributes<HTMLDivElement> {
+    /**
+     * 一行展示的列数
+     * @default 2
+     */
+    columns?: number;
+    /**
+     * 统一设置左侧标签宽度
+     * 默认仅在横向布局下生效
+     * @default 84
+     */
+    labelWidth?: number | string;
+    /**
+     * 默认布局方式
+     * @default 'horizontal'
+     */
+    layout?: KeyValueLayout;
+}
+interface KeyValueItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+    /**
+     * 左侧标题内容
+     */
+    label?: React.ReactNode;
+    /**
+     * 当前项展示值
+     */
+    value?: React.ReactNode;
+    /**
+     * 栅格跨列数
+     * @default 1
+     */
+    span?: number;
+    /**
+     * 单独覆盖当前项的布局方式
+     */
+    layout?: KeyValueLayout;
+    /**
+     * 单独覆盖当前项的标题宽度
+     */
+    labelWidth?: number | string;
+    /**
+     * 标题帮助提示文案
+     */
+    tooltip?: string;
+    /**
+     * 点击帮助图标的回调
+     */
+    onTooltipClick?: React.MouseEventHandler<HTMLButtonElement>;
+    /**
+     * 帮助图标无障碍名称
+     * @default '查看字段说明'
+     */
+    tooltipAriaLabel?: string;
+    /**
+     * 数字型内容，切换为数字字体
+     * @default false
+     */
+    numeric?: boolean;
+    /**
+     * 空值时的占位内容
+     * @default '--'
+     */
+    emptyFallback?: React.ReactNode;
+}
+interface KeyValueTextProps extends React.HTMLAttributes<HTMLDivElement> {
+    /**
+     * 主文案内容
+     */
+    value?: React.ReactNode;
+    /**
+     * 附加链接文案
+     */
+    linkText?: React.ReactNode;
+    /**
+     * 链接地址
+     */
+    href?: string;
+    /**
+     * 链接点击回调
+     */
+    onLinkClick?: React.MouseEventHandler<HTMLElement>;
+    /**
+     * 链接打开方式
+     */
+    target?: React.HTMLAttributeAnchorTarget;
+    /**
+     * 链接 rel
+     */
+    rel?: string;
+    /**
+     * 末尾图标，一般用于编辑或跳转
+     */
+    icon?: React.ReactNode;
+    /**
+     * 点击图标回调
+     */
+    onIconClick?: React.MouseEventHandler<HTMLButtonElement>;
+    /**
+     * 图标无障碍名称
+     * @default '执行附加操作'
+     */
+    iconAriaLabel?: string;
+    /**
+     * 是否单行省略
+     * @default false
+     */
+    ellipsis?: boolean;
+}
+interface KeyValueTagsProps extends React.HTMLAttributes<HTMLDivElement> {
+}
+interface KeyValueImagesProps extends React.HTMLAttributes<HTMLDivElement> {
+}
+interface KeyValueImageProps extends React.HTMLAttributes<HTMLDivElement> {
+    /**
+     * 图片地址
+     */
+    src: string;
+    /**
+     * 图片描述
+     */
+    alt: string;
+    /**
+     * 图片下方说明
+     */
+    label?: React.ReactNode;
+}
+declare const KeyValue: React.ForwardRefExoticComponent<KeyValueProps & React.RefAttributes<HTMLDivElement>>;
+declare const KeyValueItem: React.ForwardRefExoticComponent<KeyValueItemProps & React.RefAttributes<HTMLDivElement>>;
+declare const KeyValueText: React.ForwardRefExoticComponent<KeyValueTextProps & React.RefAttributes<HTMLDivElement>>;
+declare const KeyValueTags: React.ForwardRefExoticComponent<KeyValueTagsProps & React.RefAttributes<HTMLDivElement>>;
+declare const KeyValueImages: React.ForwardRefExoticComponent<KeyValueImagesProps & React.RefAttributes<HTMLDivElement>>;
+declare const KeyValueImage: React.ForwardRefExoticComponent<KeyValueImageProps & React.RefAttributes<HTMLDivElement>>;
+
 interface UploadFileItem {
     id?: string;
     name?: string;
@@ -1153,4 +1287,4 @@ interface UploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChan
 }
 declare const Upload: React.ForwardRefExoticComponent<UploadProps & React.RefAttributes<HTMLDivElement>>;
 
-export { Alert, type AlertProps, type AlertVariant, Button, type ButtonProps, type ButtonSize, type ButtonVariant, Card, CardBody, CardDescription, CardDivider, type CardDividerProps, type CardDividerVariant, CardFooter, CardHeader, type CardHeaderProps, CardMetric, type CardMetricProps, CardMetrics, type CardMetricsProps, type CardProps, type CardSize, CardTitle, Checkbox, type CheckboxProps, DatePicker, type DatePickerProps, type DatePickerSize, type DatePickerType, type DatePickerValue, type DateRangeValue, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, type FilterDatePickerType, type FilterDatePickerValue, type FilterDateRangeValue, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterTimePickerType, type FilterTimePickerValue, type FilterTimeRangeValue, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, type IconVariant, Input, type InputProps, Menu, type MenuProps, Message, type MessageOptions, type MessageProps, type MessageVariant, Navbar, type NavbarProps, type NavbarTheme, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Radio, type RadioProps, type RadioSize, type RadioVariant, Search, type SearchProps, Select, type SelectOption, type SelectProps, type SelectSize, Status, type StatusColor, type StatusProps, type StepItem, Steps, type StepsProps, Switch, type SwitchProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, TimePicker, type TimePickerProps, type TimePickerSize, type TimePickerType, type TimePickerValue, type TimeRangeValue, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, message, useFormItemStatus };
+export { Alert, type AlertProps, type AlertVariant, Button, type ButtonProps, type ButtonSize, type ButtonVariant, Card, CardBody, CardDescription, CardDivider, type CardDividerProps, type CardDividerVariant, CardFooter, CardHeader, type CardHeaderProps, CardMetric, type CardMetricProps, CardMetrics, type CardMetricsProps, type CardProps, type CardSize, CardTitle, Checkbox, type CheckboxProps, DatePicker, type DatePickerProps, type DatePickerSize, type DatePickerType, type DatePickerValue, type DateRangeValue, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, type FilterDatePickerType, type FilterDatePickerValue, type FilterDateRangeValue, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterTimePickerType, type FilterTimePickerValue, type FilterTimeRangeValue, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, type IconVariant, Input, type InputProps, KeyValue, KeyValueImage, type KeyValueImageProps, KeyValueImages, type KeyValueImagesProps, KeyValueItem, type KeyValueItemProps, type KeyValueLayout, type KeyValueProps, KeyValueTags, type KeyValueTagsProps, KeyValueText, type KeyValueTextProps, Menu, type MenuProps, Message, type MessageOptions, type MessageProps, type MessageVariant, Navbar, type NavbarProps, type NavbarTheme, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Radio, type RadioProps, type RadioSize, type RadioVariant, Search, type SearchProps, Select, type SelectOption, type SelectProps, type SelectSize, Status, type StatusColor, type StatusProps, type StepItem, Steps, type StepsProps, Switch, type SwitchProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, TimePicker, type TimePickerProps, type TimePickerSize, type TimePickerType, type TimePickerValue, type TimeRangeValue, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, message, useFormItemStatus };

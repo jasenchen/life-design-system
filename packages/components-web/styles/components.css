@@ -3604,6 +3604,21 @@ button.lds-filter {
   vertical-align: middle;
 }
 
+.lds-table__th.is-align-left,
+.lds-table__td.is-align-left {
+  text-align: left;
+}
+
+.lds-table__th.is-align-center,
+.lds-table__td.is-align-center {
+  text-align: center;
+}
+
+.lds-table__th.is-align-right,
+.lds-table__td.is-align-right {
+  text-align: right;
+}
+
 /* 商品列样式 */
 .lds-table-cell--product {
   display: flex;
@@ -4535,6 +4550,12 @@ button.lds-filter {
   color: var(--color-text-primary);
 }
 
+.lds-table-cell--tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* 操作列样式 */
 .lds-table-cell--operation {
   display: flex;
@@ -4543,7 +4564,7 @@ button.lds-filter {
 }
 
 .lds-table-cell__action {
-  color: var(--color-primary-normal);
+  color: var(--color-text-link-normal);
   cursor: pointer;
   text-decoration: none;
   font: var(--body-regular);
@@ -4551,11 +4572,40 @@ button.lds-filter {
 }
 
 .lds-table-cell__action:hover {
-  color: var(--color-primary-hover);
+  color: var(--color-text-link-hover);
+}
+
+.lds-table-cell__action:active {
+  color: var(--color-text-link-active);
 }
 
 .lds-table-cell__action.is-danger {
   color: var(--color-danger-normal);
+}
+
+.lds-table-cell__action.is-danger:hover {
+  color: var(--color-danger-hover);
+}
+
+.lds-table-cell__action.is-danger:active {
+  color: var(--color-danger-active);
+}
+
+.lds-table-cell__action.is-disabled,
+.lds-table-cell__action[aria-disabled='true'] {
+  color: var(--color-text-link-disable);
+  cursor: not-allowed;
+  pointer-events: auto;
+}
+
+.lds-table-cell__action.is-disabled:hover,
+.lds-table-cell__action[aria-disabled='true']:hover {
+  color: var(--color-text-link-disable);
+}
+
+.lds-table-cell__action.is-disabled:active,
+.lds-table-cell__action[aria-disabled='true']:active {
+  color: var(--color-text-link-disable);
 }
 
 .lds-table-cell__action.is-danger:hover {

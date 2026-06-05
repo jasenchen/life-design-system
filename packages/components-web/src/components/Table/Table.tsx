@@ -1,6 +1,13 @@
 import React from 'react';
 import { clsx } from 'clsx';
-import { Tag } from '../Tag/Tag';
+import { Tag, type TagProps } from '../Tag/Tag';
+
+export type TableCellAlign = 'left' | 'center' | 'right';
+
+const getTableAlignClassName = (align?: TableCellAlign) => {
+  if (!align) return undefined;
+  return `is-align-${align}`;
+};
 
 export const TableWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => <div ref={ref} className={clsx('lds-table-wrapper', className)} {...props} />
@@ -27,14 +34,20 @@ export const Tr = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTM
 );
 Tr.displayName = 'Tr';
 
-export const Th = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<HTMLTableCellElement>>(
-  ({ className, ...props }, ref) => <th ref={ref} className={clsx('lds-table__th', className)} {...props} />
-);
+export interface ThProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
+  align?: TableCellAlign;
+}
+export const Th = React.forwardRef<HTMLTableCellElement, ThProps>(({ className, align, ...props }, ref) => (
+  <th ref={ref} className={clsx('lds-table__th', getTableAlignClassName(align), className)} {...props} />
+));
 Th.displayName = 'Th';
 
-export const Td = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<HTMLTableCellElement>>(
-  ({ className, ...props }, ref) => <td ref={ref} className={clsx('lds-table__td', className)} {...props} />
-);
+export interface TdProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
+  align?: TableCellAlign;
+}
+export const Td = React.forwardRef<HTMLTableCellElement, TdProps>(({ className, align, ...props }, ref) => (
+  <td ref={ref} className={clsx('lds-table__td', getTableAlignClassName(align), className)} {...props} />
+));
 Td.displayName = 'Td';
 
 export const TableCellProduct = ({ img, title, tag, tagVariant = 'default', id }: any) => (
@@ -61,14 +74,45 @@ export const TableCellProduct = ({ img, title, tag, tagVariant = 'default', id }
 );
 
 export const TableCellAmount = ({ children }: any) => <div className="lds-table-cell--amount">{children}</div>;
+export interface TableCellTagProps extends TagProps {
+  containerClassName?: string;
+}
+export const TableCellTag = ({
+  containerClassName,
+  className,
+  size = 'small',
+  variant = 'light',
+  color = 'gray',
+  ...props
+}: TableCellTagProps) => (
+  <div className={clsx('lds-table-cell--tag', containerClassName)}>
+    <Tag className={className} size={size} variant={variant} color={color} {...props} />
+  </div>
+);
 export const TableCellOperation = ({ children }: any) => <div className="lds-table-cell--operation">{children}</div>;
 
 export interface TableCellActionProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   danger?: boolean;
+  disabled?: boolean;
 }
 export const TableCellAction = React.forwardRef<HTMLAnchorElement, TableCellActionProps>(
-  ({ className, danger, ...props }, ref) => (
-    <a ref={ref} className={clsx('lds-table-cell__action', danger && 'is-danger', className)} {...props} />
+  ({ className, danger, disabled = false, href, onClick, tabIndex, ...props }, ref) => (
+    <a
+      ref={ref}
+      className={clsx('lds-table-cell__action', danger && 'is-danger', disabled && 'is-disabled', className)}
+      href={disabled ? undefined : href}
+      aria-disabled={disabled || undefined}
+      tabIndex={disabled ? -1 : tabIndex}
+      onClick={(event) => {
+        if (disabled) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+        onClick?.(event);
+      }}
+      {...props}
+    />
   )
 );
 TableCellAction.displayName = 'TableCellAction';

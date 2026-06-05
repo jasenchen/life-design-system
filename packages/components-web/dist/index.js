@@ -78,6 +78,7 @@ __export(index_exports, {
   TableCellAmount: () => TableCellAmount,
   TableCellOperation: () => TableCellOperation,
   TableCellProduct: () => TableCellProduct,
+  TableCellTag: () => TableCellTag,
   TableWrapper: () => TableWrapper,
   Tabs: () => Tabs,
   Tag: () => Tag,
@@ -126,6 +127,7 @@ var import_react3 = __toESM(require("react"));
 var import_clsx3 = require("clsx");
 
 // src/components/Icon/Icon.tsx
+var import_icons = require("@life-ds/icons");
 var import_react2 = __toESM(require("react"));
 var import_clsx2 = require("clsx");
 
@@ -1015,6 +1017,7 @@ var import_clsx11 = require("clsx");
 var import_jsx_runtime11 = require("react/jsx-runtime");
 var POPOVER_ANIMATION_MS = 180;
 var VIEWPORT_PADDING = 16;
+var DEFAULT_POPOVER_Z_INDEX = 1150;
 var mergeRefs = (...refs) => {
   return (value) => {
     refs.forEach((ref) => {
@@ -1046,6 +1049,20 @@ var getPlacementAlign = (placement) => {
   if (placement.endsWith("end")) return "end";
   if (placement.endsWith("center")) return "center";
   return "start";
+};
+var getPopoverZIndex = (anchor) => {
+  if (!anchor || typeof window === "undefined") {
+    return DEFAULT_POPOVER_Z_INDEX;
+  }
+  const overlayRoot = anchor.closest(".lds-dialog-root, .lds-drawer-root");
+  if (!overlayRoot) {
+    return DEFAULT_POPOVER_Z_INDEX;
+  }
+  const overlayZIndex = Number.parseInt(window.getComputedStyle(overlayRoot).zIndex, 10);
+  if (Number.isNaN(overlayZIndex)) {
+    return DEFAULT_POPOVER_Z_INDEX;
+  }
+  return overlayZIndex + 1;
 };
 var getPositionForPlacement = (placement, anchorRect, contentRect, offset) => {
   const side = getPlacementSide(placement);
@@ -1144,7 +1161,8 @@ var Popover = import_react11.default.forwardRef(
         top: Math.max(VIEWPORT_PADDING, nextTop),
         left: clampedLeft,
         minWidth: matchTriggerWidth ? anchorRect.width : void 0,
-        maxHeight: Math.max(96, availableHeight)
+        maxHeight: Math.max(96, availableHeight),
+        zIndex: getPopoverZIndex(triggerElement2)
       });
     }, [matchTriggerWidth, offset, placement]);
     (0, import_react11.useEffect)(() => {
@@ -1251,6 +1269,9 @@ var Popover = import_react11.default.forwardRef(
       } : null,
       ...positionStyle.maxHeight !== void 0 ? {
         ["--lds-popover-max-height"]: `${positionStyle.maxHeight}px`
+      } : null,
+      ...positionStyle.zIndex !== void 0 ? {
+        zIndex: positionStyle.zIndex
       } : null
     };
     return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
@@ -2403,7 +2424,23 @@ var Filter = import_react15.default.forwardRef((props, ref) => {
     width
   } = props;
   if (props.type === "input") {
-    const { className: className2, value: value2, defaultValue, onChange, inputProps, style: style2, ...rest2 } = props;
+    const {
+      type: _type,
+      size: _size2,
+      label: _label2,
+      placeholder: _placeholder2,
+      disabled: _disabled2,
+      isActive: _isActive2,
+      rightIcon: _rightIcon2,
+      width: _width2,
+      className: className2,
+      value: value2,
+      defaultValue,
+      onChange,
+      inputProps,
+      style: style2,
+      ...rest2
+    } = props;
     const filled2 = isFilledValue(value2 != null ? value2 : defaultValue);
     return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
       "div",
@@ -2447,7 +2484,21 @@ var Filter = import_react15.default.forwardRef((props, ref) => {
       }
     );
   }
-  const { type, className, value, onClick, style, ...rest } = props;
+  const {
+    type,
+    size: _size,
+    label: _label,
+    placeholder: _placeholder,
+    disabled: _disabled,
+    isActive: _isActive,
+    rightIcon: _rightIcon,
+    width: _width,
+    className,
+    value,
+    onClick,
+    style,
+    ...rest
+  } = props;
   const filled = isFilledValue(value);
   const defaultIconName = getDefaultRightIconName(type);
   const iconNode = rightIcon != null ? rightIcon : defaultIconName ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Icon, { name: defaultIconName, className: "lds-filter__icon-svg", "aria-hidden": "true" }) : null;
@@ -3485,6 +3536,64 @@ FilterTimePicker.displayName = "FilterTimePicker";
 var import_react19 = __toESM(require("react"));
 var import_clsx19 = require("clsx");
 var import_jsx_runtime19 = require("react/jsx-runtime");
+var isManagedFilterElement = (child) => import_react19.default.isValidElement(child) && (child.type === Filter || child.type === FilterSelect || child.type === FilterDatePicker || child.type === FilterTimePicker);
+var getManagedFilterConfig = (child) => {
+  var _a, _b, _c, _d, _e, _f;
+  if (!isManagedFilterElement(child)) return null;
+  const props = child.props;
+  const name = typeof props.name === "string" ? props.name : void 0;
+  if (!name) return null;
+  if (child.type === Filter) {
+    const isControlled2 = props.value !== void 0;
+    const currentValue2 = isControlled2 ? props.value : (_a = props.defaultValue) != null ? _a : "";
+    return {
+      name,
+      kind: "filter",
+      isControlled: isControlled2,
+      currentValue: currentValue2,
+      resetValue: (_b = props.defaultValue) != null ? _b : "",
+      element: child
+    };
+  }
+  if (child.type === FilterSelect) {
+    const isControlled2 = props.value !== void 0;
+    const currentValue2 = isControlled2 ? props.value : props.defaultValue;
+    return {
+      name,
+      kind: "select",
+      isControlled: isControlled2,
+      currentValue: currentValue2,
+      resetValue: props.defaultValue,
+      element: child
+    };
+  }
+  if (child.type === FilterDatePicker) {
+    const picker2 = props.picker === "range" ? "range" : "date";
+    const fallbackValue2 = picker2 === "range" ? [null, null] : null;
+    const isControlled2 = props.value !== void 0;
+    const currentValue2 = isControlled2 ? props.value : (_c = props.defaultValue) != null ? _c : fallbackValue2;
+    return {
+      name,
+      kind: "date",
+      isControlled: isControlled2,
+      currentValue: currentValue2,
+      resetValue: (_d = props.defaultValue) != null ? _d : fallbackValue2,
+      element: child
+    };
+  }
+  const picker = props.picker === "range" ? "range" : "time";
+  const fallbackValue = picker === "range" ? [null, null] : null;
+  const isControlled = props.value !== void 0;
+  const currentValue = isControlled ? props.value : (_e = props.defaultValue) != null ? _e : fallbackValue;
+  return {
+    name,
+    kind: "time",
+    isControlled,
+    currentValue,
+    resetValue: (_f = props.defaultValue) != null ? _f : fallbackValue,
+    element: child
+  };
+};
 var FilterGroup = import_react19.default.forwardRef(
   ({
     className,
@@ -3493,7 +3602,9 @@ var FilterGroup = import_react19.default.forwardRef(
     gap = 12,
     onQuery,
     onReset,
+    onValuesChange,
     showActions,
+    submitMode = "auto",
     actions,
     queryText = "\u67E5\u8BE2",
     resetText = "\u91CD\u7F6E",
@@ -3503,6 +3614,84 @@ var FilterGroup = import_react19.default.forwardRef(
   }, ref) => {
     const shouldShowDefaultActions = Boolean(showActions != null ? showActions : onQuery || onReset);
     const shouldRenderActionsRow = Boolean(actions || shouldShowDefaultActions);
+    const effectiveSubmitMode = submitMode === "auto" ? shouldRenderActionsRow ? "manual" : "realtime" : submitMode;
+    const managedFilters = import_react19.default.useMemo(
+      () => import_react19.default.Children.toArray(children).map((child) => getManagedFilterConfig(child)).filter((item) => item !== null),
+      [children]
+    );
+    const valuesRef = import_react19.default.useRef({});
+    const [resetVersion, setResetVersion] = import_react19.default.useState(0);
+    import_react19.default.useEffect(() => {
+      const nextValues = {};
+      managedFilters.forEach((config) => {
+        if (config.isControlled || !(config.name in valuesRef.current)) {
+          nextValues[config.name] = config.currentValue;
+          return;
+        }
+        nextValues[config.name] = valuesRef.current[config.name];
+      });
+      valuesRef.current = nextValues;
+    }, [managedFilters]);
+    const emitValuesChange = import_react19.default.useCallback(
+      (values, meta) => {
+        onValuesChange == null ? void 0 : onValuesChange(values, meta);
+      },
+      [onValuesChange]
+    );
+    const handleFilterValueChange = import_react19.default.useCallback(
+      (name, value) => {
+        const nextValues = { ...valuesRef.current, [name]: value };
+        valuesRef.current = nextValues;
+        emitValuesChange(nextValues, { name, value, source: "change" });
+        if (effectiveSubmitMode === "realtime") {
+          onQuery == null ? void 0 : onQuery(nextValues);
+        }
+      },
+      [effectiveSubmitMode, emitValuesChange, onQuery]
+    );
+    const handleQuery = import_react19.default.useCallback(() => {
+      onQuery == null ? void 0 : onQuery({ ...valuesRef.current });
+    }, [onQuery]);
+    const handleReset = import_react19.default.useCallback(() => {
+      const resetValues = managedFilters.reduce((acc, config) => {
+        acc[config.name] = config.resetValue;
+        return acc;
+      }, {});
+      valuesRef.current = resetValues;
+      setResetVersion((version) => version + 1);
+      onReset == null ? void 0 : onReset(resetValues);
+      Object.entries(resetValues).forEach(([name, value]) => {
+        emitValuesChange(resetValues, { name, value, source: "reset" });
+      });
+    }, [emitValuesChange, managedFilters, onReset]);
+    const enhancedChildren = import_react19.default.useMemo(
+      () => import_react19.default.Children.map(children, (child, index) => {
+        var _a;
+        const config = getManagedFilterConfig(child);
+        if (!config || !import_react19.default.isValidElement(child)) return child;
+        const keyPrefix = (_a = child.key) != null ? _a : `${config.name}-${index}`;
+        const commonProps = { key: `${String(keyPrefix)}-${resetVersion}` };
+        if (config.kind === "filter") {
+          const originalOnChange2 = child.props.onChange;
+          return import_react19.default.cloneElement(child, {
+            ...commonProps,
+            onChange: (value, e) => {
+              originalOnChange2 == null ? void 0 : originalOnChange2(value, e);
+              handleFilterValueChange(config.name, value);
+            }
+          });
+        }
+        const originalOnChange = child.props.onChange;
+        return import_react19.default.cloneElement(child, {
+          ...commonProps,
+          onChange: (value, ...args) => {
+            originalOnChange == null ? void 0 : originalOnChange(value, ...args);
+            handleFilterValueChange(config.name, value);
+          }
+        });
+      }),
+      [children, handleFilterValueChange, resetVersion]
+    );
     return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
       "div",
       {
@@ -3516,10 +3705,10 @@ var FilterGroup = import_react19.default.forwardRef(
         },
         ...props,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "lds-filter-group__grid", children }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "lds-filter-group__grid", children: enhancedChildren }),
           shouldRenderActionsRow ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "lds-filter-group__actions-row", children: actions ? actions : /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
-            onQuery ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Button, { variant: "secondary", size, onClick: onQuery, children: queryText }) : null,
-            onReset ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Button, { variant: "default", size, onClick: onReset, children: resetText }) : null
+            onQuery ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Button, { variant: "secondary", size, onClick: handleQuery, children: queryText }) : null,
+            onReset ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Button, { variant: "default", size, onClick: handleReset, children: resetText }) : null
           ] }) }) : null
         ]
       }
@@ -3992,6 +4181,10 @@ Tag.displayName = "Tag";
 
 // src/components/Table/Table.tsx
 var import_jsx_runtime27 = require("react/jsx-runtime");
+var getTableAlignClassName = (align) => {
+  if (!align) return void 0;
+  return `is-align-${align}`;
+};
 var TableWrapper = import_react27.default.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { ref, className: (0, import_clsx27.clsx)("lds-table-wrapper", className), ...props })
 );
@@ -4012,13 +4205,9 @@ var Tr = import_react27.default.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("tr", { ref, className: (0, import_clsx27.clsx)("lds-table__row", className), ...props })
 );
 Tr.displayName = "Tr";
-var Th = import_react27.default.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("th", { ref, className: (0, import_clsx27.clsx)("lds-table__th", className), ...props })
-);
+var Th = import_react27.default.forwardRef(({ className, align, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("th", { ref, className: (0, import_clsx27.clsx)("lds-table__th", getTableAlignClassName(align), className), ...props }));
 Th.displayName = "Th";
-var Td = import_react27.default.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("td", { ref, className: (0, import_clsx27.clsx)("lds-table__td", className), ...props })
-);
+var Td = import_react27.default.forwardRef(({ className, align, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("td", { ref, className: (0, import_clsx27.clsx)("lds-table__td", getTableAlignClassName(align), className), ...props }));
 Td.displayName = "Td";
 var TableCellProduct = ({ img, title, tag, tagVariant = "default", id }) => /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "lds-table-cell--product", children: [
   /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("img", { src: img, alt: "\u5546\u54C1\u56FE", className: "lds-table-cell__product-img" }),
@@ -4042,9 +4231,35 @@ var TableCellProduct = ({ img, title, tag, tagVariant = "default", id }) => /* @
   ] })
 ] });
 var TableCellAmount = ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "lds-table-cell--amount", children });
+var TableCellTag = ({
+  containerClassName,
+  className,
+  size = "small",
+  variant = "light",
+  color = "gray",
+  ...props
+}) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: (0, import_clsx27.clsx)("lds-table-cell--tag", containerClassName), children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Tag, { className, size, variant, color, ...props }) });
 var TableCellOperation = ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "lds-table-cell--operation", children });
 var TableCellAction = import_react27.default.forwardRef(
-  ({ className, danger, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("a", { ref, className: (0, import_clsx27.clsx)("lds-table-cell__action", danger && "is-danger", className), ...props })
+  ({ className, danger, disabled = false, href, onClick, tabIndex, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+    "a",
+    {
+      ref,
+      className: (0, import_clsx27.clsx)("lds-table-cell__action", danger && "is-danger", disabled && "is-disabled", className),
+      href: disabled ? void 0 : href,
+      "aria-disabled": disabled || void 0,
+      tabIndex: disabled ? -1 : tabIndex,
+      onClick: (event) => {
+        if (disabled) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+        onClick == null ? void 0 : onClick(event);
+      },
+      ...props
+    }
+  )
 );
 TableCellAction.displayName = "TableCellAction";
 
@@ -5166,6 +5381,7 @@ Upload.displayName = "Upload";
   TableCellAmount,
   TableCellOperation,
   TableCellProduct,
+  TableCellTag,
   TableWrapper,
   Tabs,
   Tag,

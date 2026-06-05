@@ -89,7 +89,7 @@ import '@life-ds/icons';
 ```html
 <button class="lds-btn">
   <svg class="icon btn-icon">
-    <use href="#ic-add-round-line"></use> <!-- 或 ./assets/...#ic-add-round-line -->
+    <use href="#ic-add-round-line"></use>
   </svg>
   添加项
 </button>

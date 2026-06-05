@@ -1,3 +1,4 @@
+import '@life-ds/icons';
 import React from 'react';
 import { clsx } from 'clsx';
 import { ICON_3DL_DATA_URLS } from './icon3dlAssets';

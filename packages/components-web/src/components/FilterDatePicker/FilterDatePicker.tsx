@@ -16,6 +16,7 @@ export type FilterDatePickerValue = Date | FilterDateRangeValue | null;
 
 export interface FilterDatePickerProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
+  name?: string;
   label: React.ReactNode;
   picker?: FilterDatePickerType;
   placeholder?: React.ReactNode;

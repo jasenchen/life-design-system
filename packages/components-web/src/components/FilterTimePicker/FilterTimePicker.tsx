@@ -9,6 +9,7 @@ export type FilterTimePickerValue = string | FilterTimeRangeValue | null;
 
 export interface FilterTimePickerProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
+  name?: string;
   label: React.ReactNode;
   picker?: FilterTimePickerType;
   placeholder?: React.ReactNode;

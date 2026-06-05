@@ -22,7 +22,7 @@
 - 标题（key）超过 2 行时必须打点省略，避免把 value 区域挤乱。
 - 窄容器（如 Drawer 内窄列、侧边卡片、局部摘要区）才考虑切换为纵向布局。
 - `value` 优先展示真实内容，不要使用只读的 `Input disabled`、`Select disabled`、`Upload disabled` 来伪装详情态。
-- 数字型内容（金额、编号、库存等）使用数字字体语义，不要和普通文本混写成同一种视觉。
+- 数据型内容（如金额、价格、成交额、库存、统计指标）才使用数字字体语义；编号、ID、时间、纯英文串等仍按普通文本处理。
 - 图片展示继续遵循字段结构：左侧是标题，右侧是图片组；图片默认可参考 Upload 完成态的缩略图尺寸（如 `76 x 76`），但应根据内容类型灵活调整，例如身份证等证件照通常需要长方形比例，某些商品图或材料图也可能需要展示得更大。
 - 当内容只是普通说明文案时，直接使用文本；只有内容确实适合结构化组合时，才在 `value` 区放 `Card`。
 - 当内容本质上是列表型数据时，优先在 `value` 区放 `Table`，不要把表格硬拆成很多行零散的 KeyValue。
@@ -229,7 +229,7 @@ export function ShopDetailReadOnly() {
 | `tooltip` | `string` | `undefined` | 标题帮助提示文案 |
 | `onTooltipClick` | `(e) => void` | `undefined` | 点击帮助图标的回调 |
 | `tooltipAriaLabel` | `string` | `'查看字段说明'` | 帮助图标无障碍名称 |
-| `numeric` | `boolean` | `false` | 数字型内容，切换到 `--font-number` |
+| `numeric` | `boolean` | `false` | 数据型内容（如金额、价格、成交额、库存、统计指标），切换到 `--font-number`；编号、ID、时间等不要开启 |
 | `emptyFallback` | `React.ReactNode` | `'--'` | 空值占位内容 |
 
 ### KeyValueText 组件 API
@@ -308,7 +308,7 @@ export function ShopDetailReadOnly() {
 - 标题超过 2 行必须打点省略，避免破坏 value 区域的阅读节奏。
 - 标题文案使用 `var(--color-text-caption)`，内容文案使用 `var(--color-text-primary)`。
 - KeyValue 默认单项间距使用 `var(--spacing-4x)`，包括横向的 `key / value` 间距与纵向行距。
-- 数字型内容使用 `--font-number`，不要和普通文本混用同一字体。
+- `--font-number` 仅用于金额、价格、成交额、库存、统计指标等数据型内容；编号、ID、时间、纯英文串等仍使用 `--font-normal`。
 - 标题帮助提示使用 `ic-help-line`，尺寸 16px，保持 hover / active / focus-visible 状态。
 - 文本值支持链接和图标操作，但它们仍属于同一个 `value` 区，不要拆成额外字段。
 - 图片值使用统一图片组结构；默认可参考 Upload 完成态的缩略图尺寸，但应根据内容类型调整尺寸与比例，例如证件照适合长方形展示，部分业务图片也可能需要更大展示。

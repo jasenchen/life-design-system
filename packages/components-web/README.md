@@ -171,10 +171,17 @@ npm install @life-ds/tokens
 ```bash
 npm install @life-ds/icons
 ```
-在您的 HTML 文件中，您可以通过绝对路径或者配置构建工具来引用：
+请在应用入口文件中执行注入：
+
+```ts
+import '@life-ds/icons';
+```
+
+随后在页面中直接使用 Hash ID 引用图标，而不要通过静态文件路径引用：
+
 ```html
 <svg class="lds-icon">
-  <use href="node_modules/@life-ds/icons/assets/sprite.svg#icon-name"></use>
+  <use href="#ic-add-round-line"></use>
 </svg>
 ```
 

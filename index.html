@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Life Design System - Components</title>
+  <link rel="icon" href="./assets/logo-laike.svg" type="image/svg+xml">
   
   <link rel="stylesheet" href="./packages/tokens/life-ds-tokens.css?v=tag-1">
   <link rel="stylesheet" href="./packages/components-web/styles/base.css?v=tag-1">
@@ -18,6 +19,7 @@
         "react-dom": "https://esm.sh/react-dom@18.3.1",
         "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
         "clsx": "https://esm.sh/clsx@2.1.1",
+        "@life-ds/icons": "./packages/icons/index.js?v=tag-1",
         "@life-ds/components-web": "./packages/components-web/dist/index.mjs?v=tag-1"
       }
     }
@@ -2066,7 +2068,7 @@
     Navbar,
     Menu,
     PageHeader, Status, Steps, Checkbox, Switch, Drawer, Dialog, Form, FormItem, KeyValue, KeyValueItem, KeyValueText, KeyValueTags, KeyValueImages, KeyValueImage, Upload,
-    TableWrapper, Table, Thead, Tbody, Tr, Th, Td, TableCellProduct, TableCellAmount, TableCellOperation, TableCellAction,
+    TableWrapper, Table, Thead, Tbody, Tr, Th, Td, TableCellProduct, TableCellTag, TableCellAmount, TableCellOperation, TableCellAction,
     Tag,
     Pagination
   } from '@life-ds/components-web';
@@ -3425,79 +3427,315 @@
           </div>
         );
 
-        const FiltersRow = ({ extraCount = 0, includeTime = false }) => (
-          <>
-            <Filter type="input" size="small" label="字段标题" placeholder="请输入" value="" onChange={() => {}} />
-            <FilterSelect
-              size="small"
-              label="字段标题"
-              placeholder="请选择"
-              options={[
-                { label: '选项1', value: 'option-1', iconName: 'ic-drink-line' },
-                { label: '选项2', value: 'option-2', iconName: 'ic-drink-line' },
-                { label: '选项3', value: 'option-3', iconName: 'ic-drink-line' }
-              ]}
-            />
-            <FilterDatePicker size="small" label="字段标题" placeholder="请选择" />
-            <FilterDatePicker
-              picker="range"
-              size="small"
-              label="字段标题"
-              placeholder="请选择"
-              defaultValue={[new Date(2026, 2, 23), new Date(2026, 2, 23)]}
-            />
-            {includeTime ? (
-              <>
-                <FilterTimePicker
+        const formatDemoDate = (value) => {
+          if (!(value instanceof Date) || Number.isNaN(value.getTime())) return '';
+          const year = value.getFullYear();
+          const month = `${value.getMonth() + 1}`.padStart(2, '0');
+          const date = `${value.getDate()}`.padStart(2, '0');
+          return `${year}.${month}.${date}`;
+        };
+
+        const parseDemoDate = (value) => {
+          if (!value) return null;
+          const [year, month, date] = value.split('.').map(Number);
+          if (!year || !month || !date) return null;
+          return new Date(year, month - 1, date);
+        };
+
+        const parseDemoTime = (value) => {
+          if (!value || typeof value !== 'string') return null;
+          const [hour, minute] = value.split(':').map(Number);
+          if (Number.isNaN(hour) || Number.isNaN(minute)) return null;
+          return hour * 60 + minute;
+        };
+
+        const isDateInRange = (dateText, rangeValue) => {
+          if (!Array.isArray(rangeValue) || (!rangeValue[0] && !rangeValue[1])) return true;
+          const current = parseDemoDate(dateText);
+          if (!current) return false;
+          const [start, end] = rangeValue;
+          if (start instanceof Date && current < start) return false;
+          if (end instanceof Date && current > end) return false;
+          return true;
+        };
+
+        const isTimeInRange = (timeText, rangeValue) => {
+          if (!Array.isArray(rangeValue) || (!rangeValue[0] && !rangeValue[1])) return true;
+          const current = parseDemoTime(timeText);
+          if (current === null) return false;
+          const [start, end] = rangeValue;
+          const startValue = parseDemoTime(start);
+          const endValue = parseDemoTime(end);
+          if (startValue !== null && current < startValue) return false;
+          if (endValue !== null && current > endValue) return false;
+          return true;
+        };
+
+        const filterDemoRows = [
+          {
+            id: 'FG-1001',
+            title: '资生堂烫染护理',
+            status: 'selling',
+            statusLabel: '出售中',
+            statusColor: 'green',
+            date: '2026.03.23',
+            time: '10:30',
+            type: 'group',
+            city: 'beijing',
+            channel: 'store',
+            source: 'manual'
+          },
+          {
+            id: 'FG-1002',
+            title: '招牌火锅双人餐',
+            status: 'review',
+            statusLabel: '审核中',
+            statusColor: 'orange',
+            date: '2026.03.24',
+            time: '12:00',
+            type: 'voucher',
+            city: 'shanghai',
+            channel: 'douyin',
+            source: 'import'
+          },
+          {
+            id: 'FG-1003',
+            title: '高级洗剪吹套餐',
+            status: 'off',
+            statusLabel: '已下架',
+            statusColor: 'gray',
+            date: '2026.03.25',
+            time: '18:36',
+            type: 'group',
+            city: 'beijing',
+            channel: 'store',
+            source: 'manual'
+          },
+          {
+            id: 'FG-1004',
+            title: '轻食沙拉单人餐',
+            status: 'selling',
+            statusLabel: '出售中',
+            statusColor: 'green',
+            date: '2026.03.26',
+            time: '20:15',
+            type: 'coupon',
+            city: 'guangzhou',
+            channel: 'xiaohongshu',
+            source: 'import'
+          }
+        ];
+
+        const FilterGroupResultDemo = () => {
+          const isManualMode = item.mode === 'multi';
+          const [appliedValues, setAppliedValues] = React.useState(
+            isManualMode ? {} : { status: 'selling' }
+          );
+
+          const filteredRows = React.useMemo(() => {
+            return filterDemoRows.filter((row) => {
+              const keyword = typeof appliedValues.keyword === 'string' ? appliedValues.keyword.trim().toLowerCase() : '';
+              if (keyword && !`${row.title} ${row.id}`.toLowerCase().includes(keyword)) return false;
+
+              if (appliedValues.status && appliedValues.status !== 'all' && row.status !== appliedValues.status) {
+                return false;
+              }
+
+              const dateValue = appliedValues.saleDate;
+              if (dateValue instanceof Date && row.date !== formatDemoDate(dateValue)) return false;
+
+              if (!isDateInRange(row.date, appliedValues.saleDateRange)) return false;
+
+              if (typeof appliedValues.saleTime === 'string' && appliedValues.saleTime && row.time !== appliedValues.saleTime) {
+                return false;
+              }
+
+              if (!isTimeInRange(row.time, appliedValues.saleTimeRange)) return false;
+
+              if (appliedValues.type && appliedValues.type !== 'all' && row.type !== appliedValues.type) return false;
+              if (appliedValues.city && appliedValues.city !== 'all' && row.city !== appliedValues.city) return false;
+              if (appliedValues.channel && appliedValues.channel !== 'all' && row.channel !== appliedValues.channel) return false;
+              if (appliedValues.source && appliedValues.source !== 'all' && row.source !== appliedValues.source) return false;
+
+              return true;
+            });
+          }, [appliedValues]);
+
+          return (
+            <div style={{ display: 'grid', gap: 16 }}>
+              <FilterGroup
+                size="small"
+                submitMode={isManualMode ? 'manual' : 'realtime'}
+                showActions={isManualMode}
+                onQuery={(values) => setAppliedValues(values)}
+                onReset={(values) => setAppliedValues(values)}
+              >
+                <Filter
+                  name="keyword"
+                  type="input"
                   size="small"
-                  label="字段标题"
-                  placeholder="请选择"
-                  defaultValue="18:36"
+                  label="关键词"
+                  placeholder="请输入"
                 />
-                <FilterTimePicker
+                <FilterSelect
+                  name="status"
+                  size="small"
+                  label="商品状态"
+                  placeholder="请选择"
+                  defaultValue={isManualMode ? undefined : 'selling'}
+                  options={[
+                    { label: '全部状态', value: 'all', iconName: 'ic-drink-line' },
+                    { label: '出售中', value: 'selling', iconName: 'ic-drink-line' },
+                    { label: '审核中', value: 'review', iconName: 'ic-drink-line' },
+                    { label: '已下架', value: 'off', iconName: 'ic-drink-line' }
+                  ]}
+                />
+                <FilterDatePicker
+                  name="saleDate"
+                  size="small"
+                  label="售卖日期"
+                  placeholder="请选择"
+                />
+                <FilterDatePicker
+                  name="saleDateRange"
                   picker="range"
                   size="small"
-                  label="字段标题"
+                  label="日期区间"
                   placeholder="请选择"
-                  defaultValue={['10:30', '22:30']}
+                  defaultValue={isManualMode ? [null, null] : [new Date(2026, 2, 23), new Date(2026, 2, 26)]}
                 />
-              </>
-            ) : null}
-            {Array.from({ length: extraCount }).map((_, i) => (
-              <FilterSelect
-                key={i}
-                size="small"
-                label="字段标题"
-                placeholder="请选择"
-                options={[
-                  { label: '选项1', value: 'option-1', iconName: 'ic-drink-line' },
-                  { label: '选项2', value: 'option-2', iconName: 'ic-drink-line' }
-                ]}
-              />
-            ))}
-          </>
-        );
+                {item.mode !== 'narrow' ? (
+                  <FilterTimePicker
+                    name="saleTime"
+                    size="small"
+                    label="售卖时间"
+                    placeholder="请选择"
+                  />
+                ) : null}
+                {item.mode !== 'narrow' ? (
+                  <FilterTimePicker
+                    name="saleTimeRange"
+                    picker="range"
+                    size="small"
+                    label="时间区间"
+                    placeholder="请选择"
+                    defaultValue={isManualMode ? [null, null] : ['10:00', '20:30']}
+                  />
+                ) : null}
+                {item.mode === 'multi' ? (
+                  <FilterSelect
+                    name="type"
+                    size="small"
+                    label="商品类型"
+                    placeholder="请选择"
+                    options={[
+                      { label: '全部类型', value: 'all', iconName: 'ic-drink-line' },
+                      { label: '团购', value: 'group', iconName: 'ic-drink-line' },
+                      { label: '代金券', value: 'voucher', iconName: 'ic-drink-line' },
+                      { label: '优惠券', value: 'coupon', iconName: 'ic-drink-line' }
+                    ]}
+                  />
+                ) : null}
+                {item.mode === 'multi' ? (
+                  <FilterSelect
+                    name="city"
+                    size="small"
+                    label="城市"
+                    placeholder="请选择"
+                    options={[
+                      { label: '全部城市', value: 'all', iconName: 'ic-store-line' },
+                      { label: '北京', value: 'beijing', iconName: 'ic-store-line' },
+                      { label: '上海', value: 'shanghai', iconName: 'ic-store-line' },
+                      { label: '广州', value: 'guangzhou', iconName: 'ic-store-line' }
+                    ]}
+                  />
+                ) : null}
+                {item.mode === 'multi' ? (
+                  <FilterSelect
+                    name="channel"
+                    size="small"
+                    label="投放渠道"
+                    placeholder="请选择"
+                    options={[
+                      { label: '全部渠道', value: 'all', iconName: 'ic-sell-line' },
+                      { label: '门店', value: 'store', iconName: 'ic-sell-line' },
+                      { label: '抖音', value: 'douyin', iconName: 'ic-sell-line' },
+                      { label: '小红书', value: 'xiaohongshu', iconName: 'ic-sell-line' }
+                    ]}
+                  />
+                ) : null}
+                {item.mode === 'multi' ? (
+                  <FilterSelect
+                    name="source"
+                    size="small"
+                    label="创建来源"
+                    placeholder="请选择"
+                    options={[
+                      { label: '全部来源', value: 'all', iconName: 'ic-add-round-line' },
+                      { label: '手动创建', value: 'manual', iconName: 'ic-add-round-line' },
+                      { label: '批量导入', value: 'import', iconName: 'ic-add-round-line' }
+                    ]}
+                  />
+                ) : null}
+              </FilterGroup>
 
-        const Demo = () => (
-          <FilterGroup
-            size="small"
-            onQuery={() => {}}
-            onReset={() => {}}
-          >
-            <FiltersRow
-              extraCount={item.mode === 'multi' ? 4 : 0}
-              includeTime={item.mode === 'wide'}
-            />
-          </FilterGroup>
-        );
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: 12,
+                  color: 'var(--color-text-secondary)',
+                  font: 'var(--body-regular)',
+                }}
+              >
+                <span>{isManualMode ? '点击查询按钮后更新下方结果' : '筛选值变化后会实时更新下方结果'}</span>
+                <span>共 {filteredRows.length} 条结果</span>
+              </div>
+
+              <TableWrapper>
+                <Table>
+                  <Thead>
+                    <Tr>
+                      <Th align="left">商品名称</Th>
+                      <Th align="center">状态</Th>
+                      <Th align="left">售卖日期</Th>
+                      <Th align="left">售卖时间</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {filteredRows.length ? (
+                      filteredRows.map((row) => (
+                        <Tr key={row.id}>
+                          <Td align="left">{row.title}</Td>
+                          <Td align="center">
+                            <TableCellTag color={row.statusColor}>{row.statusLabel}</TableCellTag>
+                          </Td>
+                          <Td align="left">{row.date}</Td>
+                          <Td align="left">{row.time}</Td>
+                        </Tr>
+                      ))
+                    ) : (
+                      <Tr>
+                        <Td align="center" colSpan={4} style={{ color: 'var(--color-text-secondary)' }}>
+                          暂无符合条件的结果
+                        </Td>
+                      </Tr>
+                    )}
+                  </Tbody>
+                </Table>
+              </TableWrapper>
+            </div>
+          );
+        };
 
         if (item.mode === 'narrow') {
           // Ensure 3 columns can fit: 3*294 + 2*12 + 2*12(padding) = 930px
-          root.render(<Wrapper width={960}><Demo /></Wrapper>);
+          root.render(<Wrapper width={960}><FilterGroupResultDemo /></Wrapper>);
         } else if (item.mode === 'wide') {
-          root.render(<Wrapper width={1250}><Demo /></Wrapper>);
+          root.render(<Wrapper width={1250}><FilterGroupResultDemo /></Wrapper>);
         } else {
-          root.render(<Wrapper width={'100%'}><Demo /></Wrapper>);
+          root.render(<Wrapper width={'100%'}><FilterGroupResultDemo /></Wrapper>);
         }
       } else if (item.type === 'popover-demo') {
         const PopoverDemo = () => {
@@ -4131,17 +4369,17 @@
                       <Table>
                         <Thead>
                           <Tr>
-                            <Th>门店名称</Th>
-                            <Th>门店地址</Th>
-                            <Th>收款账户</Th>
+                            <Th align="left">门店名称</Th>
+                            <Th align="left">门店地址</Th>
+                            <Th align="left">收款账户</Th>
                           </Tr>
                         </Thead>
                         <Tbody>
                           {storeRows.map((row) => (
                             <Tr key={row.name}>
-                              <Td>{row.name}</Td>
-                              <Td>{row.address}</Td>
-                              <Td>{row.account}</Td>
+                              <Td align="left">{row.name}</Td>
+                              <Td align="left">{row.address}</Td>
+                              <Td align="left">{row.account}</Td>
                             </Tr>
                           ))}
                         </Tbody>
@@ -4245,6 +4483,7 @@
       } else if (item.type === 'page-gallery') {
         const PageGallery = () => {
           const [pageType, setPageType] = React.useState('list');
+          const [listAppliedFilters, setListAppliedFilters] = React.useState({});
 
           React.useEffect(() => {
             window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
@@ -4260,36 +4499,87 @@
               title: '【节假日通用】资生堂烫染护理',
               tag: '团购',
               tagVariant: 'default',
+              status: 'selling',
               id: '23468723648223',
               amount: '￥508.00',
               time: '2026.06.01 12:00',
               stock: '10,000',
               pending: '500',
-              actions: ['上架', '编辑']
+              actions: [
+                { label: '上架' },
+                { label: '编辑', disabled: true }
+              ]
             },
             {
               title: '【工作日可用】高级洗剪吹套餐',
               tag: '热销',
               tagVariant: 'orange',
+              status: 'review',
               id: '89345723648224',
               amount: '￥128.00',
               time: '2026.06.02 14:30',
               stock: '8,500',
               pending: '240',
-              actions: ['下架', '编辑']
+              actions: [
+                { label: '下架', disabled: true },
+                { label: '编辑' }
+              ]
             },
             {
               title: '【双人套餐】招牌火锅经典双人餐',
               tag: '新品',
               tagVariant: 'green',
+              status: 'off',
               id: '56345723648225',
               amount: '￥198.00',
               time: '2026.06.10 18:00',
               stock: '3,200',
               pending: '86',
-              actions: ['查看', '编辑']
+              actions: [
+                { label: '查看' },
+                { label: '删除', danger: true, disabled: true }
+              ]
             }
           ];
+
+          const formatPreviewDate = (value) => {
+            if (!(value instanceof Date) || Number.isNaN(value.getTime())) return '';
+            const year = value.getFullYear();
+            const month = `${value.getMonth() + 1}`.padStart(2, '0');
+            const date = `${value.getDate()}`.padStart(2, '0');
+            return `${year}.${month}.${date}`;
+          };
+
+          const getPreviewDatePart = (value) => {
+            if (typeof value !== 'string') return '';
+            return value.split(' ')[0] ?? '';
+          };
+
+          const getPreviewTimePart = (value) => {
+            if (typeof value !== 'string') return '';
+            return value.split(' ')[1] ?? '';
+          };
+
+          const filteredProductRows = React.useMemo(() => {
+            return productRows.filter((row) => {
+              const keyword = typeof listAppliedFilters.keyword === 'string' ? listAppliedFilters.keyword.trim().toLowerCase() : '';
+              if (keyword && !`${row.title} ${row.id}`.toLowerCase().includes(keyword)) return false;
+
+              if (listAppliedFilters.status && listAppliedFilters.status !== 'all' && row.status !== listAppliedFilters.status) {
+                return false;
+              }
+
+              if (listAppliedFilters.saleDate instanceof Date && getPreviewDatePart(row.time) !== formatPreviewDate(listAppliedFilters.saleDate)) {
+                return false;
+              }
+
+              if (typeof listAppliedFilters.saleTime === 'string' && listAppliedFilters.saleTime && getPreviewTimePart(row.time) !== listAppliedFilters.saleTime) {
+                return false;
+              }
+
+              return true;
+            });
+          }, [listAppliedFilters, productRows]);
 
           const categoryOptions = [
             { label: '美食 / 火锅', value: 'hotpot', iconName: 'ic-drink-line' },
@@ -4346,15 +4636,21 @@
                       />
 
                       <div style={{ marginBottom: 'var(--spacing-6x)' }}>
-                        <FilterGroup size="small" onQuery={() => {}} onReset={() => {}}>
-                          <Filter type="input" size="small" label="商品名称" placeholder="请输入" defaultValue="" onChange={() => {}} />
-                          <FilterSelect size="small" label="商品状态" placeholder="请选择" options={[
+                        <FilterGroup
+                          size="small"
+                          submitMode="manual"
+                          onQuery={(values) => setListAppliedFilters(values)}
+                          onReset={(values) => setListAppliedFilters(values)}
+                        >
+                          <Filter name="keyword" type="input" size="small" label="商品名称" placeholder="请输入" />
+                          <FilterSelect name="status" size="small" label="商品状态" placeholder="请选择" defaultValue="all" options={[
                             { label: '全部', value: 'all' },
                             { label: '出售中', value: 'selling' },
-                            { label: '审核中', value: 'review' }
+                            { label: '审核中', value: 'review' },
+                            { label: '已下架', value: 'off' }
                           ]} />
-                          <FilterDatePicker size="small" label="售卖日期" placeholder="请选择" />
-                          <FilterTimePicker size="small" label="售卖时间" placeholder="请选择" />
+                          <FilterDatePicker name="saleDate" size="small" label="售卖日期" placeholder="请选择" />
+                          <FilterTimePicker name="saleTime" size="small" label="售卖时间" placeholder="请选择" />
                         </FilterGroup>
                       </div>
 
@@ -4375,38 +4671,51 @@
                         <Table>
                           <Thead>
                             <Tr>
-                              <Th>商品信息</Th>
-                              <Th>价格（元）</Th>
-                              <Th>售卖时间</Th>
-                              <Th>剩余库存</Th>
-                              <Th>待核销</Th>
-                              <Th>操作</Th>
+                              <Th align="left">商品信息</Th>
+                              <Th align="right">价格（元）</Th>
+                              <Th align="left">售卖时间</Th>
+                              <Th align="right">剩余库存</Th>
+                              <Th align="right">待核销</Th>
+                              <Th align="left">操作</Th>
                             </Tr>
                           </Thead>
                           <Tbody>
-                            {productRows.map((row) => (
-                              <Tr key={row.id}>
-                                <Td>
-                                  <TableCellProduct img="./assets/shangpin.png" title={row.title} tag={row.tag} tagVariant={row.tagVariant} id={row.id} />
-                                </Td>
-                                <Td><TableCellAmount>{row.amount}</TableCellAmount></Td>
-                                <Td>{row.time}</Td>
-                                <Td>{row.stock}</Td>
-                                <Td>{row.pending}</Td>
-                                <Td>
-                                  <TableCellOperation>
-                                    {row.actions.map((action) => (
-                                      <TableCellAction key={action} danger={action === '删除'}>{action}</TableCellAction>
-                                    ))}
-                                  </TableCellOperation>
+                            {filteredProductRows.length ? (
+                              filteredProductRows.map((row) => (
+                                <Tr key={row.id}>
+                                  <Td align="left">
+                                    <TableCellProduct img="./assets/shangpin.png" title={row.title} tag={row.tag} tagVariant={row.tagVariant} id={row.id} />
+                                  </Td>
+                                  <Td align="right"><TableCellAmount>{row.amount}</TableCellAmount></Td>
+                                  <Td align="left">{row.time}</Td>
+                                  <Td align="right">{row.stock}</Td>
+                                  <Td align="right">{row.pending}</Td>
+                                  <Td align="left">
+                                    <TableCellOperation>
+                                      {row.actions.map((action) => (
+                                        <TableCellAction key={action.label} danger={action.danger} disabled={action.disabled}>
+                                          {action.label}
+                                        </TableCellAction>
+                                      ))}
+                                    </TableCellOperation>
+                                  </Td>
+                                </Tr>
+                              ))
+                            ) : (
+                              <Tr>
+                                <Td align="center" colSpan={6} style={{ color: 'var(--color-text-secondary)' }}>
+                                  暂无符合筛选条件的商品
                                 </Td>
                               </Tr>
-                            ))}
+                            )}
                           </Tbody>
                         </Table>
                       </TableWrapper>
 
                       <div className="lds-pagination-wrapper">
+                        <div style={{ marginRight: 'auto', color: 'var(--color-text-secondary)', font: 'var(--body-regular)' }}>
+                          当前命中 {filteredProductRows.length} 条商品
+                        </div>
                         <Pagination
                           total={500}
                           defaultCurrent={2}
@@ -4455,7 +4764,7 @@
                             <div style={{ display: 'grid', gap: 'var(--spacing-base)', font: 'var(--body-regular)' }}>
                               <div>
                                 <span style={{ color: 'var(--color-text-caption)' }}>商品编号：</span>
-                                <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-number)' }}>2137279250</span>
+                                <span style={{ color: 'var(--color-text-primary)' }}>2137279250</span>
                               </div>
                               <div>
                                 <span style={{ color: 'var(--color-text-caption)' }}>经营主体：</span>
@@ -4601,7 +4910,7 @@
                                 <div style={{ display: 'grid', gap: 'var(--spacing-base)', font: 'var(--body-regular)' }}>
                                   <div>
                                     <span style={{ color: 'var(--color-text-caption)' }}>商品编号：</span>
-                                    <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-number)' }}>2137279250</span>
+                                    <span style={{ color: 'var(--color-text-primary)' }}>2137279250</span>
                                   </div>
                                   <div>
                                     <span style={{ color: 'var(--color-text-caption)' }}>经营主体：</span>
@@ -4745,7 +5054,7 @@
                             <div style={{ display: 'grid', gap: 'var(--spacing-base)', font: 'var(--body-regular)' }}>
                               <div>
                                 <span style={{ color: 'var(--color-text-caption)' }}>商品编号：</span>
-                                <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-number)' }}>2137279250</span>
+                                <span style={{ color: 'var(--color-text-primary)' }}>2137279250</span>
                               </div>
                               <div>
                                 <span style={{ color: 'var(--color-text-caption)' }}>经营主体：</span>
@@ -4833,19 +5142,19 @@
                               <Table>
                                 <Thead>
                                   <Tr>
-                                    <Th>门店名称</Th>
-                                    <Th>城市</Th>
-                                    <Th>售卖周期</Th>
-                                    <Th>分配库存</Th>
+                                    <Th align="left">门店名称</Th>
+                                    <Th align="left">城市</Th>
+                                    <Th align="left">售卖周期</Th>
+                                    <Th align="right">分配库存</Th>
                                   </Tr>
                                 </Thead>
                                 <Tbody>
                                   {detailStoreRows.map((row) => (
                                     <Tr key={row.store}>
-                                      <Td>{row.store}</Td>
-                                      <Td>{row.city}</Td>
-                                      <Td>{row.period}</Td>
-                                      <Td>{row.stock}</Td>
+                                      <Td align="left">{row.store}</Td>
+                                      <Td align="left">{row.city}</Td>
+                                      <Td align="left">{row.period}</Td>
+                                      <Td align="right">{row.stock}</Td>
                                     </Tr>
                                   ))}
                                 </Tbody>
@@ -4941,17 +5250,19 @@
                               <Table>
                                 <Thead>
                                   <Tr>
-                                    <Th>材料名称</Th>
-                                    <Th>提交时间</Th>
-                                    <Th>审核结果</Th>
+                                    <Th align="left">材料名称</Th>
+                                    <Th align="left">提交时间</Th>
+                                    <Th align="center">审核结果</Th>
                                   </Tr>
                                 </Thead>
                                 <Tbody>
                                   {detailAuditRows.map((row) => (
                                     <Tr key={row.item}>
-                                      <Td>{row.item}</Td>
-                                      <Td>{row.submittedAt}</Td>
-                                      <Td>{row.result}</Td>
+                                      <Td align="left">{row.item}</Td>
+                                      <Td align="left">{row.submittedAt}</Td>
+                                      <Td align="center">
+                                        <TableCellTag color={row.result === '审核通过' ? 'green' : 'orange'}>{row.result}</TableCellTag>
+                                      </Td>
                                     </Tr>
                                   ))}
                                 </Tbody>
@@ -5072,37 +5383,40 @@
             <Table>
               <Thead>
                 <Tr>
-                  <Th>商品信息</Th>
-                  <Th>价格（元）</Th>
-                  <Th>售卖时间</Th>
-                  <Th>剩余库存</Th>
-                  <Th>待核销</Th>
-                  <Th>操作</Th>
+                  <Th align="left">商品信息</Th>
+                  <Th align="center">状态</Th>
+                  <Th align="right">价格（元）</Th>
+                  <Th align="left">售卖时间</Th>
+                  <Th align="right">剩余库存</Th>
+                  <Th align="right">待核销</Th>
+                  <Th align="left">操作</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 <Tr>
-                  <Td><TableCellProduct img="./assets/shangpin.png" title="【节假日通用】资生堂烫染护理" tag="团购" tagVariant="default" id="23468723648223" /></Td>
-                  <Td><TableCellAmount>￥508.00</TableCellAmount></Td>
-                  <Td>2023.08.01 12:00</Td>
-                  <Td>10,000</Td>
-                  <Td>500</Td>
-                  <Td>
+                  <Td align="left"><TableCellProduct img="./assets/shangpin.png" title="【节假日通用】资生堂烫染护理" tag="团购" tagVariant="default" id="23468723648223" /></Td>
+                  <Td align="center"><TableCellTag color="green">售卖中</TableCellTag></Td>
+                  <Td align="right"><TableCellAmount>￥508.00</TableCellAmount></Td>
+                  <Td align="left">2023.08.01 12:00</Td>
+                  <Td align="right">10,000</Td>
+                  <Td align="right">500</Td>
+                  <Td align="left">
                     <TableCellOperation>
                       <TableCellAction>上架</TableCellAction>
-                      <TableCellAction>编辑</TableCellAction>
+                      <TableCellAction disabled>编辑</TableCellAction>
                     </TableCellOperation>
                   </Td>
                 </Tr>
                 <Tr>
-                  <Td><TableCellProduct img="./assets/shangpin.png" title="【工作日可用】高级洗剪吹套餐" tag="热销" tagVariant="orange" id="89345723648224" /></Td>
-                  <Td><TableCellAmount>￥128.00</TableCellAmount></Td>
-                  <Td>2023.08.02 14:30</Td>
-                  <Td>8,500</Td>
-                  <Td>240</Td>
-                  <Td>
+                  <Td align="left"><TableCellProduct img="./assets/shangpin.png" title="【工作日可用】高级洗剪吹套餐" tag="热销" tagVariant="orange" id="89345723648224" /></Td>
+                  <Td align="center"><TableCellTag color="orange">待上架</TableCellTag></Td>
+                  <Td align="right"><TableCellAmount>￥128.00</TableCellAmount></Td>
+                  <Td align="left">2023.08.02 14:30</Td>
+                  <Td align="right">8,500</Td>
+                  <Td align="right">240</Td>
+                  <Td align="left">
                     <TableCellOperation>
-                      <TableCellAction>下架</TableCellAction>
+                      <TableCellAction disabled>下架</TableCellAction>
                       <TableCellAction danger>删除</TableCellAction>
                     </TableCellOperation>
                   </Td>

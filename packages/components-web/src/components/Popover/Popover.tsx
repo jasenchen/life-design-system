@@ -12,6 +12,7 @@ import { clsx } from 'clsx';
 
 const POPOVER_ANIMATION_MS = 180;
 const VIEWPORT_PADDING = 16;
+const DEFAULT_POPOVER_Z_INDEX = 1150;
 
 export type PopoverPlacement =
   | 'bottom-start'
@@ -92,6 +93,7 @@ type PositionStyle = {
   left: number;
   minWidth?: number;
   maxHeight?: number;
+  zIndex?: number;
 };
 
 const mergeRefs = <T,>(
@@ -133,6 +135,24 @@ const getPlacementAlign = (placement: PopoverPlacement): 'start' | 'center' | 'e
   if (placement.endsWith('end')) return 'end';
   if (placement.endsWith('center')) return 'center';
   return 'start';
+};
+
+const getPopoverZIndex = (anchor: HTMLElement | null) => {
+  if (!anchor || typeof window === 'undefined') {
+    return DEFAULT_POPOVER_Z_INDEX;
+  }
+
+  const overlayRoot = anchor.closest('.lds-dialog-root, .lds-drawer-root');
+  if (!overlayRoot) {
+    return DEFAULT_POPOVER_Z_INDEX;
+  }
+
+  const overlayZIndex = Number.parseInt(window.getComputedStyle(overlayRoot).zIndex, 10);
+  if (Number.isNaN(overlayZIndex)) {
+    return DEFAULT_POPOVER_Z_INDEX;
+  }
+
+  return overlayZIndex + 1;
 };
 
 const getPositionForPlacement = (
@@ -265,6 +285,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         left: clampedLeft,
         minWidth: matchTriggerWidth ? anchorRect.width : undefined,
         maxHeight: Math.max(96, availableHeight),
+        zIndex: getPopoverZIndex(triggerElement),
       });
     }, [matchTriggerWidth, offset, placement]);
 
@@ -402,6 +423,11 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       ...(positionStyle.maxHeight !== undefined
         ? {
             ['--lds-popover-max-height' as const]: `${positionStyle.maxHeight}px`,
+          }
+        : null),
+      ...(positionStyle.zIndex !== undefined
+        ? {
+            zIndex: positionStyle.zIndex,
           }
         : null),
     } as React.CSSProperties;

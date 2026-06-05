@@ -20,6 +20,10 @@ type CommonProps = {
    */
   label: React.ReactNode;
   /**
+   * 字段名。与 `FilterGroup` 配合时用于收集当前筛选值。
+   */
+  name?: string;
+  /**
    * 占位文案（未填充时展示）
    */
   placeholder?: React.ReactNode;
@@ -89,7 +93,23 @@ export const Filter = React.forwardRef<HTMLElement, FilterProps>((props, ref) =>
   } = props;
 
   if (props.type === 'input') {
-    const { className, value, defaultValue, onChange, inputProps, style, ...rest } = props;
+    const {
+      type: _type,
+      size: _size,
+      label: _label,
+      placeholder: _placeholder,
+      disabled: _disabled,
+      isActive: _isActive,
+      rightIcon: _rightIcon,
+      width: _width,
+      className,
+      value,
+      defaultValue,
+      onChange,
+      inputProps,
+      style,
+      ...rest
+    } = props;
     const filled = isFilledValue(value ?? defaultValue);
 
     return (
@@ -132,7 +152,21 @@ export const Filter = React.forwardRef<HTMLElement, FilterProps>((props, ref) =>
     );
   }
 
-  const { type, className, value, onClick, style, ...rest } = props;
+  const {
+    type,
+    size: _size,
+    label: _label,
+    placeholder: _placeholder,
+    disabled: _disabled,
+    isActive: _isActive,
+    rightIcon: _rightIcon,
+    width: _width,
+    className,
+    value,
+    onClick,
+    style,
+    ...rest
+  } = props;
   const filled = isFilledValue(value);
   const defaultIconName = getDefaultRightIconName(type);
   const iconNode =

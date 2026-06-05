@@ -99,6 +99,7 @@ export function AppLayoutDemo() {
 
 - 当用户明确提出是列表页时使用此类型；
 - 列表页所在的典型页面底层背景默认沿用 [页面基础框架](#页面基础框架) 中的 `var(--color-bg-gray)`，右侧内容主画布 `.app-body` 继续使用 `var(--color-bg-normal)`；表格、筛选区、分页器等组件自身再使用各自语义 token。
+- 列表页筛选区优先使用 `FilterGroup`、`Filter`、`FilterSelect`、`FilterDatePicker`、`FilterTimePicker` 等标准筛选器组件；不要因为局部交互或实现问题退回到普通 `Form`、裸 `Input` / `Select` 或手写筛选栏。
 
 #### 页面结构层级 (Tree Structure)
 
@@ -127,7 +128,10 @@ import React from 'react';
 import {
   Button,
   Filter,
+  FilterDatePicker,
   FilterGroup,
+  FilterSelect,
+  FilterTimePicker,
   PageHeader,
   Pagination,
   Tab,
@@ -162,10 +166,33 @@ export function ListPageLayoutDemo() {
 
       <div style={{ marginBottom: '24px' }}>
         <FilterGroup size="small" onQuery={() => {}} onReset={() => {}}>
-          <Filter type="input" size="small" label="商品名称" placeholder="请输入" value="" onChange={() => {}} />
-          <Filter type="select" size="small" label="商品状态" placeholder="请选择" onClick={() => {}} />
-          <Filter type="date" size="small" label="售卖日期" placeholder="请选择" onClick={() => {}} />
-          <Filter type="time" size="small" label="售卖时间" placeholder="请选择" onClick={() => {}} />
+          <Filter name="keyword" type="input" size="small" label="商品名称" placeholder="请输入" value="" onChange={() => {}} />
+          <FilterSelect
+            name="status"
+            size="small"
+            label="商品状态"
+            placeholder="请选择"
+            options={[
+              { label: '全部状态', value: 'all' },
+              { label: '出售中', value: 'selling' },
+              { label: '已下架', value: 'off' },
+            ]}
+            onChange={() => {}}
+          />
+          <FilterDatePicker
+            name="saleDate"
+            size="small"
+            label="售卖日期"
+            placeholder="请选择"
+            onChange={() => {}}
+          />
+          <FilterTimePicker
+            name="saleTime"
+            size="small"
+            label="售卖时间"
+            placeholder="请选择"
+            onChange={() => {}}
+          />
         </FilterGroup>
       </div>
 
@@ -185,37 +212,37 @@ export function ListPageLayoutDemo() {
         <Table>
           <Thead>
             <Tr>
-              <Th>商品信息</Th>
-              <Th>价格（元）</Th>
-              <Th>售卖时间</Th>
-              <Th>剩余库存</Th>
-              <Th>待核销</Th>
-              <Th>操作</Th>
+              <Th align="left">商品信息</Th>
+              <Th align="right">价格（元）</Th>
+              <Th align="left">售卖时间</Th>
+              <Th align="right">剩余库存</Th>
+              <Th align="right">待核销</Th>
+              <Th align="left">操作</Th>
             </Tr>
           </Thead>
           <Tbody>
             <Tr>
-              <Td><TableCellProduct img="../../assets/shangpin.png" title="【节假日通用】资生堂烫染护理" tag="团购" tagVariant="default" id="23468723648223" /></Td>
-              <Td><TableCellAmount>￥508.00</TableCellAmount></Td>
-              <Td>2023.08.01 12:00</Td>
-              <Td>10,000</Td>
-              <Td>500</Td>
-              <Td>
+              <Td align="left"><TableCellProduct img="../../assets/shangpin.png" title="【节假日通用】资生堂烫染护理" tag="团购" tagVariant="default" id="23468723648223" /></Td>
+              <Td align="right"><TableCellAmount>￥508.00</TableCellAmount></Td>
+              <Td align="left">2023.08.01 12:00</Td>
+              <Td align="right">10,000</Td>
+              <Td align="right">500</Td>
+              <Td align="left">
                 <TableCellOperation>
                   <TableCellAction>上架</TableCellAction>
-                  <TableCellAction>编辑</TableCellAction>
+                  <TableCellAction disabled>编辑</TableCellAction>
                 </TableCellOperation>
               </Td>
             </Tr>
             <Tr>
-              <Td><TableCellProduct img="../../assets/shangpin.png" title="【工作日可用】高级洗剪吹套餐" tag="热销" tagVariant="orange" id="89345723648224" /></Td>
-              <Td><TableCellAmount>￥128.00</TableCellAmount></Td>
-              <Td>2023.08.02 14:30</Td>
-              <Td>8,500</Td>
-              <Td>240</Td>
-              <Td>
+              <Td align="left"><TableCellProduct img="../../assets/shangpin.png" title="【工作日可用】高级洗剪吹套餐" tag="热销" tagVariant="orange" id="89345723648224" /></Td>
+              <Td align="right"><TableCellAmount>￥128.00</TableCellAmount></Td>
+              <Td align="left">2023.08.02 14:30</Td>
+              <Td align="right">8,500</Td>
+              <Td align="right">240</Td>
+              <Td align="left">
                 <TableCellOperation>
-                  <TableCellAction>下架</TableCellAction>
+                  <TableCellAction disabled>下架</TableCellAction>
                   <TableCellAction danger>删除</TableCellAction>
                 </TableCellOperation>
               </Td>
@@ -287,7 +314,7 @@ export function ListPageLayoutDemo() {
 3. **统领信息区**：用于承载当前表单最重要的上下文信息，例如业务对象名称、主体名称、编号、金额、审核对象或关键状态；可以是图文样式，也可以是纯文本样式。
 4. **步骤条**：仅当表单存在明确先后顺序、多阶段填写或“上一步 / 下一步 / 提交审核”语义时使用 `<Steps />`；平级切换不要使用步骤条，应使用 `Tabs`。步骤条在表单页中应保持组件默认宽度，不要拉伸到表单内容容器整行；实现上建议额外包一层 `.form-page-steps` 容器，在父容器内水平居中对齐。
 5. **表单区**：字段必须使用 `Form` + `FormItem` 组织；如果存在多个业务主题，应拆成多个分组，每组由“分组标题 + Form 组件”组成。
-6. **全局操作区**：放置影响整个表单的操作按钮组，也可放置协议同意勾选；该区域在表单页中通常为吸底布局，固定贴在 `app-body` 底部。实现上优先作为 `.app-body` 下、`.app-content` 外的兄弟节点，而不是放进滚动容器内部，这样可以保留基础框架的底部内边距且不会出现露底问题。操作区背景需使用 `var(--color-bg-normal)`，顶部与正文之间的分割线使用 `var(--color-divider-normal)`。操作区内部内容仍需使用独立容器居中，宽度与表单内容容器保持一致；按钮组间距使用 `var(--spacing-3x)`，同一区域最多一个 `primary` 按钮。
+6. **全局操作区**：放置影响整个表单的操作按钮组，也可放置协议同意勾选；该区域在表单页中通常为吸底布局，固定贴在 `app-body` 底部。实现上优先作为 `.app-body` 下、`.app-content` 外的兄弟节点，而不是放进滚动容器内部，这样可以保留基础框架的底部内边距且不会出现露底问题。操作区背景需使用 `var(--color-bg-normal)`，顶部与正文之间的分割线使用 `var(--color-divider-normal)`。操作区内部内容仍需使用独立容器居中，宽度与表单内容容器保持一致；按钮组间距使用 `var(--spacing-3x)`，同一区域最多一个 `primary` 按钮。Footer 默认只承载全局操作按钮，不要在这里混入说明文案、字段解释、状态描述或其他正文信息；如果存在全局协议同意信息，使用 `Checkbox` 单独放在按钮组正上方，按钮组本身仍然保持水平居中。
 7. **块间距**：统领信息区、步骤条、表单区、全局操作区这些页面级块之间的垂直间距统一使用 `var(--spacing-8x)`，即 32px。
 8. **聚合区分割线**：统领信息区下方一般会有一根虚线分割线，用于和后续步骤条或表单区分隔；分割线与上方、下方内容之间的间距都使用 `var(--spacing-8x)`，也遵循页面级块间距规则。分割线颜色使用 `var(--color-border-normal)`。
 
@@ -299,7 +326,7 @@ export function ListPageLayoutDemo() {
 - 图文样式适合展示商品、门店、资质主体等带缩略图的对象；纯文本样式适合展示经营主体、计划名称、编号、金额等关键信息。
 - 标题可使用 `font: var(--display-medium)` 或 `font: var(--title-medium)`，根据内容重要性选择；辅助信息使用 `font: var(--body-regular)`。
 - 颜色、圆角、背景、边框和间距必须使用 `life-ds-tokens.css` 中的语义化 tokens，不要硬编码色值。
-- 金额、编号等数字型重点信息可使用 `font-family: var(--font-number)`，其余文本使用 `var(--font-normal)`。
+- 金额、价格、成交额、库存、统计指标等数据型重点信息可使用 `font-family: var(--font-number)`；编号、ID、时间、纯英文串等内容仍使用 `var(--font-normal)`。
 
 #### 表单分组规范
 
@@ -311,7 +338,8 @@ export function ListPageLayoutDemo() {
 #### 全局操作区规范
 
 - 全局操作区一般位于表单区底部，用于提交、保存草稿、取消、上一步、下一步等影响整页的动作。
-- 如果提交前需要用户同意协议，使用 `Checkbox` 放在按钮组上方或左侧，文案中协议名称可使用链接色 token。
+- Footer 默认只放全局操作按钮，不要塞入说明文案、提示段落、字段解释或其他正文信息。
+- 如果提交前需要用户同意协议，使用 `Checkbox` 放在按钮组正上方，文案中协议名称可使用链接色 token；不要把协议勾选放到按钮左侧，更不要让按钮组失去居中对齐。
 - 主提交按钮使用 `Button variant="primary"`；取消、返回、保存草稿等辅助操作使用 `variant="default"` 或 `variant="secondary"`。
 - 表单提交按钮应保持可点击；校验在点击提交时触发，错误通过 `FormItem` 的 `error` 回显，不要因为字段未填完就禁用提交按钮。
 
@@ -373,7 +401,7 @@ export function FormPageLayoutDemo() {
               <div style={{ display: 'grid', gap: 'var(--spacing-base)', font: 'var(--body-regular)' }}>
                 <div>
                   <span style={{ color: 'var(--color-text-caption)' }}>商品编号：</span>
-                  <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-number)' }}>
+                  <span style={{ color: 'var(--color-text-primary)' }}>
                     2137279250
                   </span>
                 </div>
@@ -530,7 +558,7 @@ export function FormPageLayoutDemo() {
 5. **附属说明**：附属说明用于解释预览区的操作语义，例如“点击图片对应区域可直接修改”；说明文案应简短，不要写成长段解释。
 6. **预览区 Tabs**：如果存在多个预览图切换，可使用 `Tabs variant="capsule" size="small"`；Tabs 一般按照组件自身内容宽度渲染，不要主动拉伸到预览区整行，也不要和预览图再包成额外卡片。
 7. **预览图本体**：预览图区域不需要外层卡片包裹；如果是手机端截图类预览，建议使用一个圆角矩形设备外轮廓承载图片，外轮廓描边为 6px，图片本体裁切在轮廓内部，不允许露出四角。
-8. **全局操作区**：即使页面上半部分是“双栏布局”，底部全局操作区内容也始终保持居中，不要对齐到左侧表单列。
+8. **全局操作区**：即使页面上半部分是“双栏布局”，底部全局操作区内容也始终保持居中，不要对齐到左侧表单列。Footer 默认只放全局操作按钮；若存在协议同意信息，也只能放在按钮组正上方，不能在 footer 内混入其他说明文案。
 
 #### 预览区规范
 
@@ -773,7 +801,7 @@ export function FormPageWithPreviewDemo() {
 8. **表格信息**：列表型从属信息仍然使用 `Table` 展示，但一般不再放行内编辑、上传入口、下拉切换等操作；默认按只读模式处理。
 9. **图片信息**：表单页中的上传组件进入详情页后，应转为上传完成后的图片展示；展示时依旧遵循 key value 结构，只是 `value` 区从纯文本变为图片组。优先使用 `KeyValueImages` / `KeyValueImage`，图片尺寸按 [keyvalue.md](keyvalue.md) 中的规则根据内容类型调整。
 10. **块间距**：统领信息区、分组区、表格区、Card 区、图片区这些页面级块之间的垂直间距统一使用 `var(--spacing-8x)`。
-11. **全局操作区**：详情页底部全局操作区是可选的。仅当页面存在“返回列表”“复制配置”“刷新状态”“再次提交”等整页级动作时才展示。
+11. **全局操作区**：详情页底部全局操作区是可选的。仅当页面存在“返回列表”“复制配置”“刷新状态”“再次提交”等整页级动作时才展示。Footer 默认只放全局操作按钮，并保持整体居中；不要在这里补说明文案、状态解释或字段补充信息。若确实存在全局协议同意信息，也应放在按钮组正上方，按钮组本身仍然保持居中。
 
 #### key value 展示规范
 
@@ -781,8 +809,9 @@ export function FormPageWithPreviewDemo() {
 - 标签文案（key）使用 `font: var(--body-regular)` + `var(--color-text-caption)`。
 - 内容文案（value）使用 `font: var(--body-regular)` + `var(--color-text-primary)`。
 - 默认采用“左 key / 右 value”的横向结构，建议标签区宽度与表单页 label 宽度保持相近，形成稳定对齐关系。
+- KeyValue 单项默认间距使用 `var(--spacing-4x)`，不要在详情页字段区手动改成更松或更紧的另一套节奏。
 - 仅当单元本身很窄，或值区本身是小体量补充信息时，才允许改为上下结构。
-- 金额、编号、库存等数字型重点内容可使用 `font-family: var(--font-number)`。
+- 金额、价格、成交额、库存、统计指标等数据型重点内容可使用 `font-family: var(--font-number)`；编号、ID、时间、纯英文串等内容仍使用 `var(--font-normal)`。
 - 不要使用只读的 `Input disabled` 或只读的 `Select` 来伪装详情态；详情页就是普通文本，不是禁用表单。
 - 当一个值可能换行时，允许自动换行；不要为了对齐把值截断成单行。
 
@@ -862,7 +891,7 @@ export function DetailPageLayoutDemo() {
               <div style={{ display: 'grid', gap: 'var(--spacing-base)', font: 'var(--body-regular)' }}>
                 <div>
                   <span style={{ color: 'var(--color-text-caption)' }}>商品编号：</span>
-                  <span style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-number)' }}>
+                  <span style={{ color: 'var(--color-text-primary)' }}>
                     2137279250
                   </span>
                 </div>
@@ -955,18 +984,18 @@ export function DetailPageLayoutDemo() {
                 <Table>
                   <Thead>
                     <Tr>
-                      <Th>门店名称</Th>
-                      <Th>城市</Th>
-                      <Th>售卖周期</Th>
-                      <Th>分配库存</Th>
+                      <Th align="left">门店名称</Th>
+                      <Th align="left">城市</Th>
+                      <Th align="left">售卖周期</Th>
+                      <Th align="right">分配库存</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
                     <Tr>
-                      <Td>朝阳大悦城店</Td>
-                      <Td>北京</Td>
-                      <Td>2026.06.01 - 2026.06.30</Td>
-                      <Td>500</Td>
+                      <Td align="left">朝阳大悦城店</Td>
+                      <Td align="left">北京</Td>
+                      <Td align="left">2026.06.01 - 2026.06.30</Td>
+                      <Td align="right">500</Td>
                     </Tr>
                   </Tbody>
                 </Table>
@@ -1014,7 +1043,7 @@ export function DetailPageLayoutDemo() {
 4. **描述长度**：`Status` 的 `description` 控制在两行左右的信息量，用于解释当前结果、下一步动作或失败原因。
 5. **复杂说明**：审核关注点、驳回原因、整改建议等长文本说明，不要全部塞进 `Status description`；如果内容更适合结构化组合，可用 `Card` 承载，如果只是普通说明文案，直接使用正文文本块即可。
 6. **表格只读**：表格中可以展示审核记录、绑定门店、操作留痕等内容，但不再放置编辑、删除、上传等交互单元。
-7. **底部操作区**：如果存在状态相关动作，按钮组间距统一使用 `var(--spacing-3x)`，最多一个 `primary` 按钮。
+7. **底部操作区**：如果存在状态相关动作，按钮组间距统一使用 `var(--spacing-3x)`，最多一个 `primary` 按钮。Footer 默认只承载这些全局动作按钮，并保持居中；不要额外塞说明文案。若存在全局协议同意信息，放在按钮组正上方即可，按钮组仍保持居中。
 
 #### 标准结构示例
 
@@ -1030,6 +1059,7 @@ import {
   PageHeader,
   Status,
   Table,
+  TableCellTag,
   TableWrapper,
   Tbody,
   Td,
@@ -1116,16 +1146,18 @@ export function DetailPageWithStatusDemo() {
               <Table>
                 <Thead>
                   <Tr>
-                    <Th>材料名称</Th>
-                    <Th>提交时间</Th>
-                    <Th>审核结果</Th>
+                    <Th align="left">材料名称</Th>
+                    <Th align="left">提交时间</Th>
+                    <Th align="center">审核结果</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   <Tr>
-                    <Td>营业执照</Td>
-                    <Td>2026.06.08 16:30</Td>
-                    <Td>审核通过</Td>
+                    <Td align="left">营业执照</Td>
+                    <Td align="left">2026.06.08 16:30</Td>
+                    <Td align="center">
+                      <TableCellTag color="green">审核通过</TableCellTag>
+                    </Td>
                   </Tr>
                 </Tbody>
               </Table>

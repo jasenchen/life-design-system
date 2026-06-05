@@ -48,7 +48,7 @@
   - **金额**（右对齐）：如 ¥240,000.00，数字类通常右对齐以便比较。
   - **日期/时间**（左对齐）：标准化的时间格式展示。
 - **状态与控件**：
-  - **标签 (Tag)**（中对齐）：用于展示状态（如成功、失败、进行中）。
+  - **独立状态标签列 (Tag)**（中对齐）：用于展示状态（如成功、失败、进行中）。如果 Tag 只是商品信息、头像信息等复合单元中的一部分，则跟随该复合结构保持左对齐。
   - **开关 (Switch)**（中对齐）：用于直接在表格内控制某项功能的启停。
   - **操作 (Action)**（左对齐）：行内的文字按钮组合（如“查看 编辑 更多”）。
 - **复合图文结构（统一左对齐）**：
@@ -62,15 +62,18 @@
   - **折叠/展开**：用于触发展开行表格的箭头（`>`）。
   - **排序**：用于手动调整行顺序的拖拽手柄（`⋮⋮`）。
 
-> **对齐原则总结**：除了金额/数字明确要求**右对齐**，以及行级控制组件（多选、折叠、排序）要求**居中对齐**外，其余绝大部分文本、图文复合结构、状态标签及操作按钮均默认**左对齐**。
+> **对齐原则总结**：除了金额/数字明确要求**右对齐**，以及独立状态标签列、开关、行级控制组件（多选、折叠、排序）要求**居中对齐**外，其余绝大部分文本、图文复合结构及操作按钮均默认**左对齐**。复合图文结构内部若包含 Tag，也跟随该结构左对齐。
 
 ## 最佳实践
 
 - **优先使用 life-ds 组件库中的表格（Table）组件。**
 - 当需要一起扫描、比较或管理几行相关的数据时，请使用表格。如果是移动端或卡片式展示，请考虑使用列表（List）。
 - **对齐方式**：文本类型数据左对齐，数字或金额类型右对齐，状态标签或简短固定操作可居中对齐。
+- **表头同步**：当某一列的表身内容使用 `align="center"` 或 `align="right"` 时，对应的 `Th` 也必须使用相同的 `align`，不要出现表头左对齐、表内容居中/右对齐的错位情况。
+- **状态标签边界**：独立状态列优先使用 `TableCellTag` 并保持居中；不要把商品信息列中内嵌的 Tag 当成独立状态列处理。
 - **空白数据**：单元格没有数据时，应显示破折号（如 `-` 或 `--`），而不是留白或显示“null”，以明确告知用户该数据缺失而非未加载。
 - **操作收纳**：当单行操作超过 3 个时，应将前两个最高频的操作平铺展示，其余操作收纳进“更多（...）”下拉菜单中。
+- **操作可见性**：操作列中若某个动作当前不可点击，优先保留该操作并设置为 `disabled` / 禁用态，不要直接隐藏；只有当该动作对当前行完全不适用且会造成误导时，才考虑不展示。
 - **列宽控制**：为重要列设定合理的最小宽度，对超长文本使用省略号截断（配合 Tooltip 提示），防止破坏表格整体布局。
 - **冻结行列**：当列数过多需要横向滚动时，必须冻结最左侧的关键信息列（如 ID、名称、多选框）和最右侧的操作列。表头也应在向下滚动时吸顶冻结。
 - 让表格定义整体的结构和对齐方式，让单元格定义具体的数据展示和行内交互。
@@ -97,6 +100,7 @@ import {
   Th,
   Td,
   TableCellProduct,
+  TableCellTag,
   TableCellAmount,
   TableCellOperation,
   TableCellAction,
@@ -108,15 +112,16 @@ export default function Demo() {
       <Table>
         <Thead>
           <Tr>
-            <Th>商品信息</Th>
-            <Th>价格（元）</Th>
-            <Th>售卖时间</Th>
-            <Th>操作</Th>
+            <Th align="left">商品信息</Th>
+            <Th align="center">状态</Th>
+            <Th align="right">价格（元）</Th>
+            <Th align="left">售卖时间</Th>
+            <Th align="left">操作</Th>
           </Tr>
         </Thead>
         <Tbody>
           <Tr>
-            <Td>
+            <Td align="left">
               <TableCellProduct
                 img="https://picsum.photos/seed/demo/48/48"
                 title="【节假日通用】资生堂烫染护理"
@@ -125,14 +130,19 @@ export default function Demo() {
                 id="23468723648223"
               />
             </Td>
-            <Td>
+            <Td align="center">
+              <TableCellTag color="green">售卖中</TableCellTag>
+            </Td>
+            <Td align="right">
               <TableCellAmount>￥508.00</TableCellAmount>
             </Td>
-            <Td>2023.08.01 12:00</Td>
-            <Td>
+            <Td align="left">
+              2023.08.01 12:00
+            </Td>
+            <Td align="left">
               <TableCellOperation>
                 <TableCellAction href="#">上架</TableCellAction>
-                <TableCellAction href="#">编辑</TableCellAction>
+                  <TableCellAction href="#" disabled>编辑</TableCellAction>
               </TableCellOperation>
             </Td>
           </Tr>
@@ -155,9 +165,12 @@ export default function Demo() {
 | Cell 组件              | 典型场景                                | 关键 props                                                                                        | 输出/注意事项                                                                                             |
 | :------------------- | :---------------------------------- | :---------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
 | `TableCellProduct`   | 商品信息列：图片 + 标题 +（可选）标签 + 商品 ID（双排信息） | `img`（图片 URL）、`title`（主标题）、`id`（商品 ID）、`tag?`（可选标签文本）、`tagVariant?`（`default \| orange \| red`） | 内部已包含一个 `Tag` 用于显示 `tag`，并把 `tagVariant` 映射为 `Tag` 的 `variant/color`；如果你的产品信息结构不同（例如三排文本/头像），再考虑自定义 |
+| `TableCellTag`       | 独立状态标签列：如“售卖中 / 已下架 / 审核中”              | 继承 `Tag` 的 props（如 `color` / `variant` / `size`）                                                   | 默认使用居中容器包裹 `Tag`；适用于独立状态列，不适用于商品信息列内嵌 tag                                                     |
 | `TableCellAmount`    | 金额/价格列：用于展示价格、成交额等数字数据              | `children`（金额文本）                                                                                | 使用基础正文字号与数字字体族 `--font-number`；对齐方式仍由表格列的布局规则决定                                                               |
 | `TableCellOperation` | 操作列：行内多个操作聚合（如“上架 / 编辑 / 更多”）       | `children`（一组操作项）                                                                               | 仅负责操作项的横向排列与间距；一般与 `TableCellAction` 组合使用                                                           |
-| `TableCellAction`    | 具体操作项：行内文字操作（看起来像链接）                | 继承 `<a>` 的 props（如 `href` / `onClick`），以及 `danger?`（危险操作）                                       | 渲染为 `<a>`；危险操作用 `danger` 强调（如删除/下架）                                                                 |
+| `TableCellAction`    | 具体操作项：行内文字操作（看起来像链接）                | 继承 `<a>` 的 props（如 `href` / `onClick`），以及 `danger?`（危险操作）、`disabled?`（禁用态）                         | 普通操作文字颜色使用 `--color-text-link-normal / hover / active / disable`；危险操作用 `danger` 切到危险色语义；不可点击时优先使用 `disabled` 保留操作占位，而不是直接隐藏 |
+
+`Th` / `Td` 都支持 `align?: 'left' | 'center' | 'right'`。当列内内容不是默认左对齐时，必须在表头和表身上成对声明相同的 `align`。
 
 ## 实现要点
 

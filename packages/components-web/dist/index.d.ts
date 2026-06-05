@@ -402,6 +402,10 @@ type CommonProps = {
      */
     label: React.ReactNode;
     /**
+     * 字段名。与 `FilterGroup` 配合时用于收集当前筛选值。
+     */
+    name?: string;
+    /**
      * 占位文案（未填充时展示）
      */
     placeholder?: React.ReactNode;
@@ -446,6 +450,7 @@ interface FilterSelectOption {
     disabled?: boolean;
 }
 interface FilterSelectProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
+    name?: string;
     label: React.ReactNode;
     placeholder?: React.ReactNode;
     size?: FilterSize;
@@ -469,6 +474,7 @@ type FilterDatePickerType = 'date' | 'range';
 type FilterDateRangeValue = [Date | null, Date | null];
 type FilterDatePickerValue = Date | FilterDateRangeValue | null;
 interface FilterDatePickerProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
+    name?: string;
     label: React.ReactNode;
     picker?: FilterDatePickerType;
     placeholder?: React.ReactNode;
@@ -493,6 +499,7 @@ type FilterTimePickerType = 'time' | 'range';
 type FilterTimeRangeValue = [string | null, string | null];
 type FilterTimePickerValue = string | FilterTimeRangeValue | null;
 interface FilterTimePickerProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
+    name?: string;
     label: React.ReactNode;
     picker?: FilterTimePickerType;
     placeholder?: React.ReactNode;
@@ -513,7 +520,9 @@ interface FilterTimePickerProps extends Omit<React.HTMLAttributes<HTMLSpanElemen
 }
 declare const FilterTimePicker: React.ForwardRefExoticComponent<FilterTimePickerProps & React.RefAttributes<HTMLSpanElement>>;
 
-interface FilterGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+type FilterGroupValues = Record<string, unknown>;
+type FilterGroupSubmitMode = 'auto' | 'manual' | 'realtime';
+interface FilterGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onReset'> {
     /**
      * 过滤项尺寸（用于按钮尺寸对齐；筛选项本身由使用方传入）
      * @default 'small'
@@ -530,18 +539,36 @@ interface FilterGroupProps extends React.HTMLAttributes<HTMLDivElement> {
      */
     gap?: number;
     /**
-     * 点击查询
+     * 提交当前筛选值。
+     * - `manual` 模式下由“查询”按钮触发
+     * - `realtime` 模式下由筛选值变化自动触发
      */
-    onQuery?: () => void;
+    onQuery?: (values: FilterGroupValues) => void;
     /**
-     * 点击重置
+     * 点击重置。回调参数为重置后的筛选值。
      */
-    onReset?: () => void;
+    onReset?: (values: FilterGroupValues) => void;
+    /**
+     * 值变化回调。仅会收集声明了 `name` 的筛选项。
+     */
+    onValuesChange?: (values: FilterGroupValues, meta: {
+        name: string;
+        value: unknown;
+        source: 'change' | 'reset';
+    }) => void;
     /**
      * 是否显示默认 Query/Reset 操作区
      * 当传入 onQuery 或 onReset 时，默认展示对应按钮
      */
     showActions?: boolean;
+    /**
+     * 提交模式。
+     * - `auto`：有操作区时走 `manual`，无操作区时走 `realtime`
+     * - `manual`：仅点击“查询”时提交
+     * - `realtime`：筛选值变化时立即提交
+     * @default 'auto'
+     */
+    submitMode?: FilterGroupSubmitMode;
     /**
      * 覆盖操作区（若传入则完全自定义）
      */
@@ -637,18 +664,60 @@ interface StepsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChang
 }
 declare const Steps: React.ForwardRefExoticComponent<StepsProps & React.RefAttributes<HTMLDivElement>>;
 
+type TagSize = 'large' | 'default-size' | 'small';
+type TagVariant = 'fill' | 'light' | 'outline';
+type TagColor = 'blue' | 'green' | 'orange' | 'red' | 'gray';
+interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
+    /**
+     * 标签尺寸
+     * @default 'default-size'
+     */
+    size?: TagSize;
+    /**
+     * 标签样式类型
+     * @default 'light'
+     */
+    variant?: TagVariant;
+    /**
+     * 标签语义色
+     * @default 'gray'
+     */
+    color?: TagColor;
+    /**
+     * 左侧图标，可选
+     */
+    leftIcon?: React.ReactNode;
+    /**
+     * 右侧图标，可选
+     */
+    rightIcon?: React.ReactNode;
+}
+declare const Tag: React.ForwardRefExoticComponent<TagProps & React.RefAttributes<HTMLSpanElement>>;
+
+type TableCellAlign = 'left' | 'center' | 'right';
 declare const TableWrapper: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 declare const Table: React.ForwardRefExoticComponent<React.TableHTMLAttributes<HTMLTableElement> & React.RefAttributes<HTMLTableElement>>;
 declare const Thead: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLTableSectionElement> & React.RefAttributes<HTMLTableSectionElement>>;
 declare const Tbody: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLTableSectionElement> & React.RefAttributes<HTMLTableSectionElement>>;
 declare const Tr: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLTableRowElement> & React.RefAttributes<HTMLTableRowElement>>;
-declare const Th: React.ForwardRefExoticComponent<React.ThHTMLAttributes<HTMLTableCellElement> & React.RefAttributes<HTMLTableCellElement>>;
-declare const Td: React.ForwardRefExoticComponent<React.TdHTMLAttributes<HTMLTableCellElement> & React.RefAttributes<HTMLTableCellElement>>;
+interface ThProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
+    align?: TableCellAlign;
+}
+declare const Th: React.ForwardRefExoticComponent<ThProps & React.RefAttributes<HTMLTableCellElement>>;
+interface TdProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
+    align?: TableCellAlign;
+}
+declare const Td: React.ForwardRefExoticComponent<TdProps & React.RefAttributes<HTMLTableCellElement>>;
 declare const TableCellProduct: ({ img, title, tag, tagVariant, id }: any) => react_jsx_runtime.JSX.Element;
 declare const TableCellAmount: ({ children }: any) => react_jsx_runtime.JSX.Element;
+interface TableCellTagProps extends TagProps {
+    containerClassName?: string;
+}
+declare const TableCellTag: ({ containerClassName, className, size, variant, color, ...props }: TableCellTagProps) => react_jsx_runtime.JSX.Element;
 declare const TableCellOperation: ({ children }: any) => react_jsx_runtime.JSX.Element;
 interface TableCellActionProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
     danger?: boolean;
+    disabled?: boolean;
 }
 declare const TableCellAction: React.ForwardRefExoticComponent<TableCellActionProps & React.RefAttributes<HTMLAnchorElement>>;
 
@@ -687,36 +756,6 @@ interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 
     onCheckedChange?: (checked: boolean) => void;
 }
 declare const Switch: React.ForwardRefExoticComponent<SwitchProps & React.RefAttributes<HTMLInputElement>>;
-
-type TagSize = 'large' | 'default-size' | 'small';
-type TagVariant = 'fill' | 'light' | 'outline';
-type TagColor = 'blue' | 'green' | 'orange' | 'red' | 'gray';
-interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
-    /**
-     * 标签尺寸
-     * @default 'default-size'
-     */
-    size?: TagSize;
-    /**
-     * 标签样式类型
-     * @default 'light'
-     */
-    variant?: TagVariant;
-    /**
-     * 标签语义色
-     * @default 'gray'
-     */
-    color?: TagColor;
-    /**
-     * 左侧图标，可选
-     */
-    leftIcon?: React.ReactNode;
-    /**
-     * 右侧图标，可选
-     */
-    rightIcon?: React.ReactNode;
-}
-declare const Tag: React.ForwardRefExoticComponent<TagProps & React.RefAttributes<HTMLSpanElement>>;
 
 type PaginationSize = 'default-size' | 'small';
 interface PaginationProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onChange'> {
@@ -1287,4 +1326,4 @@ interface UploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChan
 }
 declare const Upload: React.ForwardRefExoticComponent<UploadProps & React.RefAttributes<HTMLDivElement>>;
 
-export { Alert, type AlertProps, type AlertVariant, Button, type ButtonProps, type ButtonSize, type ButtonVariant, Card, CardBody, CardDescription, CardDivider, type CardDividerProps, type CardDividerVariant, CardFooter, CardHeader, type CardHeaderProps, CardMetric, type CardMetricProps, CardMetrics, type CardMetricsProps, type CardProps, type CardSize, CardTitle, Checkbox, type CheckboxProps, DatePicker, type DatePickerProps, type DatePickerSize, type DatePickerType, type DatePickerValue, type DateRangeValue, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, type FilterDatePickerType, type FilterDatePickerValue, type FilterDateRangeValue, FilterGroup, type FilterGroupProps, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterTimePickerType, type FilterTimePickerValue, type FilterTimeRangeValue, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, type IconVariant, Input, type InputProps, KeyValue, KeyValueImage, type KeyValueImageProps, KeyValueImages, type KeyValueImagesProps, KeyValueItem, type KeyValueItemProps, type KeyValueLayout, type KeyValueProps, KeyValueTags, type KeyValueTagsProps, KeyValueText, type KeyValueTextProps, Menu, type MenuProps, Message, type MessageOptions, type MessageProps, type MessageVariant, Navbar, type NavbarProps, type NavbarTheme, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Radio, type RadioProps, type RadioSize, type RadioVariant, Search, type SearchProps, Select, type SelectOption, type SelectProps, type SelectSize, Status, type StatusColor, type StatusProps, type StepItem, Steps, type StepsProps, Switch, type SwitchProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, TableCellAmount, TableCellOperation, TableCellProduct, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, Textarea, type TextareaProps, Th, Thead, TimePicker, type TimePickerProps, type TimePickerSize, type TimePickerType, type TimePickerValue, type TimeRangeValue, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, message, useFormItemStatus };
+export { Alert, type AlertProps, type AlertVariant, Button, type ButtonProps, type ButtonSize, type ButtonVariant, Card, CardBody, CardDescription, CardDivider, type CardDividerProps, type CardDividerVariant, CardFooter, CardHeader, type CardHeaderProps, CardMetric, type CardMetricProps, CardMetrics, type CardMetricsProps, type CardProps, type CardSize, CardTitle, Checkbox, type CheckboxProps, DatePicker, type DatePickerProps, type DatePickerSize, type DatePickerType, type DatePickerValue, type DateRangeValue, Dialog, type DialogProps, type DialogType, Drawer, type DrawerProps, type DrawerSize, Filter, type FilterButtonProps, FilterDatePicker, type FilterDatePickerProps, type FilterDatePickerType, type FilterDatePickerValue, type FilterDateRangeValue, FilterGroup, type FilterGroupProps, type FilterGroupSubmitMode, type FilterGroupValues, type FilterInputProps, type FilterProps, FilterSelect, type FilterSelectOption, type FilterSelectProps, type FilterSize, FilterTimePicker, type FilterTimePickerProps, type FilterTimePickerType, type FilterTimePickerValue, type FilterTimeRangeValue, type FilterType, Form, FormItem, type FormItemProps, type FormLayout, type FormProps, Icon, type IconProps, type IconVariant, Input, type InputProps, KeyValue, KeyValueImage, type KeyValueImageProps, KeyValueImages, type KeyValueImagesProps, KeyValueItem, type KeyValueItemProps, type KeyValueLayout, type KeyValueProps, KeyValueTags, type KeyValueTagsProps, KeyValueText, type KeyValueTextProps, Menu, type MenuProps, Message, type MessageOptions, type MessageProps, type MessageVariant, Navbar, type NavbarProps, type NavbarTheme, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, type PaginationSize, Popover, type PopoverPlacement, type PopoverProps, Radio, type RadioProps, type RadioSize, type RadioVariant, Search, type SearchProps, Select, type SelectOption, type SelectProps, type SelectSize, Status, type StatusColor, type StatusProps, type StepItem, Steps, type StepsProps, Switch, type SwitchProps, Tab, type TabProps, Table, TableCellAction, type TableCellActionProps, type TableCellAlign, TableCellAmount, TableCellOperation, TableCellProduct, TableCellTag, type TableCellTagProps, TableWrapper, Tabs, type TabsProps, Tag, type TagColor, type TagProps, type TagSize, type TagVariant, Tbody, Td, type TdProps, Textarea, type TextareaProps, Th, type ThProps, Thead, TimePicker, type TimePickerProps, type TimePickerSize, type TimePickerType, type TimePickerValue, type TimeRangeValue, Tr, Upload, type UploadFileItem, type UploadProps, type UploadVisualState, message, useFormItemStatus };

@@ -6,7 +6,7 @@
 
 所有字体族均使用--font-normal，你可以在全局层面使用这个字体族的token。
 
-只有用于数据展示的数字字体，才会使用--font-number。
+只有用于金额、价格、成交额、库存、统计指标等数据展示场景时，才会使用--font-number。
 
 #### 字体（font-family）
 
@@ -15,7 +15,7 @@
 | 变量              | 取值                                                                                                                                                                                                                                                                                                | 使用场景                        |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `--font-normal` | `-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,noto sans，sans-serif，"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`                     | 全局默认字体，用于正文、标题、标签等所有常规文本    |
-| `--font-number` | `"Douyin Number ABC",-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,noto sans，sans-serif，"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"` | 仅用于数据展示类文本，如数字统计、金额、倒计时、编号等 |
+| `--font-number` | `"Douyin Number ABC",-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,noto sans，sans-serif，"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"` | 仅用于数据展示类文本，如金额、价格、成交额、库存、统计指标等；时间、编号、ID、纯英文串仍使用 `--font-normal` |
 
 #### 文本样式（text styles）
 
@@ -114,4 +114,3 @@
 | `--spacing-5x`  | 20px (5x)  | **常规间距**：区块内面板之间、Label 与内容（横向）、面板内边距等。 |
 | `--spacing-8x`  | 32px (8x)  | **容器内边距**：内容区、容器类组件内边距。                |
 | `--spacing-10x` | 40px (10x) | **跨域间距**：不带线条分割的区块之间留白。                |
-

@@ -13,6 +13,7 @@ export interface FilterSelectOption {
 
 export interface FilterSelectProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'defaultValue' | 'onChange'> {
+  name?: string;
   label: React.ReactNode;
   placeholder?: React.ReactNode;
   size?: FilterSize;

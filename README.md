@@ -61,7 +61,7 @@ export function App() {
 }
 ```
 
-在 React 项目中，请优先使用 `@life-ds/components-web` 提供的组件，避免手写 `.lds-` DOM 结构或仅通过 class 名拼装组件。
+在 React 项目中，请优先使用 `@life-ds/components-web` 提供的组件，避免手写 `.lds-` DOM 结构或仅通过 class 名拼装组件。若页面通过 `@life-ds/components-web` 使用图标，图标注入会自动完成；只有在你单独使用 `@life-ds/icons` 或手写 `<svg><use /></svg>` 时，才需要在入口文件中显式执行 `import '@life-ds/icons';`。
 
 ### 2. 接入 AI 技能集 (Skills)
 
@@ -137,26 +137,26 @@ npm publish --workspace=@life-ds/skills --access public
 git push origin main
 ```
 
-推荐使用一个仓库级版本 tag 统一标记本次发布，例如 `1.2.0`：
+推荐使用一个仓库级版本 tag 统一标记本次发布，例如 `1.2.1`：
 
 ```bash
 # 1. 创建并推送 Git tag
-git tag life-ds-v1.2.0
-git push origin life-ds-v1.2.0
+git tag life-ds-v1.2.1
+git push origin life-ds-v1.2.1
 
 # 2. 使用 GitHub CLI 创建 Release
-gh release create life-ds-v1.2.0 \
-  --title "Life Design System v1.2.0" \
-  --notes "Release @life-ds/tokens@1.2.0, @life-ds/components-web@1.2.0, @life-ds/skills@1.2.0"
+gh release create life-ds-v1.2.1 \
+  --title "Life Design System v1.2.1" \
+  --notes "Release @life-ds/tokens@1.2.1, @life-ds/components-web@1.2.1, @life-ds/skills@1.2.1"
 ```
 
 如果你更希望保留包级 tag，也可以额外创建：
 
 ```bash
-git tag tokens-v1.2.0
-git tag components-web-v1.2.0
-git tag skills-v1.2.0
-git push origin tokens-v1.2.0 components-web-v1.2.0 skills-v1.2.0
+git tag tokens-v1.2.1
+git tag components-web-v1.2.1
+git tag skills-v1.2.1
+git push origin tokens-v1.2.1 components-web-v1.2.1 skills-v1.2.1
 ```
 
 ---

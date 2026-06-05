@@ -30,6 +30,7 @@ import React3 from "react";
 import { clsx as clsx3 } from "clsx";
 
 // src/components/Icon/Icon.tsx
+import "@life-ds/icons";
 import React2 from "react";
 import { clsx as clsx2 } from "clsx";
 
@@ -927,6 +928,7 @@ import { clsx as clsx11 } from "clsx";
 import { jsx as jsx11, jsxs as jsxs10 } from "react/jsx-runtime";
 var POPOVER_ANIMATION_MS = 180;
 var VIEWPORT_PADDING = 16;
+var DEFAULT_POPOVER_Z_INDEX = 1150;
 var mergeRefs = (...refs) => {
   return (value) => {
     refs.forEach((ref) => {
@@ -958,6 +960,20 @@ var getPlacementAlign = (placement) => {
   if (placement.endsWith("end")) return "end";
   if (placement.endsWith("center")) return "center";
   return "start";
+};
+var getPopoverZIndex = (anchor) => {
+  if (!anchor || typeof window === "undefined") {
+    return DEFAULT_POPOVER_Z_INDEX;
+  }
+  const overlayRoot = anchor.closest(".lds-dialog-root, .lds-drawer-root");
+  if (!overlayRoot) {
+    return DEFAULT_POPOVER_Z_INDEX;
+  }
+  const overlayZIndex = Number.parseInt(window.getComputedStyle(overlayRoot).zIndex, 10);
+  if (Number.isNaN(overlayZIndex)) {
+    return DEFAULT_POPOVER_Z_INDEX;
+  }
+  return overlayZIndex + 1;
 };
 var getPositionForPlacement = (placement, anchorRect, contentRect, offset) => {
   const side = getPlacementSide(placement);
@@ -1056,7 +1072,8 @@ var Popover = React11.forwardRef(
         top: Math.max(VIEWPORT_PADDING, nextTop),
         left: clampedLeft,
         minWidth: matchTriggerWidth ? anchorRect.width : void 0,
-        maxHeight: Math.max(96, availableHeight)
+        maxHeight: Math.max(96, availableHeight),
+        zIndex: getPopoverZIndex(triggerElement2)
       });
     }, [matchTriggerWidth, offset, placement]);
     useEffect(() => {
@@ -1163,6 +1180,9 @@ var Popover = React11.forwardRef(
       } : null,
       ...positionStyle.maxHeight !== void 0 ? {
         ["--lds-popover-max-height"]: `${positionStyle.maxHeight}px`
+      } : null,
+      ...positionStyle.zIndex !== void 0 ? {
+        zIndex: positionStyle.zIndex
       } : null
     };
     return /* @__PURE__ */ jsxs10(
@@ -2315,7 +2335,23 @@ var Filter = React15.forwardRef((props, ref) => {
     width
   } = props;
   if (props.type === "input") {
-    const { className: className2, value: value2, defaultValue, onChange, inputProps, style: style2, ...rest2 } = props;
+    const {
+      type: _type,
+      size: _size2,
+      label: _label2,
+      placeholder: _placeholder2,
+      disabled: _disabled2,
+      isActive: _isActive2,
+      rightIcon: _rightIcon2,
+      width: _width2,
+      className: className2,
+      value: value2,
+      defaultValue,
+      onChange,
+      inputProps,
+      style: style2,
+      ...rest2
+    } = props;
     const filled2 = isFilledValue(value2 != null ? value2 : defaultValue);
     return /* @__PURE__ */ jsxs14(
       "div",
@@ -2359,7 +2395,21 @@ var Filter = React15.forwardRef((props, ref) => {
       }
     );
   }
-  const { type, className, value, onClick, style, ...rest } = props;
+  const {
+    type,
+    size: _size,
+    label: _label,
+    placeholder: _placeholder,
+    disabled: _disabled,
+    isActive: _isActive,
+    rightIcon: _rightIcon,
+    width: _width,
+    className,
+    value,
+    onClick,
+    style,
+    ...rest
+  } = props;
   const filled = isFilledValue(value);
   const defaultIconName = getDefaultRightIconName(type);
   const iconNode = rightIcon != null ? rightIcon : defaultIconName ? /* @__PURE__ */ jsx15(Icon, { name: defaultIconName, className: "lds-filter__icon-svg", "aria-hidden": "true" }) : null;
@@ -3397,6 +3447,64 @@ FilterTimePicker.displayName = "FilterTimePicker";
 import React19 from "react";
 import { clsx as clsx19 } from "clsx";
 import { Fragment as Fragment3, jsx as jsx19, jsxs as jsxs18 } from "react/jsx-runtime";
+var isManagedFilterElement = (child) => React19.isValidElement(child) && (child.type === Filter || child.type === FilterSelect || child.type === FilterDatePicker || child.type === FilterTimePicker);
+var getManagedFilterConfig = (child) => {
+  var _a, _b, _c, _d, _e, _f;
+  if (!isManagedFilterElement(child)) return null;
+  const props = child.props;
+  const name = typeof props.name === "string" ? props.name : void 0;
+  if (!name) return null;
+  if (child.type === Filter) {
+    const isControlled2 = props.value !== void 0;
+    const currentValue2 = isControlled2 ? props.value : (_a = props.defaultValue) != null ? _a : "";
+    return {
+      name,
+      kind: "filter",
+      isControlled: isControlled2,
+      currentValue: currentValue2,
+      resetValue: (_b = props.defaultValue) != null ? _b : "",
+      element: child
+    };
+  }
+  if (child.type === FilterSelect) {
+    const isControlled2 = props.value !== void 0;
+    const currentValue2 = isControlled2 ? props.value : props.defaultValue;
+    return {
+      name,
+      kind: "select",
+      isControlled: isControlled2,
+      currentValue: currentValue2,
+      resetValue: props.defaultValue,
+      element: child
+    };
+  }
+  if (child.type === FilterDatePicker) {
+    const picker2 = props.picker === "range" ? "range" : "date";
+    const fallbackValue2 = picker2 === "range" ? [null, null] : null;
+    const isControlled2 = props.value !== void 0;
+    const currentValue2 = isControlled2 ? props.value : (_c = props.defaultValue) != null ? _c : fallbackValue2;
+    return {
+      name,
+      kind: "date",
+      isControlled: isControlled2,
+      currentValue: currentValue2,
+      resetValue: (_d = props.defaultValue) != null ? _d : fallbackValue2,
+      element: child
+    };
+  }
+  const picker = props.picker === "range" ? "range" : "time";
+  const fallbackValue = picker === "range" ? [null, null] : null;
+  const isControlled = props.value !== void 0;
+  const currentValue = isControlled ? props.value : (_e = props.defaultValue) != null ? _e : fallbackValue;
+  return {
+    name,
+    kind: "time",
+    isControlled,
+    currentValue,
+    resetValue: (_f = props.defaultValue) != null ? _f : fallbackValue,
+    element: child
+  };
+};
 var FilterGroup = React19.forwardRef(
   ({
     className,
@@ -3405,7 +3513,9 @@ var FilterGroup = React19.forwardRef(
     gap = 12,
     onQuery,
     onReset,
+    onValuesChange,
     showActions,
+    submitMode = "auto",
     actions,
     queryText = "\u67E5\u8BE2",
     resetText = "\u91CD\u7F6E",
@@ -3415,6 +3525,84 @@ var FilterGroup = React19.forwardRef(
   }, ref) => {
     const shouldShowDefaultActions = Boolean(showActions != null ? showActions : onQuery || onReset);
     const shouldRenderActionsRow = Boolean(actions || shouldShowDefaultActions);
+    const effectiveSubmitMode = submitMode === "auto" ? shouldRenderActionsRow ? "manual" : "realtime" : submitMode;
+    const managedFilters = React19.useMemo(
+      () => React19.Children.toArray(children).map((child) => getManagedFilterConfig(child)).filter((item) => item !== null),
+      [children]
+    );
+    const valuesRef = React19.useRef({});
+    const [resetVersion, setResetVersion] = React19.useState(0);
+    React19.useEffect(() => {
+      const nextValues = {};
+      managedFilters.forEach((config) => {
+        if (config.isControlled || !(config.name in valuesRef.current)) {
+          nextValues[config.name] = config.currentValue;
+          return;
+        }
+        nextValues[config.name] = valuesRef.current[config.name];
+      });
+      valuesRef.current = nextValues;
+    }, [managedFilters]);
+    const emitValuesChange = React19.useCallback(
+      (values, meta) => {
+        onValuesChange == null ? void 0 : onValuesChange(values, meta);
+      },
+      [onValuesChange]
+    );
+    const handleFilterValueChange = React19.useCallback(
+      (name, value) => {
+        const nextValues = { ...valuesRef.current, [name]: value };
+        valuesRef.current = nextValues;
+        emitValuesChange(nextValues, { name, value, source: "change" });
+        if (effectiveSubmitMode === "realtime") {
+          onQuery == null ? void 0 : onQuery(nextValues);
+        }
+      },
+      [effectiveSubmitMode, emitValuesChange, onQuery]
+    );
+    const handleQuery = React19.useCallback(() => {
+      onQuery == null ? void 0 : onQuery({ ...valuesRef.current });
+    }, [onQuery]);
+    const handleReset = React19.useCallback(() => {
+      const resetValues = managedFilters.reduce((acc, config) => {
+        acc[config.name] = config.resetValue;
+        return acc;
+      }, {});
+      valuesRef.current = resetValues;
+      setResetVersion((version) => version + 1);
+      onReset == null ? void 0 : onReset(resetValues);
+      Object.entries(resetValues).forEach(([name, value]) => {
+        emitValuesChange(resetValues, { name, value, source: "reset" });
+      });
+    }, [emitValuesChange, managedFilters, onReset]);
+    const enhancedChildren = React19.useMemo(
+      () => React19.Children.map(children, (child, index) => {
+        var _a;
+        const config = getManagedFilterConfig(child);
+        if (!config || !React19.isValidElement(child)) return child;
+        const keyPrefix = (_a = child.key) != null ? _a : `${config.name}-${index}`;
+        const commonProps = { key: `${String(keyPrefix)}-${resetVersion}` };
+        if (config.kind === "filter") {
+          const originalOnChange2 = child.props.onChange;
+          return React19.cloneElement(child, {
+            ...commonProps,
+            onChange: (value, e) => {
+              originalOnChange2 == null ? void 0 : originalOnChange2(value, e);
+              handleFilterValueChange(config.name, value);
+            }
+          });
+        }
+        const originalOnChange = child.props.onChange;
+        return React19.cloneElement(child, {
+          ...commonProps,
+          onChange: (value, ...args) => {
+            originalOnChange == null ? void 0 : originalOnChange(value, ...args);
+            handleFilterValueChange(config.name, value);
+          }
+        });
+      }),
+      [children, handleFilterValueChange, resetVersion]
+    );
     return /* @__PURE__ */ jsxs18(
       "div",
       {
@@ -3428,10 +3616,10 @@ var FilterGroup = React19.forwardRef(
         },
         ...props,
         children: [
-          /* @__PURE__ */ jsx19("div", { className: "lds-filter-group__grid", children }),
+          /* @__PURE__ */ jsx19("div", { className: "lds-filter-group__grid", children: enhancedChildren }),
           shouldRenderActionsRow ? /* @__PURE__ */ jsx19("div", { className: "lds-filter-group__actions-row", children: actions ? actions : /* @__PURE__ */ jsxs18(Fragment3, { children: [
-            onQuery ? /* @__PURE__ */ jsx19(Button, { variant: "secondary", size, onClick: onQuery, children: queryText }) : null,
-            onReset ? /* @__PURE__ */ jsx19(Button, { variant: "default", size, onClick: onReset, children: resetText }) : null
+            onQuery ? /* @__PURE__ */ jsx19(Button, { variant: "secondary", size, onClick: handleQuery, children: queryText }) : null,
+            onReset ? /* @__PURE__ */ jsx19(Button, { variant: "default", size, onClick: handleReset, children: resetText }) : null
           ] }) }) : null
         ]
       }
@@ -3904,6 +4092,10 @@ Tag.displayName = "Tag";
 
 // src/components/Table/Table.tsx
 import { jsx as jsx27, jsxs as jsxs25 } from "react/jsx-runtime";
+var getTableAlignClassName = (align) => {
+  if (!align) return void 0;
+  return `is-align-${align}`;
+};
 var TableWrapper = React27.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx27("div", { ref, className: clsx27("lds-table-wrapper", className), ...props })
 );
@@ -3924,13 +4116,9 @@ var Tr = React27.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx27("tr", { ref, className: clsx27("lds-table__row", className), ...props })
 );
 Tr.displayName = "Tr";
-var Th = React27.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx27("th", { ref, className: clsx27("lds-table__th", className), ...props })
-);
+var Th = React27.forwardRef(({ className, align, ...props }, ref) => /* @__PURE__ */ jsx27("th", { ref, className: clsx27("lds-table__th", getTableAlignClassName(align), className), ...props }));
 Th.displayName = "Th";
-var Td = React27.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx27("td", { ref, className: clsx27("lds-table__td", className), ...props })
-);
+var Td = React27.forwardRef(({ className, align, ...props }, ref) => /* @__PURE__ */ jsx27("td", { ref, className: clsx27("lds-table__td", getTableAlignClassName(align), className), ...props }));
 Td.displayName = "Td";
 var TableCellProduct = ({ img, title, tag, tagVariant = "default", id }) => /* @__PURE__ */ jsxs25("div", { className: "lds-table-cell--product", children: [
   /* @__PURE__ */ jsx27("img", { src: img, alt: "\u5546\u54C1\u56FE", className: "lds-table-cell__product-img" }),
@@ -3954,9 +4142,35 @@ var TableCellProduct = ({ img, title, tag, tagVariant = "default", id }) => /* @
   ] })
 ] });
 var TableCellAmount = ({ children }) => /* @__PURE__ */ jsx27("div", { className: "lds-table-cell--amount", children });
+var TableCellTag = ({
+  containerClassName,
+  className,
+  size = "small",
+  variant = "light",
+  color = "gray",
+  ...props
+}) => /* @__PURE__ */ jsx27("div", { className: clsx27("lds-table-cell--tag", containerClassName), children: /* @__PURE__ */ jsx27(Tag, { className, size, variant, color, ...props }) });
 var TableCellOperation = ({ children }) => /* @__PURE__ */ jsx27("div", { className: "lds-table-cell--operation", children });
 var TableCellAction = React27.forwardRef(
-  ({ className, danger, ...props }, ref) => /* @__PURE__ */ jsx27("a", { ref, className: clsx27("lds-table-cell__action", danger && "is-danger", className), ...props })
+  ({ className, danger, disabled = false, href, onClick, tabIndex, ...props }, ref) => /* @__PURE__ */ jsx27(
+    "a",
+    {
+      ref,
+      className: clsx27("lds-table-cell__action", danger && "is-danger", disabled && "is-disabled", className),
+      href: disabled ? void 0 : href,
+      "aria-disabled": disabled || void 0,
+      tabIndex: disabled ? -1 : tabIndex,
+      onClick: (event) => {
+        if (disabled) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+        onClick == null ? void 0 : onClick(event);
+      },
+      ...props
+    }
+  )
 );
 TableCellAction.displayName = "TableCellAction";
 
@@ -5077,6 +5291,7 @@ export {
   TableCellAmount,
   TableCellOperation,
   TableCellProduct,
+  TableCellTag,
   TableWrapper,
   Tabs,
   Tag,

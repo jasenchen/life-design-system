@@ -8,7 +8,7 @@
 - `FilterSelect`：基于 `Filter + Popover` 的单选下拉筛选
 - `FilterDatePicker`：基于 `Filter + Popover` 的日期筛选，支持单日期和日期区间
 - `FilterTimePicker`：基于 `Filter + Popover` 的时间筛选，支持单时间和时间区间
-- `FilterGroup`：筛选区容器，负责布局和查询 / 重置操作
+- `FilterGroup`：筛选区容器，负责布局、收集筛选值，以及“查询 / 重置”或实时提交交互
 
 ## 默认选择
 
@@ -23,7 +23,7 @@
 
 ## 何时需要“查询 / 重置”
 
-- 当筛选项数量 **小于等于 3 个** 时：一般 **不配置** “查询 / 重置”按钮，筛选值变更后可直接触发刷新。
+- 当筛选项数量 **小于等于 3 个** 时：一般 **不配置** “查询 / 重置”按钮，优先使用 `FilterGroup` 的实时提交模式，让筛选值变更后直接触发刷新。
 - 当筛选项数量 **较多** 或请求成本较高时：才配置“查询 / 重置”，避免频繁请求。
 
 > ⚠️ **“查询 / 重置”按钮已经由 `FilterGroup` 内置**。需要时只需传入 `onQuery` / `onReset` 回调，**严禁在 `FilterGroup` 外部或内部手写 `<Button>查询</Button>` / `<Button>重置</Button>`**，否则会出现两套样式、间距错乱以及与设计系统不一致的问题。
@@ -43,7 +43,7 @@
 - **关键词输入使用 `Filter type="input"`；可展开的选择器使用 `FilterSelect` / `FilterDatePicker` / `FilterTimePicker`。**
 - `Filter` 是基础单元，不要手工拼装 `.lds-filter` DOM 结构和类名。
 - 默认只展示高频筛选项，将次要条件收纳到“展开 / 高级筛选”中。
-- 筛选值变更后是否立即查询，由业务层决定；组件本身只负责值和交互。
+- `FilterGroup` 已支持按 `name` 收集筛选值；需要手动查询时使用 `manual` / 默认按钮模式，需要实时查询时使用 `realtime` 或无操作区的 `auto` 模式。
 - 下拉面板 / 日期面板 / 时间面板统一通过内部 `Popover` 承载，避免每个业务自己造浮层。
 - 选项很多时，优先在具体筛选组件中补搜索，而不是在业务层拼接自定义弹层。
 
@@ -83,54 +83,45 @@ const statusOptions = [
 ];
 
 export function FilterGroupDemo() {
-  const [keyword, setKeyword] = useState('');
-  const [status, setStatus] = useState<string>();
-  const [date, setDate] = useState<Date | null>(null);
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
-  const [time, setTime] = useState<string>();
-  const [timeRange, setTimeRange] = useState<[string | null, string | null]>([null, null]);
-
   return (
-    <FilterGroup>
+    <FilterGroup
+      onQuery={(values) => {
+        console.log('实时筛选', values);
+      }}
+    >
       <Filter
+        name="keyword"
         type="input"
         label="关键词"
         placeholder="请输入"
-        value={keyword}
-        onChange={setKeyword}
       />
       <FilterSelect
+        name="status"
         label="状态"
         placeholder="请选择"
-        value={status}
         options={statusOptions}
-        onChange={(nextValue) => setStatus(nextValue)}
       />
       <FilterDatePicker
+        name="date"
         label="日期"
         placeholder="请选择"
-        value={date}
-        onChange={setDate}
       />
       <FilterDatePicker
+        name="dateRange"
         picker="range"
         label="日期区间"
         placeholder="请选择"
-        value={dateRange}
-        onChange={(nextValue) => setDateRange(nextValue as [Date | null, Date | null])}
       />
       <FilterTimePicker
+        name="time"
         label="时间"
         placeholder="请选择"
-        value={time}
-        onChange={setTime}
       />
       <FilterTimePicker
+        name="timeRange"
         picker="range"
         label="时间区间"
         placeholder="请选择"
-        value={timeRange}
-        onChange={(nextValue) => setTimeRange(nextValue as [string | null, string | null])}
       />
     </FilterGroup>
   );
@@ -160,8 +151,11 @@ export function FilterGroupWithActionsDemo() {
 
   return (
     <FilterGroup
-      onQuery={() => {}}
-      onReset={() => {
+      submitMode="manual"
+      onQuery={(values) => {
+        console.log('手动查询', values);
+      }}
+      onReset={(values) => {
         setKeyword('');
         setStatus(undefined);
         setType(undefined);
@@ -169,9 +163,11 @@ export function FilterGroupWithActionsDemo() {
         setDateRange([null, null]);
         setTime(undefined);
         setTimeRange([null, null]);
+        console.log('重置后', values);
       }}
     >
       <Filter
+        name="keyword"
         type="input"
         label="关键词"
         placeholder="请输入"
@@ -179,6 +175,7 @@ export function FilterGroupWithActionsDemo() {
         onChange={setKeyword}
       />
       <FilterSelect
+        name="status"
         label="状态"
         placeholder="请选择"
         value={status}
@@ -190,6 +187,7 @@ export function FilterGroupWithActionsDemo() {
         ]}
       />
       <FilterSelect
+        name="type"
         label="类型"
         placeholder="请选择"
         value={type}
@@ -201,12 +199,14 @@ export function FilterGroupWithActionsDemo() {
         ]}
       />
       <FilterDatePicker
+        name="date"
         label="日期"
         placeholder="请选择"
         value={date}
         onChange={setDate}
       />
       <FilterDatePicker
+        name="dateRange"
         picker="range"
         label="日期区间"
         placeholder="请选择"
@@ -214,12 +214,14 @@ export function FilterGroupWithActionsDemo() {
         onChange={(nextValue) => setDateRange(nextValue as [Date | null, Date | null])}
       />
       <FilterTimePicker
+        name="time"
         label="时间"
         placeholder="请选择"
         value={time}
         onChange={setTime}
       />
       <FilterTimePicker
+        name="timeRange"
         picker="range"
         label="时间区间"
         placeholder="请选择"
@@ -231,6 +233,30 @@ export function FilterGroupWithActionsDemo() {
 }
 ```
 
+## FilterGroup 组件 API
+
+`FilterGroup` 不只是布局容器，也负责统一承接筛选值收集、查询、重置和实时提交交互。
+
+| 属性 | 类型 | 默认值 | 说明 |
+| :--- | :--- | :--- | :--- |
+| `size` | `'default-size' \| 'small'` | `'small'` | 默认操作按钮尺寸 |
+| `minItemWidth` | `number` | `294` | 单个筛选项的最小栅格宽度 |
+| `gap` | `number` | `12` | 筛选项之间的间距 |
+| `submitMode` | `'auto' \| 'manual' \| 'realtime'` | `'auto'` | `auto` 表示有操作区时手动提交、无操作区时实时提交 |
+| `onQuery` | `(values) => void` | `undefined` | 提交当前筛选值；手动模式由“查询”按钮触发，实时模式由值变化触发 |
+| `onReset` | `(values) => void` | `undefined` | 点击“重置”后的回调，参数为重置后的 values |
+| `onValuesChange` | `(values, meta) => void` | `undefined` | 任一具名筛选项变化时触发，`meta.source` 为 `change` 或 `reset` |
+| `showActions` | `boolean` | 自动推断 | 是否显示默认“查询 / 重置”操作区 |
+| `actions` | `React.ReactNode` | `undefined` | 自定义操作区；传入后会完全覆盖默认按钮区 |
+| `queryText` | `string` | `'查询'` | 查询按钮文案 |
+| `resetText` | `string` | `'重置'` | 重置按钮文案 |
+
+补充说明：
+
+- 想让 `FilterGroup` 收集 values，子筛选项必须声明 `name`
+- 未声明 `name` 的筛选项仍可正常展示和交互，但不会出现在 `onQuery` / `onReset` / `onValuesChange` 的返回值里
+- 重置对非受控筛选项会恢复到 `defaultValue`；若子项是受控模式，仍应在 `onReset` 中同步更新业务 state
+
 ## Filter 组件 API
 
 `Filter` 是基础筛选外观组件，支持输入态和按钮态两类模式。
@@ -239,6 +265,7 @@ export function FilterGroupWithActionsDemo() {
 | :--- | :--- | :--- | :--- |
 | `type` | `'input' \| 'select' \| 'date' \| 'time'` | - | 筛选器类型 |
 | `label` | `React.ReactNode` | - | 左侧字段标题 |
+| `name` | `string` | `undefined` | 与 `FilterGroup` 配合时用于收集当前筛选值 |
 | `placeholder` | `React.ReactNode` | `undefined` | 未填写时展示 |
 | `size` | `'default-size' \| 'small'` | `'default-size'` | 尺寸 |
 | `disabled` | `boolean` | `false` | 禁用态 |
@@ -259,6 +286,7 @@ export function FilterGroupWithActionsDemo() {
 
 | 属性 | 类型 | 默认值 | 说明 |
 | :--- | :--- | :--- | :--- |
+| `name` | `string` | `undefined` | 与 `FilterGroup` 配合时用于收集当前筛选值 |
 | `label` | `React.ReactNode` | - | 左侧字段标题 |
 | `placeholder` | `React.ReactNode` | `'请选择'` | 未选择时展示 |
 | `size` | `'default-size' \| 'small'` | `'default-size'` | 尺寸 |
@@ -291,6 +319,7 @@ export function FilterGroupWithActionsDemo() {
 
 | 属性 | 类型 | 默认值 | 说明 |
 | :--- | :--- | :--- | :--- |
+| `name` | `string` | `undefined` | 与 `FilterGroup` 配合时用于收集当前筛选值 |
 | `picker` | `'date' \| 'range'` | `'date'` | 选择器类型，单日期或日期区间 |
 | `label` | `React.ReactNode` | - | 左侧字段标题 |
 | `placeholder` | `React.ReactNode` | `'请选择'` | 未选择时展示 |
@@ -325,6 +354,7 @@ export function FilterGroupWithActionsDemo() {
 
 | 属性 | 类型 | 默认值 | 说明 |
 | :--- | :--- | :--- | :--- |
+| `name` | `string` | `undefined` | 与 `FilterGroup` 配合时用于收集当前筛选值 |
 | `picker` | `'time' \| 'range'` | `'time'` | 选择器类型，单时间或时间区间 |
 | `label` | `React.ReactNode` | - | 左侧字段标题 |
 | `placeholder` | `React.ReactNode` | `'请选择'` | 未选择时展示 |
@@ -361,6 +391,8 @@ export function FilterGroupWithActionsDemo() {
 - `FilterSelect` / `FilterDatePicker` / `FilterTimePicker` 已经封装好了 `Popover`，业务层不要再额外包一层自定义浮层。
 - 日期区间和时间区间的弹层交互已经内置，不要在业务层再套额外的区间浮层。
 - **不要自己用 `<Button>` 实现“查询 / 重置”，必须使用 `FilterGroup` 自带的 `onQuery` / `onReset` 配置项。**
+- 若需要让 `FilterGroup` 收集 values，子项必须声明 `name`；未声明 `name` 的筛选项不会出现在 `onQuery` / `onReset` / `onValuesChange` 返回值里。
+- `FilterGroup` 默认为 `submitMode="auto"`：有操作区时按手动查询处理，无操作区时按实时提交处理。
 - “查询 / 重置”仅在筛选项较多时启用；小于等于 3 个筛选项时一般不需要操作按钮。
 
 ```tsx

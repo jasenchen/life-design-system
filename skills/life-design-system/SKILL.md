@@ -9,13 +9,14 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 
 1. **优先使用** `life-ds` 提供的 **React 组件。** 在构建自定义 UI 之前，务必优先使用 `@life-ds/components-web` 提供的 React 组件。当存在等效的 `life-ds` 组件时，禁止创建自定义组件，禁止对组件样式进行覆盖和魔改。在 React 项目中，禁止手写 `.lds-` DOM 结构或自行拼装已提供的组件。
 2. **所有视觉样式均使用语义化 Tokens。** 颜色、排版、圆角和阴影必须使用 design tokens。原则上严禁在 UI 中硬编码色值、字号或圆角大小，除非由设计师提供设计稿中的圆角和间距在token中不存在时可采用硬编码，但需要告知。
-3. 所有文本的字体族均使用`--font-normal`，你可以在全局层面使用这个字体族的token。只有用于数据展示的数字字体，才会使用`--font-number`。
-4. **使用** `@life-ds/icons` **图标。** 在引入组件时，脚本会自动引入 `@life-ds/icons`，如果没有引入，请手动引入。不要捏造图标名称 —— 务必核实存在完全一致的导出项。
+3. 所有文本的字体族均使用`--font-normal`，你可以在全局层面使用这个字体族的token。`--font-number` 仅用于金额、价格、成交额、库存、统计指标等数据展示场景；时间、编号、ID、纯英文串等内容仍使用 `--font-normal`。
+4. **使用** `@life-ds/icons` **图标。** 当页面使用 `@life-ds/components-web` 提供的 `Icon` 组件或任何内置图标组件时，组件库会自动触发 `@life-ds/icons` 的 SVG Sprite 注入；当项目单独使用 `@life-ds/icons` 或手写 `<svg><use /></svg>` 引用图标时，仍需在应用入口文件（如 `main.tsx`、`index.tsx`、`main.js`）中显式执行 `import '@life-ds/icons';`。不要捏造图标名称 —— 务必核实存在完全一致的导出项。
 5. 除非是全屏页面、弹框等非典型页面类型，否则必须使用基础结构构建页面的基础框架。包含顶部导航、左侧菜单和中间内容区域，对于大部分页面，均需要遵循此结构，且不要对组件和样式进行修改！页面基础框架请阅读 [references/layout.md](references/layout.md)
 6. **在能提升清晰度的地方考虑使用动效。** 对于交互状态变化（展开/收起、切换、焦点滑动、错误反馈），优先使用 life-ds 组件内置的动效。仅对非组件元素使用自定义动效，并遵循 [references/motion.md](references/motion.md) 的预设以保持一致性。
 7. **遵循现有项目模式。** 如果仓库中已经使用了 life-ds 组件或本地封装组件，请在其基础上进行扩展，而不是创建平行的结构。
 8. 每个项目的页面，需要增加字体平滑的代码：`-webkit-font-smoothing: antialiased`
-9. 设计原则是所有页面的底层指导规则，务必在实现页面是阅读内容并遵循原则：[references/design.md](references/design.md)
+9. **生成任何页面前，必须先阅读设计原则文档。** 在生成、修改或优化任何页面之前，必须先阅读 [references/design.md](references/design.md)，并以其中的设计原则作为页面实现的底层依据，确保页面框架、组件使用、信息层级、视觉样式与交互表达均符合设计原则后才可继续实现。
+10. **列表页筛选区必须优先使用标准筛选器组件。** 当页面存在列表筛选区时，优先使用 `FilterGroup`、`Filter`、`FilterSelect`、`FilterDatePicker`、`FilterTimePicker` 等标准筛选器组件；不要因为局部实现问题退回到普通 `Form`、裸 `Input`、裸 `Select` 或自拼 DOM 结构来替代列表页筛选区。
 
 ***
 
@@ -52,11 +53,16 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
    ```
    *(该 CLI 脚本会自动将必须的 Tokens CSS、基础组件 CSS 以及 Icon SVG 精准复制到项目对应的* *`styles/`* *和* *`assets/`* *目录中。)*
 3. **指导用户在入口引入**：
-   脚本执行成功后，AI 需检查项目的入口 HTML 文件（如 `index.html`），并确保 `<head>` 标签内包含以下引入代码：
+   脚本执行成功后，AI 需同时检查 HTML 入口文件与图标使用方式：
+   - 在入口 HTML 文件（如 `index.html`）中，确保 `<head>` 标签内包含以下引入代码：
    ```html
    <link rel="stylesheet" href="./styles/life-ds-tokens.css">
    <link rel="stylesheet" href="./styles/base.css">
    <link rel="stylesheet" href="./styles/components.css">
+   ```
+   - 若项目未使用 `@life-ds/components-web` 的 `Icon` 组件，而是单独使用 `@life-ds/icons` 或手写 `<svg><use /></svg>` 图标，则必须在应用入口文件（如 `main.tsx`、`index.tsx`、`main.js`）中补充：
+   ```ts
+   import '@life-ds/icons';
    ```
 
 **注意事项：**
@@ -179,10 +185,13 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 
 - 所使用的所有 life-ds组件 API 在已安装的依赖包中确实存在
 - 颜色、排版、圆角和阴影全部使用了语义化 Tokens，特殊情况下圆角和间距可以硬编码，
-- 所有字体族均使用token：--font-normal，你可以在全局层面使用这个字体族的token。只有用于数据展示的数字字体，才会使用--font-number。
+- 所有字体族均使用token：--font-normal；`--font-number` 仅用于金额、价格、成交额、库存、统计指标等数据展示场景，时间、编号、ID、纯英文串等内容仍使用 `--font-normal`。
 - 图标来自于 `@life-ds/icons` 且导出名称已核实
+- 若页面未通过 `@life-ds/components-web` 的 `Icon` 组件使用图标，而是单独使用 `@life-ds/icons` 或手写 `<svg><use /></svg>`，则应用入口文件中已显式引入 `import '@life-ds/icons';`
+- 若页面存在列表页筛选区，则已优先使用 `FilterGroup`、`Filter`、`FilterSelect`、`FilterDatePicker`、`FilterTimePicker` 等标准筛选器组件，而不是退回到表单控件组合或自定义筛选容器
 - 悬停 (Hover)、聚焦 (focus)、激活 (active)、禁用 (disabled) 和加载中 (loading) 状态均已处理
 - 焦点可见性强
 - 响应式行为能够自适应结构，而不仅仅是尺寸
 - 动效用于阐明状态变化，而不是用于装饰
 - 代码实现遵循了仓库现有的规范
+- 所有页面的所有元素均已依据 [references/design.md](references/design.md) 的设计原则重新 review；凡是不符合设计原则的布局、组件、样式、层级或交互，均已修改至符合要求后才交付

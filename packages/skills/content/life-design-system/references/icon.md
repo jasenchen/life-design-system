@@ -4,7 +4,7 @@
 
 ## React 组件用法
 
-在 React 项目中，优先直接使用 `@life-ds/components-web` 提供的 `<Icon />` 组件，而不是手写 `<svg><use /></svg>`。
+在 React 项目中，优先直接使用 `@life-ds/components-web` 提供的 `<Icon />` 组件，而不是手写 `<svg><use /></svg>`。`components-web` 内部已经在 `Icon` 组件模块中自动触发 `@life-ds/icons` 的 SVG Sprite 注入，因此只要项目通过 `@life-ds/components-web` 使用图标，通常不需要再额外手写入口导入。
 
 ```tsx
 import React from 'react';
@@ -29,7 +29,7 @@ export default function IconExamples() {
 
 **第一步：全局注入图标**
 
-在你的前端入口文件（如 `main.tsx` 或 `index.js`）中，引入图标包：
+当项目是**单独使用** `@life-ds/icons`，或手写 `<svg><use /></svg>` 而**没有**通过 `@life-ds/components-web` 的 `<Icon />` 组件使用图标时，需要在前端入口文件（如 `main.tsx`、`index.tsx` 或 `index.js`）中引入图标包：
 
 ```javascript
 // 这会自动将 Sprite 注入到页面的 body 内
@@ -52,7 +52,7 @@ import '@life-ds/icons';
 </svg>
 ```
 
-在支持组件化的项目中（如 React/Vue），您可以封装一个通用的 Icon 组件来简化调用，或者直接在模版中使用 `<svg>` 标签。
+在支持组件化的项目中（如 React/Vue），您可以封装一个通用的 Icon 组件来简化调用，或者直接在模版中使用 `<svg>` 标签。如果图标来自 `@life-ds/components-web` 的 `<Icon />` 组件，则注入通常已自动完成；如果图标来自你自己手写的 sprite 方案，则入口文件中的 `import '@life-ds/icons';` 仍不能省略。
 
 ## 使用规则
 
@@ -63,6 +63,7 @@ import '@life-ds/icons';
 • 纯图标控件必须始终具备可访问名称。
 • 不要凭记忆捏造图标的 ID 名称，请核实 `sprite.svg` 中确切的图标 ID。
 • 优先使用标准的 `lds-icon` 类名来控制图标的样式和尺寸。
+• 若项目未使用 `@life-ds/components-web` 的 `<Icon />` 组件，而是直接依赖 sprite 图标，交付前必须确认入口文件已显式执行 `import '@life-ds/icons';`，否则图标会渲染为空白。
 
 • 常规情况下，均使用线性图标，只有当图标尺寸很小的时候，才会使用对应的面性图标，若线性图标没有对应的面性图标，则使用线性图标
 

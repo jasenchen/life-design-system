@@ -131,17 +131,32 @@ npm publish --workspace=@life-ds/components-web --access public
 npm publish --workspace=@life-ds/skills --access public
 ```
 
-发布完成后再推送 GitHub，并补上版本 tag：
+发布完成后，建议同步推送 GitHub 并创建仓库 Release：
 
 ```bash
-git add .
-git commit -m "chore: release life-ds packages"
 git push origin main
+```
 
-git tag components-web-v1.0.15
-git tag tokens-v1.0.6
-git tag skills-v1.1.0
-git push origin components-web-v1.0.15 tokens-v1.0.6 skills-v1.1.0
+推荐使用一个仓库级版本 tag 统一标记本次发布，例如 `1.2.0`：
+
+```bash
+# 1. 创建并推送 Git tag
+git tag life-ds-v1.2.0
+git push origin life-ds-v1.2.0
+
+# 2. 使用 GitHub CLI 创建 Release
+gh release create life-ds-v1.2.0 \
+  --title "Life Design System v1.2.0" \
+  --notes "Release @life-ds/tokens@1.2.0, @life-ds/components-web@1.2.0, @life-ds/skills@1.2.0"
+```
+
+如果你更希望保留包级 tag，也可以额外创建：
+
+```bash
+git tag tokens-v1.2.0
+git tag components-web-v1.2.0
+git tag skills-v1.2.0
+git push origin tokens-v1.2.0 components-web-v1.2.0 skills-v1.2.0
 ```
 
 ---

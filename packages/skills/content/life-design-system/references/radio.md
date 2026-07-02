@@ -19,6 +19,7 @@
 - 需要对选项进行更强强调时，使用 `capsule` 类型，适合需要更高识别度的轻量选择。
 - 更重要的选项，或用于流程主分支切换的重要节点且需要辅助说明文案时，使用 `card` 类型。
 - `capsule` 是 `Radio` 的一种视觉样式，不要再单独抽象为独立组件或自行拼装按钮组。
+- `cardWidth` 用于覆盖单个 card 的默认宽度；当 `Radio card` 成组出现在表单中时，通常应由外层统一设置一致的宽度，而不是逐个配置不同宽度。
 - 保持清晰的聚焦可见性（Focus Visibility）和易于点击的操作区域。
 - 选项文案应简洁明确，避免一个单选项承载过多说明性内容；信息复杂时改用 `card` 样式。
 
@@ -72,6 +73,7 @@ export function RadioExamples() {
         value="enterprise"
         label="企业版"
         description="支持更多协作成员与高级配置能力"
+        cardWidth="100%"
         checked={plan === 'enterprise'}
         onChange={() => setPlan('enterprise')}
       />
@@ -91,6 +93,7 @@ export function RadioExamples() {
 | `size`        | `'large' \| 'default-size' \| 'small' \| 'mini'` | `'default-size'` | 单选框尺寸              |
 | `label`       | `React.ReactNode`                                | `undefined`      | 主文案内容              |
 | `description` | `React.ReactNode`                                | `undefined`      | 辅助文案，仅 `card` 样式使用 |
+| `cardWidth`   | `number \| string`                               | `180`            | 卡片样式宽度；数字按 `px` 处理，字符串支持 `240px`、`100%` 等合法 CSS 宽度 |
 | `name`        | `string`                                         | `undefined`      | 同一组单选必须保持一致        |
 | `value`       | `string`                                         | `undefined`      | 当前选项对应值            |
 | `checked`     | `boolean`                                        | `undefined`      | 受控选中态              |
@@ -148,7 +151,7 @@ export function RadioExamples() {
 
 - `default` 样式需对齐 Figma 尺寸：`large/default-size/small` 分别对应 `24/20/16px` 控件规格。
 - `capsule` 样式需保持胶囊圆角、边框和选中态文字强调，不要将其实现成按钮语义。
-- `card` 样式宽度为 180px，圆角 16px，大号内边距为 `16px`，默认中号为 `12px 16px`。
+- `card` 样式默认宽度为 180px，可通过 `cardWidth` 配置为其他宽度或 `100%` 以适配容器；圆角 16px，大号内边距为 `16px`，默认中号为 `12px 16px`。
 - 所有颜色必须使用 design tokens，禁止硬编码颜色值。
 - 必须基于原生 `<input type="radio">` 实现，保证无障碍与表单语义正确。
 
@@ -159,4 +162,3 @@ export function RadioExamples() {
 - 优先选择符合信息密度的最简单样式：简单选项用 `default`，轻量筛选用 `capsule`，说明性选项用 `card`。
 - 保留原始界面的单选意图，不要误用成 Tabs、Button 或 Checkbox。
 - 除非流程明确要求，否则避免发明自定义单选行为或额外交互反馈。
-

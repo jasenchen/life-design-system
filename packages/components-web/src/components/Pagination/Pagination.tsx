@@ -100,11 +100,6 @@ export interface PaginationProps extends Omit<React.HTMLAttributes<HTMLElement>,
    */
   showQuickJumper?: boolean;
   /**
-   * 单页时隐藏
-   * @default true
-   */
-  hideOnSinglePage?: boolean;
-  /**
    * 是否禁用整组交互
    * @default false
    */
@@ -141,7 +136,6 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       pageSizeOptions = [10, 20, 50],
       showSizeChanger = true,
       showQuickJumper = true,
-      hideOnSinglePage = true,
       disabled = false,
       siblingCount = 1,
       onChange,
@@ -220,8 +214,6 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       setPage(parsed);
       setJumpValue('');
     };
-
-    if (hideOnSinglePage && totalPages <= 1) return null;
 
     const canPrev = effectiveCurrent > 1;
     const canNext = effectiveCurrent < totalPages;

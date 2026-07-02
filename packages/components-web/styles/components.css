@@ -566,7 +566,8 @@
 
 /* Card radio */
 .lds-radio--card .lds-radio__visual {
-  width: 180px;
+  width: var(--lds-radio-card-width, 180px);
+  max-width: 100%;
   justify-content: center;
   gap: var(--spacing-base);
   border-radius: 16px;

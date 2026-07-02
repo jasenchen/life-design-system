@@ -21,6 +21,7 @@
 - 字段说明优先用 `description`（灰色），仅在校验失败时使用 `error`（红色）。
 - 同一个 `FormItem` 内尽量只放一个主控件；需要并排多个控件时，自行在 `children` 中组合。
 - 所有控件优先使用 `@life-ds/components-web` 提供的 Input / Textarea / Select / Upload 等，确保高度与 label 行高对齐。
+- 当 `FormItem` 内使用一组 `Radio` 的 `card` 样式时，同一组卡片宽度应保持一致；如需自定义宽度，应优先在组容器层统一控制，不要对单个卡片分别设置不同宽度。
 - **表单提交按钮在任何时候都应保持可点击状态，不要默认置灰或根据字段是否填写动态 disabled**；校验应发生在用户点击提交时，集中检查必填项、格式等信息，并将结果通过每个 `FormItem` 的 `error` 属性回显。
 - 校验失败时应聚焦到第一个出错字段，并保持提交按钮仍然可再次点击，允许用户修正后继续提交。
 - 仅在请求进行中（Loading）使用按钮的加载态防止重复提交，而不是用 disabled 表达"表单未填完"。
@@ -162,6 +163,7 @@ import { Form, FormItem, Input, Textarea } from '@life-ds/components-web';
 - `error` 文案存在时优先级高于 `description`，且整段文字切换为 `var(--color-danger-normal)`，并设置 `role="alert"` 以便屏幕阅读器及时朗读。
 - 当 `htmlFor` 提供时，标题区使用 `<label>` 渲染，点击标题可聚焦控件。
 - 与 Input / Textarea / Select / Upload 等控件搭配使用时，控件应自行占满 `__control` 宽度。
+- 当 `Radio card` 成组出现在表单中时，应默认保持同组等宽；若需要调整宽度，优先为整组提供统一宽度规则，仅在信息密度确有明显差异时才打破等宽。
 - **提交按钮应始终保持可点击**：不要根据字段是否填写来 disabled 提交按钮；校验在用户点击提交时一次性触发，错误通过 `FormItem` 的 `error` 回显，提交按钮仅在请求进行中使用 Loading 防重。
 
 ## 提交与校验
@@ -233,4 +235,3 @@ function CreateUserForm() {
 - 字段说明优先放在 `description` 而不是控件 `placeholder` 中。
 - 若设计稿未提供错误态，仅展示 `description`，不要凭空设计错误文案。
 - 不要在 `FormItem` 之外另行包一层 `<form>` 来注入校验逻辑，校验请由业务层控制并把结果通过 `error` 传入。
-

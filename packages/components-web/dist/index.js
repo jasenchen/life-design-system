@@ -614,7 +614,9 @@ var Radio = import_react6.default.forwardRef(
     size = "default-size",
     label,
     description,
+    cardWidth,
     disabled = false,
+    style,
     ...props
   }, ref) => {
     const hasLabel = label !== void 0 && label !== null;
@@ -622,6 +624,9 @@ var Radio = import_react6.default.forwardRef(
     const isCapsule = variant === "capsule";
     const isCard = variant === "card";
     const isDefault = variant === "default";
+    const wrapperStyle = isCard && cardWidth !== void 0 ? {
+      ["--lds-radio-card-width"]: typeof cardWidth === "number" ? `${cardWidth}px` : cardWidth
+    } : void 0;
     return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
       "label",
       {
@@ -633,6 +638,7 @@ var Radio = import_react6.default.forwardRef(
           isCapsule && "lds-capsule-wrapper",
           className
         ),
+        style: wrapperStyle,
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
             "input",
@@ -641,6 +647,7 @@ var Radio = import_react6.default.forwardRef(
               className: "lds-radio__input",
               disabled,
               ref,
+              style,
               ...props
             }
           ),
@@ -4472,7 +4479,6 @@ var Pagination = import_react30.default.forwardRef(
     pageSizeOptions = [10, 20, 50],
     showSizeChanger = true,
     showQuickJumper = true,
-    hideOnSinglePage = true,
     disabled = false,
     siblingCount = 1,
     onChange,
@@ -4537,7 +4543,6 @@ var Pagination = import_react30.default.forwardRef(
       setPage(parsed);
       setJumpValue("");
     };
-    if (hideOnSinglePage && totalPages <= 1) return null;
     const canPrev = effectiveCurrent > 1;
     const canNext = effectiveCurrent < totalPages;
     return /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(

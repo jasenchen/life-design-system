@@ -275,6 +275,13 @@ interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, '
      * 卡片样式下的辅助文案
      */
     description?: React.ReactNode;
+    /**
+     * 卡片样式下的宽度。
+     * - 传数字时按 px 处理
+     * - 传字符串时支持任意合法 CSS 宽度值，如 `240px`、`100%`
+     * @default 180
+     */
+    cardWidth?: number | string;
 }
 declare const Radio: React.ForwardRefExoticComponent<RadioProps & React.RefAttributes<HTMLInputElement>>;
 
@@ -800,11 +807,6 @@ interface PaginationProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onCha
      * @default true
      */
     showQuickJumper?: boolean;
-    /**
-     * 单页时隐藏
-     * @default true
-     */
-    hideOnSinglePage?: boolean;
     /**
      * 是否禁用整组交互
      * @default false

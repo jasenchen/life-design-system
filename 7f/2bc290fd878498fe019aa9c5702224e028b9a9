@@ -1,0 +1,493 @@
+packages/components-web/styles/components.css
+  s_8c5756cd746857::t_3fc5448c57f255 569-570 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a462a04fb27c5ecf6c61cfb","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[569,570]}]}]}
+packages/skills/content/life-design-system/references/form.md
+  s_8c5756cd746857::t_ba7666ef798312 24,166 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a462b9dfb27c5ecf6c61dc6","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":24},{"Single":166}]}]}
+skills/life-design-system/references/radio.md
+  s_8c5756cd746857::t_6f10358204683a 76,96,154 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a462a0efb27c5ecf6c61d17","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":76},{"Single":96},{"Single":154}]}]}
+packages/skills/content/life-design-system/references/radio.md
+  s_8c5756cd746857::t_e2467294ef171d 22 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a462bb6fb27c5ecf6c61e09","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":22}]}]}
+  s_8c5756cd746857::t_04b0ddedcf53de 76,96,154 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a462a20fb27c5ecf6c61d38","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":76},{"Single":96},{"Single":154}]}]}
+packages/components-web/src/components/Radio/Radio.tsx
+  s_8c5756cd746857::t_34b9f769c63157 26-32,43,45,55-61,73,80 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a4629f6fb27c5ecf6c61cda","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[26,32]},{"Single":43},{"Single":45},{"Range":[55,61]},{"Single":73},{"Single":80}]}]}
+skills/life-design-system/references/form.md
+  s_8c5756cd746857::t_81a8f7cdc1b06d 24,166 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a462b8cfb27c5ecf6c61da6","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":24},{"Single":166}]}]}
+skills/life-design-system/references/pagination.md
+  s_8c5756cd746857::t_30d6d7f2d38b34 21,101 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a46305ffb27c5ecf6c62038","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":21},{"Single":101}]}]}
+  s_8c5756cd746857::t_d5a01d80498013 69-73 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a462e15fb27c5ecf6c61fa2","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[69,73]}]}]}
+packages/skills/content/life-design-system/references/pagination.md
+  s_8c5756cd746857::t_d807dfe02ddafe 69-73 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a462e28fb27c5ecf6c61fc3","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[69,73]}]}]}
+  s_8c5756cd746857::t_0d58a788781133 21,101 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a46307cfb27c5ecf6c62059","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":21},{"Single":101}]}]}
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "7f2bc290fd878498fe019aa9c5702224e028b9a9",
+  "prompts": {},
+  "sessions": {
+    "s_8c5756cd746857": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a2132d390aac0c96f884a19",
+        "model": "gpt-5.4__max"
+      },
+      "human_author": "jasenchen <palemoon@outlook.com>"
+    }
+  },
+  "attestation_metadata": {
+    "packages/components-web/src/components/Radio/Radio.tsx": [
+      {
+        "hash": "s_8c5756cd746857::t_34b9f769c63157",
+        "line_ranges": [
+          {
+            "Range": [
+              26,
+              32
+            ]
+          },
+          {
+            "Single": 43
+          },
+          {
+            "Single": 45
+          },
+          {
+            "Range": [
+              55,
+              61
+            ]
+          },
+          {
+            "Single": 73
+          },
+          {
+            "Single": 80
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a4629f6fb27c5ecf6c61cda",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  26,
+                  32
+                ]
+              },
+              {
+                "Single": 43
+              },
+              {
+                "Single": 45
+              },
+              {
+                "Range": [
+                  55,
+                  61
+                ]
+              },
+              {
+                "Single": 73
+              },
+              {
+                "Single": 80
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "packages/components-web/styles/components.css": [
+      {
+        "hash": "s_8c5756cd746857::t_3fc5448c57f255",
+        "line_ranges": [
+          {
+            "Range": [
+              569,
+              570
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a462a04fb27c5ecf6c61cfb",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  569,
+                  570
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "packages/skills/content/life-design-system/references/form.md": [
+      {
+        "hash": "s_8c5756cd746857::t_ba7666ef798312",
+        "line_ranges": [
+          {
+            "Single": 24
+          },
+          {
+            "Single": 166
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a462b9dfb27c5ecf6c61dc6",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 24
+              },
+              {
+                "Single": 166
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "packages/skills/content/life-design-system/references/pagination.md": [
+      {
+        "hash": "s_8c5756cd746857::t_d807dfe02ddafe",
+        "line_ranges": [
+          {
+            "Range": [
+              69,
+              73
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a462e28fb27c5ecf6c61fc3",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  69,
+                  73
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "hash": "s_8c5756cd746857::t_0d58a788781133",
+        "line_ranges": [
+          {
+            "Single": 21
+          },
+          {
+            "Single": 101
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a46307cfb27c5ecf6c62059",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 21
+              },
+              {
+                "Single": 101
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "packages/skills/content/life-design-system/references/radio.md": [
+      {
+        "hash": "s_8c5756cd746857::t_e2467294ef171d",
+        "line_ranges": [
+          {
+            "Single": 22
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a462bb6fb27c5ecf6c61e09",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 22
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "hash": "s_8c5756cd746857::t_04b0ddedcf53de",
+        "line_ranges": [
+          {
+            "Single": 76
+          },
+          {
+            "Single": 96
+          },
+          {
+            "Single": 154
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a462a20fb27c5ecf6c61d38",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 76
+              },
+              {
+                "Single": 96
+              },
+              {
+                "Single": 154
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "skills/life-design-system/references/form.md": [
+      {
+        "hash": "s_8c5756cd746857::t_81a8f7cdc1b06d",
+        "line_ranges": [
+          {
+            "Single": 24
+          },
+          {
+            "Single": 166
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a462b8cfb27c5ecf6c61da6",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 24
+              },
+              {
+                "Single": 166
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "skills/life-design-system/references/pagination.md": [
+      {
+        "hash": "s_8c5756cd746857::t_30d6d7f2d38b34",
+        "line_ranges": [
+          {
+            "Single": 21
+          },
+          {
+            "Single": 101
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a46305ffb27c5ecf6c62038",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 21
+              },
+              {
+                "Single": 101
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "hash": "s_8c5756cd746857::t_d5a01d80498013",
+        "line_ranges": [
+          {
+            "Range": [
+              69,
+              73
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a462e15fb27c5ecf6c61fa2",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  69,
+                  73
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "skills/life-design-system/references/radio.md": [
+      {
+        "hash": "s_8c5756cd746857::t_6f10358204683a",
+        "line_ranges": [
+          {
+            "Single": 76
+          },
+          {
+            "Single": 96
+          },
+          {
+            "Single": 154
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a462a0efb27c5ecf6c61d17",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 76
+              },
+              {
+                "Single": 96
+              },
+              {
+                "Single": 154
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "remote_transcripts": {
+    "s_8c5756cd746857": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_04b0ddedcf53de": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_0d58a788781133": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_30d6d7f2d38b34": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_34b9f769c63157": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_3fc5448c57f255": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_6f10358204683a": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_81a8f7cdc1b06d": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_866fd77f9ecf59": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_9910ac61cbb902": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_ba7666ef798312": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_d5a01d80498013": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_d807dfe02ddafe": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_8c5756cd746857::t_e2467294ef171d": {
+      "tool": "trae",
+      "conversation_id": "6a2132d390aac0c96f884a19",
+      "session_id": "6a2132d390aac0c96f884a19",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    }
+  }
+}

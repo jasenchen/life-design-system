@@ -332,7 +332,7 @@ export function ListPageLayoutDemo() {
 
 - 分组标题使用 Figma 对应的 `标题 title/medium` 样式，在代码中映射为 `font: var(--title-medium)`。
 - 分组标题只负责表达当前字段组主题，例如“基础信息”“商品信息”“资质信息”；不要把说明文案、状态标签或操作按钮塞进标题。
-- 组内字段直接使用 `Form` + `FormItem`，不要手写 `.lds-form` 结构；字段必填、说明、错误态、帮助提示遵循 [form.md](form.md)。
+- 组内字段直接使用 `Form` + `FormItem`，不要手写 `.lds-form` 结构；字段必填、说明、错误态、帮助提示遵循 [../components/form.md](../components/form.md)。
 - 如果只有一个简单主题，也可以只有一个分组，但仍建议保留分组标题以稳定页面层级。
 
 #### 全局操作区规范
@@ -794,18 +794,18 @@ export function FormPageWithPreviewDemo() {
 1. **导航区**：详情页属于二级页面，必须使用 `<PageHeader variant="secondary" />`。
 2. **内容宽度**：详情页正文沿用表单页的版心范围，最大宽度 872px，最小宽度 648px，在内容区内水平居中；上间距使用 `var(--spacing-2x)`，下间距使用 `var(--spacing-8x)`。
 3. **统领信息区**：仍然需要“先告诉用户正在查看什么”，可以展示对象名称、编号、主体名称、金额、门店、时间范围等关键摘要信息；不要直接把普通字段堆进这个区域。
-4. **字段展示方式**：原本在表单页中由 `Input`、`Select`、`DatePicker`、`TimePicker`、`Textarea` 承担的字段，在详情页里统一转为 key value 浏览态展示，并优先使用 [keyvalue.md](keyvalue.md) 中定义的 `KeyValue` 组件族搭建。
+4. **字段展示方式**：原本在表单页中由 `Input`、`Select`、`DatePicker`、`TimePicker`、`Textarea` 承担的字段，在详情页里统一转为 key value 浏览态展示，并优先使用 [../components/keyvalue.md](../components/keyvalue.md) 中定义的 `KeyValue` 组件族搭建。
 5. **key value 结构**：详情页里的 key value 默认沿用表单页的左右结构，即左侧固定标签区、右侧为值区；只有在字段容器明显过窄或卡片内补充信息位等窄场景，才切换为上下结构。不要手写一套临时的详情页字段样式。
 6. **双列展示**：如果单个字段信息量不大，优先使用双列 `KeyValue` 布局，提高信息密度；如果字段值较长，如地址、规则说明、卖点描述，可让该项跨两列单独展示。
 7. **复杂信息**：如果内容更适合结构化组合，可在 `KeyValueItem` 的 `value` 区中承载 `Card`；如果只是普通说明文案，直接使用文本块，不要为了形式统一强行塞进 `Card`。
 8. **表格信息**：列表型从属信息仍然使用 `Table` 展示，但一般不再放行内编辑、上传入口、下拉切换等操作；默认按只读模式处理。
-9. **图片信息**：表单页中的上传组件进入详情页后，应转为上传完成后的图片展示；展示时依旧遵循 key value 结构，只是 `value` 区从纯文本变为图片组。优先使用 `KeyValueImages` / `KeyValueImage`，图片尺寸按 [keyvalue.md](keyvalue.md) 中的规则根据内容类型调整。
+9. **图片信息**：表单页中的上传组件进入详情页后，应转为上传完成后的图片展示；展示时依旧遵循 key value 结构，只是 `value` 区从纯文本变为图片组。优先使用 `KeyValueImages` / `KeyValueImage`，图片尺寸按 [../components/keyvalue.md](../components/keyvalue.md) 中的规则根据内容类型调整。
 10. **块间距**：统领信息区、分组区、表格区、Card 区、图片区这些页面级块之间的垂直间距统一使用 `var(--spacing-8x)`。
 11. **全局操作区**：详情页底部全局操作区是可选的。仅当页面存在“返回列表”“复制配置”“刷新状态”“再次提交”等整页级动作时才展示。Footer 默认只放全局操作按钮，并保持整体居中；不要在这里补说明文案、状态解释或字段补充信息。若确实存在全局协议同意信息，也应放在按钮组正上方，按钮组本身仍然保持居中。
 
 #### key value 展示规范
 
-- 详情页中的结构化字段展示，请先阅读 [keyvalue.md](keyvalue.md)，并优先使用 `<KeyValue />`、`<KeyValueItem />`、`<KeyValueText />`、`<KeyValueImages />` 等现成组件。
+- 详情页中的结构化字段展示，请先阅读 [../components/keyvalue.md](../components/keyvalue.md)，并优先使用 `<KeyValue />`、`<KeyValueItem />`、`<KeyValueText />`、`<KeyValueImages />` 等现成组件。
 - 标签文案（key）使用 `font: var(--body-regular)` + `var(--color-text-caption)`。
 - 内容文案（value）使用 `font: var(--body-regular)` + `var(--color-text-primary)`。
 - 默认采用“左 key / 右 value”的横向结构，建议标签区宽度与表单页 label 宽度保持相近，形成稳定对齐关系。
@@ -1014,7 +1014,7 @@ export function DetailPageLayoutDemo() {
 适用场景：当详情页需要在顶部统领区域强调“审核中 / 已通过 / 已驳回 / 已发布 / 已失效”等总体状态时，使用带状态详情页。
 
 - 这类页面本质上仍然是详情页，只是在 `PageHeader` 下方增加了 `Status` 作为统领状态展示；
-- 状态表达优先使用 [status.md](status.md) 中定义的 `Status` 组件，而不是放大版 `Tag`；
+- 状态表达优先使用 [../components/status.md](../components/status.md) 中定义的 `Status` 组件，而不是放大版 `Tag`；
 - 除状态区外，其余内容区仍然遵循普通详情页的 key value、Card、Table、图片展示等规则；
 - 若页面存在“返回列表”“刷新状态”“再次提交”“催审提醒”等整页级动作，可增加底部全局操作区。
 

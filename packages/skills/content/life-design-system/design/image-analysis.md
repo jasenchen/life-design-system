@@ -89,7 +89,7 @@
 
 若截图中的组件与life-design-system-component不一致时，优先使用life-design-system-component，禁止在组件层面私自添加任何功能或者魔改样式！
 
-在决定如何将图像区域映射到可复用 UI 模式时，请阅读 [components.md](components.md)。
+在决定如何将图像区域映射到可复用 UI 模式时，请阅读 [组件总览](../components/index.md)。
 
 ## 第四步：理解层级 (Read The Hierarchy)
 
@@ -164,7 +164,7 @@
 - 存在多少个表面层级？
 - 设计是否依赖于页面、底页、形状和覆盖层的区分？
 
-阅读 [colors.md](colors.md)。
+阅读 [color.md](color.md)。
 
 ## 第七步：推断文本层级 (Infer Typography Hierarchy)
 
@@ -333,4 +333,3 @@
 - 保留可见的层级和模式语言
 - 实现最基本的生产就绪状态
 - 简要说明关键假设
-

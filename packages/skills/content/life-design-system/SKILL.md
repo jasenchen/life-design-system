@@ -11,11 +11,11 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 2. **所有视觉样式均使用语义化 Tokens。** 颜色、排版、圆角和阴影必须使用 design tokens。原则上严禁在 UI 中硬编码色值、字号或圆角大小，除非由设计师提供设计稿中的圆角和间距在token中不存在时可采用硬编码，但需要告知。
 3. 所有文本的字体族均使用`--font-normal`，你可以在全局层面使用这个字体族的token。`--font-number` 仅用于金额、价格、成交额、库存、统计指标等数据展示场景；时间、编号、ID、纯英文串等内容仍使用 `--font-normal`。
 4. **使用** `@life-ds/icons` **图标。** 当页面使用 `@life-ds/components-web` 提供的 `Icon` 组件或任何内置图标组件时，组件库会自动触发 `@life-ds/icons` 的 SVG Sprite 注入；当项目单独使用 `@life-ds/icons` 或手写 `<svg><use /></svg>` 引用图标时，仍需在应用入口文件（如 `main.tsx`、`index.tsx`、`main.js`）中显式执行 `import '@life-ds/icons';`。不要捏造图标名称 —— 务必核实存在完全一致的导出项。
-5. 除非是全屏页面、弹框等非典型页面类型，否则必须使用基础结构构建页面的基础框架。包含顶部导航、左侧菜单和中间内容区域，对于大部分页面，均需要遵循此结构，且不要对组件和样式进行修改！页面基础框架请阅读 [references/layout.md](references/layout.md)
-6. **在能提升清晰度的地方考虑使用动效。** 对于交互状态变化（展开/收起、切换、焦点滑动、错误反馈），优先使用 life-ds 组件内置的动效。仅对非组件元素使用自定义动效，并遵循 [references/motion.md](references/motion.md) 的预设以保持一致性。
+5. 除非是全屏页面、弹框等非典型页面类型，否则必须使用基础结构构建页面的基础框架。包含顶部导航、左侧菜单和中间内容区域，对于大部分页面，均需要遵循此结构，且不要对组件和样式进行修改！页面基础框架请阅读 [design/layout.md](design/layout.md)
+6. **在能提升清晰度的地方考虑使用动效。** 对于交互状态变化（展开/收起、切换、焦点滑动、错误反馈），优先使用 life-ds 组件内置的动效。仅对非组件元素使用自定义动效，并遵循 [design/motion.md](design/motion.md) 的预设以保持一致性。
 7. **遵循现有项目模式。** 如果仓库中已经使用了 life-ds 组件或本地封装组件，请在其基础上进行扩展，而不是创建平行的结构。
 8. 每个项目的页面，需要增加字体平滑的代码：`-webkit-font-smoothing: antialiased`
-9. **生成任何页面前，必须先阅读设计原则文档。** 在生成、修改或优化任何页面之前，必须先阅读 [references/design.md](references/design.md)，并以其中的设计原则作为页面实现的底层依据，确保页面框架、组件使用、信息层级、视觉样式与交互表达均符合设计原则后才可继续实现。
+9. **生成任何页面前，必须先阅读设计原则文档。** 在生成、修改或优化任何页面之前，必须先阅读 [design/design.md](design/design.md)，并以其中的设计原则作为页面实现的底层依据，确保页面框架、组件使用、信息层级、视觉样式与交互表达均符合设计原则后才可继续实现。
 10. **列表页筛选区必须优先使用标准筛选器组件。** 当页面存在列表筛选区时，优先使用 `FilterGroup`、`Filter`、`FilterSelect`、`FilterDatePicker`、`FilterTimePicker` 等标准筛选器组件；不要因为局部实现问题退回到普通 `Form`、裸 `Input`、裸 `Select` 或自拼 DOM 结构来替代列表页筛选区。
 
 ***
@@ -23,7 +23,7 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 # 核心工作流
 
 > ⚠️ **重要提示 (Agent System Prompt)：**
-> 本项目在 `references/` 目录下配备了详细的设计系统组件规范。在实现任何 UI（如按钮、筛选器、表格、布局）之前，你 **必须** 使用文件读取工具查阅该目录下对应的 `.md` 参考文件，并优先使用 `@life-ds/components-web` 的 React 组件 API。禁止凭空猜测组件实现，禁止手写 `.lds-` DOM/class 结构替代现有 React 组件。
+> 本项目在 `design/` 与 `components/` 目录下分别维护设计规范和组件文档。在实现任何 UI（如按钮、筛选器、表格、布局）之前，你 **必须** 使用文件读取工具查阅对应的 `.md` 参考文件，并优先使用 `@life-ds/components-web` 的 React 组件 API。禁止凭空猜测组件实现，禁止手写 `.lds-` DOM/class 结构替代现有 React 组件。
 
 ## 1. 优先检查 Life Design System (life-ds) 的引入情况
 
@@ -76,12 +76,12 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 
 将 `@life-ds `的组件和样式作为默认的实现路径。当要实现页面或者UI时，必须阅读对应组件的文档：
 
-- 设计原则：[references/design.md](references/design.md)
-- token样式：[references/tokens.md](references/tokens.md)
-- 图标：[references/icon.md](references/icon.md)
-- 颜色：[references/color.md](references/color.md)
-- 组件：[references/components.md](references/components.md)
-- 动效：[references/motion.md](references/motion.md)
+- 设计原则：[design/design.md](design/design.md)
+- token样式：[design/tokens.md](design/tokens.md)
+- 图标：[components/icon.md](components/icon.md)
+- 颜色：[design/color.md](design/color.md)
+- 组件总览：[components/index.md](components/index.md)
+- 动效：[design/motion.md](design/motion.md)
 
 <br />
 
@@ -91,7 +91,7 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 
 当准备生成页面时，你需要判断需要使用哪个类型的页面，对于大部分业务，必须基于一个标准的页面基础框架，并在内容区域填充内容，请阅读：
 
-- [references/layout.md](references/layout.md)
+- [design/layout.md](design/layout.md)
 
 ***
 
@@ -99,28 +99,28 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 
 当准备生成页面时，如果需要使用组件，必须阅读对应组件的文档并优先使用 `@life-ds/components-web` 的 React 组件 API：
 
-- 按钮 ：[references/button.md](references/button.md)
-- 提示条 ：[references/alert.md](references/alert.md)
-- 卡片 ：[references/card.md](references/card.md)
-- 键值对 ：[references/keyvalue.md](references/keyvalue.md)
-- 全局提示 ：[references/message.md](references/message.md)
-- 图标 ：[references/icon.md](references/icon.md)
-- 选择器 ：[references/select.md](references/select.md)
-- 日期选择器 ：[references/datepicker.md](references/datepicker.md)
-- 时间选择器 ：[references/timepicker.md](references/timepicker.md)
-- 标签页 ：[references/tabs.md](references/tabs.md)
-- 步骤条 ：[references/steps.md](references/steps.md)
-- 分页器 ：[references/pagination.md](references/pagination.md)
-- 表格 ：[references/table.md](references/table.md)
-- 筛选器 ：[references/filter.md](references/filter.md)
-- 标签 ：[references/tag.md](references/tag.md)
-- 多选框 ：[references/checkbox.md](references/checkbox.md)
-- 单选框 ：[references/radio.md](references/radio.md)
-- 开关 ：[references/switch.md](references/switch.md)
-- 搜索框 ：[references/search.md](references/search.md)
-- 页面标题区 ：[references/pageheader.md](references/pageheader.md)
-- 抽屉 ：[references/drawer.md](references/drawer.md)
-- 表单 ：[references/form.md](references/form.md)
+- 按钮 ：[components/button.md](components/button.md)
+- 提示条 ：[components/alert.md](components/alert.md)
+- 卡片 ：[components/card.md](components/card.md)
+- 键值对 ：[components/keyvalue.md](components/keyvalue.md)
+- 全局提示 ：[components/message.md](components/message.md)
+- 图标 ：[components/icon.md](components/icon.md)
+- 选择器 ：[components/select.md](components/select.md)
+- 日期选择器 ：[components/datepicker.md](components/datepicker.md)
+- 时间选择器 ：[components/timepicker.md](components/timepicker.md)
+- 标签页 ：[components/tabs.md](components/tabs.md)
+- 步骤条 ：[components/steps.md](components/steps.md)
+- 分页器 ：[components/pagination.md](components/pagination.md)
+- 表格 ：[components/table.md](components/table.md)
+- 筛选器 ：[components/filter.md](components/filter.md)
+- 标签 ：[components/tag.md](components/tag.md)
+- 多选框 ：[components/checkbox.md](components/checkbox.md)
+- 单选框 ：[components/radio.md](components/radio.md)
+- 开关 ：[components/switch.md](components/switch.md)
+- 搜索框 ：[components/search.md](components/search.md)
+- 页面标题区 ：[components/pageheader.md](components/pageheader.md)
+- 抽屉 ：[components/drawer.md](components/drawer.md)
+- 表单 ：[components/form.md](components/form.md)
 
 ***
 
@@ -130,7 +130,7 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 
 如果用户提供了截图、设计稿或其他视觉参考，必须阅读文档：
 
-- [references/image-analysis.md](references/image-analysis.md)
+- [design/image-analysis.md](design/image-analysis.md)
 
 使用图片来推断布局结构、层级、组件、Token 角色和状态 —— 然后使用 life-ds 组件和 Tokens 进行实现。
 
@@ -194,4 +194,4 @@ description: "使用 @life-ds 构建或优化抖音来客风格的 React Web 界
 - 响应式行为能够自适应结构，而不仅仅是尺寸
 - 动效用于阐明状态变化，而不是用于装饰
 - 代码实现遵循了仓库现有的规范
-- 所有页面的所有元素均已依据 [references/design.md](references/design.md) 的设计原则重新 review；凡是不符合设计原则的布局、组件、样式、层级或交互，均已修改至符合要求后才交付
+- 所有页面的所有元素均已依据 [design/design.md](design/design.md) 的设计原则重新 review；凡是不符合设计原则的布局、组件、样式、层级或交互，均已修改至符合要求后才交付

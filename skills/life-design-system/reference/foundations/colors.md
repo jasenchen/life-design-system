@@ -45,7 +45,8 @@
 | Token               | 用途                |
 | :------------------ | :---------------- |
 | `--color-bg-normal` | 扁平页面背景            |
-| `--color-bg-popup`  | 弹层、弹框、popup等组件的背景 |
+| `--color-bg-dialog` | Dialog、Drawer 等弹层背景 |
+| `--color-bg-tips`   | Message、Popover 等高层级提示背景 |
 | `--color-bg-mask`   | 蒙层背景              |
 
 容器背景：
@@ -55,6 +56,7 @@
 | `--color-fill-normal`  | 容器、卡片、组件的默认背景 |
 | `--color-fill-gray`    | 灰色容器的背景       |
 | `--color-fill-primary` | 浅色主色作为容器的背景   |
+| `--color-fill-white-disable` | Switch、Radio、Checkbox 等白色部件的禁用态填充 |
 
 - `*-bg `— 整体页面的背景
 - `*-fill `— 容器、卡片、组件等的默认背景
@@ -93,4 +95,3 @@
 | 模态框遮罩层 (backdrop) | `--color-bg-mask`                                       |
 | 图标颜色              | `--color-text-primary/secondary/caption/disable`(与文本相同) |
 | 品牌强调色             | `--color-text-primary`                                  |
-

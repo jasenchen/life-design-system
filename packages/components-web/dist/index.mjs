@@ -4103,8 +4103,96 @@ var getTableAlignClassName = (align) => {
   if (!align) return void 0;
   return `is-align-${align}`;
 };
+var getTableFixedClassName = (fixed) => {
+  if (!fixed) return void 0;
+  return `is-fixed-${fixed}`;
+};
 var TableWrapper = React27.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx27("div", { ref, className: clsx27("lds-table-wrapper", className), ...props })
+  ({ className, onScroll, style, ...props }, ref) => {
+    const scrollerRef = React27.useRef(null);
+    const [{ hasScrolledLeft, hasScrolledRight, hasFixedLeft, hasFixedRight, leftShadowBoundary, rightShadowBoundary }, setScrollState] = React27.useState({
+      hasScrolledLeft: false,
+      hasScrolledRight: false,
+      hasFixedLeft: false,
+      hasFixedRight: false,
+      leftShadowBoundary: 0,
+      rightShadowBoundary: 0
+    });
+    const updateScrollState = React27.useCallback(() => {
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+      const maxScrollLeft = Math.max(scroller.scrollWidth - scroller.clientWidth, 0);
+      const scrollerRect = scroller.getBoundingClientRect();
+      const leftFixedCell = scroller.querySelector(".lds-table__thead .is-fixed-left, tbody .is-fixed-left");
+      const rightFixedCell = scroller.querySelector(".lds-table__thead .is-fixed-right, tbody .is-fixed-right");
+      const nextState = {
+        hasScrolledLeft: scroller.scrollLeft > 1,
+        hasScrolledRight: maxScrollLeft - scroller.scrollLeft > 1,
+        hasFixedLeft: Boolean(leftFixedCell),
+        hasFixedRight: Boolean(rightFixedCell),
+        leftShadowBoundary: leftFixedCell ? Math.round(leftFixedCell.getBoundingClientRect().right - scrollerRect.left) : 0,
+        rightShadowBoundary: rightFixedCell ? Math.round(scrollerRect.right - rightFixedCell.getBoundingClientRect().left) : 0
+      };
+      setScrollState((prevState) => {
+        if (prevState.hasScrolledLeft === nextState.hasScrolledLeft && prevState.hasScrolledRight === nextState.hasScrolledRight && prevState.hasFixedLeft === nextState.hasFixedLeft && prevState.hasFixedRight === nextState.hasFixedRight && prevState.leftShadowBoundary === nextState.leftShadowBoundary && prevState.rightShadowBoundary === nextState.rightShadowBoundary) {
+          return prevState;
+        }
+        return nextState;
+      });
+    }, []);
+    React27.useImperativeHandle(ref, () => scrollerRef.current, []);
+    React27.useEffect(() => {
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+      updateScrollState();
+      const resizeObserver = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => {
+        updateScrollState();
+      }) : null;
+      resizeObserver == null ? void 0 : resizeObserver.observe(scroller);
+      const table = scroller.querySelector("table");
+      if (table) {
+        resizeObserver == null ? void 0 : resizeObserver.observe(table);
+      }
+      return () => {
+        resizeObserver == null ? void 0 : resizeObserver.disconnect();
+      };
+    }, [updateScrollState]);
+    const wrapperStyle = {
+      "--lds-table-fixed-left-shadow-boundary": `${leftShadowBoundary}px`,
+      "--lds-table-fixed-right-shadow-boundary": `${rightShadowBoundary}px`,
+      ...style
+    };
+    return /* @__PURE__ */ jsxs25(
+      "div",
+      {
+        className: clsx27(
+          "lds-table-wrapper",
+          hasScrolledLeft && "is-scrolled-left",
+          hasScrolledRight && "is-scrolled-right",
+          hasFixedLeft && "has-fixed-left",
+          hasFixedRight && "has-fixed-right",
+          className
+        ),
+        style: wrapperStyle,
+        children: [
+          /* @__PURE__ */ jsx27(
+            "div",
+            {
+              ref: scrollerRef,
+              className: "lds-table-wrapper__scroller",
+              onScroll: (event) => {
+                onScroll == null ? void 0 : onScroll(event);
+                updateScrollState();
+              },
+              ...props
+            }
+          ),
+          /* @__PURE__ */ jsx27("span", { className: "lds-table-wrapper__fixed-shadow lds-table-wrapper__fixed-shadow--left", "aria-hidden": "true" }),
+          /* @__PURE__ */ jsx27("span", { className: "lds-table-wrapper__fixed-shadow lds-table-wrapper__fixed-shadow--right", "aria-hidden": "true" })
+        ]
+      }
+    );
+  }
 );
 TableWrapper.displayName = "TableWrapper";
 var Table = React27.forwardRef(
@@ -4123,9 +4211,23 @@ var Tr = React27.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx27("tr", { ref, className: clsx27("lds-table__row", className), ...props })
 );
 Tr.displayName = "Tr";
-var Th = React27.forwardRef(({ className, align, ...props }, ref) => /* @__PURE__ */ jsx27("th", { ref, className: clsx27("lds-table__th", getTableAlignClassName(align), className), ...props }));
+var Th = React27.forwardRef(({ className, align, fixed, ...props }, ref) => /* @__PURE__ */ jsx27(
+  "th",
+  {
+    ref,
+    className: clsx27("lds-table__th", getTableAlignClassName(align), getTableFixedClassName(fixed), className),
+    ...props
+  }
+));
 Th.displayName = "Th";
-var Td = React27.forwardRef(({ className, align, ...props }, ref) => /* @__PURE__ */ jsx27("td", { ref, className: clsx27("lds-table__td", getTableAlignClassName(align), className), ...props }));
+var Td = React27.forwardRef(({ className, align, fixed, ...props }, ref) => /* @__PURE__ */ jsx27(
+  "td",
+  {
+    ref,
+    className: clsx27("lds-table__td", getTableAlignClassName(align), getTableFixedClassName(fixed), className),
+    ...props
+  }
+));
 Td.displayName = "Td";
 var TableCellProduct = ({ img, title, tag, tagVariant = "default", id }) => /* @__PURE__ */ jsxs25("div", { className: "lds-table-cell--product", children: [
   /* @__PURE__ */ jsx27("img", { src: img, alt: "\u5546\u54C1\u56FE", className: "lds-table-cell__product-img" }),

@@ -50,7 +50,7 @@ npx @life-ds/skills install-claude user
 
 #### 说明
 
-- Claude Code 的技能目录入口文件是 `SKILL.md`，我们同时复制了 `design/` 设计规范与 `components/` 组件文档，便于技能按需读取详细规范。
+- Claude Code 的技能目录入口文件是 `SKILL.md`，我们同时复制了 `reference/` 下的 `foundations/`、`pages/`、`components/` 文档，以及根目录的 `examples/`、`scripts/`，便于技能按需读取详细规范。
 - 如果是在已打开的 Claude Code 会话中首次新建 `.claude/skills/` 目录，通常需要重启一次会话以确保新目录被监听；如果目录已存在，后续修改会自动生效。
 - `CLAUDE.md` 适合放项目级长期约束，`.claude/skills/` 适合放可按需调用的设计系统技能；两者可以同时使用。
 
@@ -86,8 +86,12 @@ npx @life-ds/skills get life-design-system
 ### 1. 修改技能
 所有的技能源码均位于根目录的 `skills/` 文件夹下，例如 `skills/life-design-system/`：
 - `skills/<skill-name>/SKILL.md`: 核心指令定义。
-- `skills/<skill-name>/design/`: 设计规范文档。
-- `skills/<skill-name>/components/`: 组件文档。
+- `skills/<skill-name>/reference/foundations/`: 基础规范文档。
+- `skills/<skill-name>/reference/pages/`: 页面与布局文档。
+- `skills/<skill-name>/reference/components/`: 组件文档。
+- `skills/<skill-name>/examples/`: 案例文档。
+- `skills/<skill-name>/scripts/`: 常用脚本说明。
+- `skills/<skill-name>/gotchas.md`: 常见陷阱。
 
 ### 2. 同步内容
 在根目录修改完文档后，运行同步脚本将内容推送到分发包：

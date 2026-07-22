@@ -19,10 +19,11 @@
   --color-border-normal: var(--color-opacity-2);
   --color-border-hover: var(--color-brand-5);
   --color-border-active: var(--color-brand-6);
+  --color-divider-normal: var(--color-opacity-2);
   --color-border-disable: var(--color-opacity-1);
-  --color-divider-normal: var(--color-opacity-1);
+  --color-divider-light-normal: var(--color-opacity-1);
   --color-fill-normal: var(--layer-fill-normal); /* 各类组件的背景 */
-  --color-fill-hover: var(--color-opacity-0);
+  --color-fill-hover: var(--layer-fill-hover);
   --color-fill-active: var(--color-brand-opacity-0);
   --color-fill-disable: var(--color-opacity-0);
   --color-fill-gray: var(--color-opacity-0);
@@ -31,8 +32,10 @@
   --color-fill-warning: var(--color-orange-opacity-0);
   --color-fill-danger: var(--color-red-opacity-0);
   --color-fill-info: var(--color-blue-opacity-0);
+  --color-fill-white-disable: var(--layer-fill-white-disable); /* 用于checkbox等组件的白色部分disable状态 */
   --color-bg-normal: var(--layer-bg-normal); /* 页面背景 */
-  --color-bg-popup: var(--layer-bg-popup); /* 弹层背景 */
+  --color-bg-dialog: var(--layer-bg-dialog); /* 弹层背景 */
+  --color-bg-tips: var(--layer-bg-tips); /* 用于tips、message等轻量弹层背景 */
   --color-bg-mask: var(--layer-mask); /* 蒙层 */
   --color-bg-gray: var(--color-gray-0); /* 灰色页面背景色 */
   --color-text-link-normal: var(--color-brand-5);
@@ -149,16 +152,16 @@
   --color-green-8: #087153;
   --color-green-9: #08664D;
   --color-orange-0: #FFF6F0;
-  --color-blue-0: #F0F9FF;
-  --color-blue-1: #D9F0FF;
-  --color-blue-2: #B8E1FF;
-  --color-blue-3: #88CBFF;
-  --color-blue-4: #48ADFF;
-  --color-blue-5: #0088FF;
-  --color-blue-6: #0669C5;
-  --color-blue-7: #085199;
-  --color-blue-8: #08407B;
-  --color-blue-9: #083466;
+  --color-blue-0: #F0F6FF;
+  --color-blue-1: #DEEBFF;
+  --color-blue-2: #C5DBFF;
+  --color-blue-3: #A0C3FF;
+  --color-blue-4: #6FA1FF;
+  --color-blue-5: #387AFF;
+  --color-blue-6: #2155C5;
+  --color-blue-7: #133C99;
+  --color-blue-8: #0C2B7B;
+  --color-blue-9: #082166;
   --color-orange-1: #FFE9DA;
   --color-orange-2: #FFD4B9;
   --color-orange-3: #FFB58B;
@@ -211,9 +214,13 @@
   --color-blue-opacity-2: rgba(0, 149, 255, 0.28);
   --color-blue-opacity-3: rgba(0, 144, 255, 0.47);
   --layer-bg-normal: var(--white-10); /* 一般用于底色 */
-  --layer-bg-popup: var(--white-10); /* 一般用于底色 */
+  --layer-bg-dialog: var(--white-10); /* 用于弹框、底弹等容器的底色 */
+  --layer-bg-tips: var(--white-10); /* 一般用于底色 */
   --layer-fill-normal: var(--white-10); /* 一般用于各种组件的背景 */
+  --layer-fill-hover: var(--color-gray-0); /* 一般用于各种组件的背景 */
+  --layer-fill-white-disable: var(--white-10); /* 用于checkbox等组件的白色部分disable状态 */
   --layer-mask: var(--black-5);
+  --color-gray-0: #FAFBFC;
 }
 
 [data-theme="dark"] {
@@ -222,11 +229,11 @@
   --color-brand-2: #233B74;
   --color-brand-3: #2F57B0;
   --color-brand-4: #387AFF;
-  --color-brand-5: #6C9FFF;
-  --color-brand-6: #9ABFFF;
-  --color-brand-7: #BDD6FF;
-  --color-brand-8: #D5E6FF;
-  --color-brand-9: #E6F0FF;
+  --color-brand-5: #6399FF;
+  --color-brand-6: #89B4FF;
+  --color-brand-7: #A5C8FF;
+  --color-brand-8: #B9D5FF;
+  --color-brand-9: #C7DEFF;
   --color-gray-0: #0C0D0F;
   --color-opacity-0: rgba(204, 221, 255, 0.06);
   --color-opacity-1: rgba(215, 228, 255, 0.07);
@@ -260,41 +267,41 @@
   --color-red-2: #72212C;
   --color-red-3: #AC2B3A;
   --color-red-4: #FA2F44;
-  --color-red-5: #FB6572;
-  --color-red-6: #FD969C;
-  --color-red-7: #FEBABE;
-  --color-red-8: #FFD4D5;
-  --color-red-9: #FFE6E6;
+  --color-red-5: #FB5C69;
+  --color-red-6: #FD848C;
+  --color-red-7: #FEA3A7;
+  --color-red-8: #FFB8BB;
+  --color-red-9: #FFC7C8;
   --color-green-0: #102E26;
   --color-green-1: #134033;
   --color-green-2: #155B46;
   --color-green-3: #11825E;
   --color-green-4: #00B579;
-  --color-green-5: #37CB97;
-  --color-green-6: #71DFB7;
-  --color-green-7: #A4EED1;
-  --color-green-8: #CAF8E6;
-  --color-green-9: #E6FFF4;
+  --color-green-5: #2FCB95;
+  --color-green-6: #62DFB1;
+  --color-green-7: #8EEEC9;
+  --color-green-8: #AFF8DB;
+  --color-green-9: #C7FFE8;
   --color-orange-0: #2E1810;
-  --color-blue-0: #101E2E;
-  --color-blue-1: #162F4A;
-  --color-blue-2: #1A4774;
-  --color-blue-3: #1766B0;
-  --color-blue-4: #0088FF;
-  --color-blue-5: #45ABFF;
-  --color-blue-6: #82C9FF;
-  --color-blue-7: #B0DEFF;
-  --color-blue-8: #D0ECFF;
-  --color-blue-9: #E6F5FF;
+  --color-blue-0: #10172E;
+  --color-blue-1: #18264A;
+  --color-blue-2: #233B74;
+  --color-blue-3: #2F57B0;
+  --color-blue-4: #387AFF;
+  --color-blue-5: #6399FF;
+  --color-blue-6: #89B4FF;
+  --color-blue-7: #A5C8FF;
+  --color-blue-8: #B9D5FF;
+  --color-blue-9: #C7DEFF;
   --color-orange-1: #4A2516;
   --color-orange-2: #74361B;
   --color-orange-3: #B0491A;
   --color-orange-4: #FF5A08;
-  --color-orange-5: #FF894A;
-  --color-orange-6: #FFB285;
-  --color-orange-7: #FFCFB2;
-  --color-orange-8: #FFE3D1;
-  --color-orange-9: #FFF0E6;
+  --color-orange-5: #FF8341;
+  --color-orange-6: #FFA774;
+  --color-orange-7: #FFC19A;
+  --color-orange-8: #FFD3B5;
+  --color-orange-9: #FFDEC7;
   --white-1: rgba(255, 255, 255, 0.9);
   --white-2: rgba(255, 255, 255, 0.8);
   --white-3: rgba(255, 255, 255, 0.7);
@@ -333,14 +340,18 @@
   --color-orange-opacity-1: rgba(247, 123, 74, 0.3);
   --color-orange-opacity-2: rgba(252, 117, 59, 0.46);
   --color-orange-opacity-3: rgba(251, 107, 40, 0.7);
-  --color-blue-opacity-0: rgba(84, 158, 242, 0.19);
-  --color-blue-opacity-1: rgba(74, 158, 247, 0.3);
-  --color-blue-opacity-2: rgba(59, 156, 252, 0.46);
-  --color-blue-opacity-3: rgba(34, 146, 252, 0.7);
+  --color-blue-opacity-0: rgba(84, 121, 242, 0.19);
+  --color-blue-opacity-1: rgba(80, 127, 247, 0.3);
+  --color-blue-opacity-2: rgba(74, 128, 252, 0.46);
+  --color-blue-opacity-3: rgba(65, 124, 251, 0.7);
   --layer-bg-normal: var(--color-gray-1); /* 一般用于底色 */
-  --layer-bg-popup: var(--color-gray-3); /* 一般用于底色 */
+  --layer-bg-dialog: var(--color-gray-3); /* 用于弹框、底弹等容器的底色 */
+  --layer-bg-tips: var(--color-gray-4); /* 一般用于底色 */
   --layer-fill-normal: var(--color-opacity-0); /* 一般用于各种组件的背景 */
+  --layer-fill-hover: var(--color-opacity-1); /* 一般用于各种组件的背景 */
+  --layer-fill-white-disable: var(--color-opacity-4); /* 用于checkbox等组件的白色部分disable状态 */
   --layer-mask: var(--black-9);
+  --color-gray-0: #101114;
 }
 
 /* ====== Text Styles ====== */

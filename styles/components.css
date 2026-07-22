@@ -1169,6 +1169,8 @@ button.lds-filter {
 
 /* 12. 表格组件 (Table) */
 .lds-table-wrapper {
+  --lds-table-fixed-left-shadow-boundary: 0px;
+  --lds-table-fixed-right-shadow-boundary: 0px;
   width: 100%;
   border-radius: 12px;
   border: 1px solid var(--color-border-normal);
@@ -1176,11 +1178,41 @@ button.lds-filter {
   box-sizing: border-box;
   background-color: var(--color-bg-normal);
   font-family: var(--font-normal);
+  position: relative;
+}
+
+.lds-table-wrapper__scroller {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.lds-table-wrapper__fixed-shadow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 4;
+}
+
+.lds-table-wrapper__fixed-shadow--left {
+  left: 0;
+  width: var(--lds-table-fixed-left-shadow-boundary);
+  box-shadow: var(--shadow-right);
+}
+
+.lds-table-wrapper__fixed-shadow--right {
+  right: 0;
+  width: var(--lds-table-fixed-right-shadow-boundary);
+  box-shadow: var(--shadow-left);
 }
 
 .lds-table {
-  width: 100%;
-  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
   border-spacing: 0;
   text-align: left;
 }
@@ -1196,15 +1228,16 @@ button.lds-filter {
   border-bottom: 1px solid var(--color-divider-normal);
   font-weight: 500;
   white-space: nowrap;
+  position: relative;
+  background-color: var(--color-bg-normal);
 }
 
 .lds-table__row {
-  background-color: var(--color-bg-normal);
-  transition: background-color 0.2s;
+  --lds-table-row-overlay-bg: transparent;
 }
 
 .lds-table tbody .lds-table__row:hover {
-  background-color: var(--color-fill-hover);
+  --lds-table-row-overlay-bg: var(--color-fill-hover);
 }
 
 .lds-table__row:last-child .lds-table__td {
@@ -1217,6 +1250,56 @@ button.lds-filter {
   color: var(--color-text-primary);
   border-bottom: 1px solid var(--color-divider-normal);
   vertical-align: middle;
+  position: relative;
+  background-color: var(--color-bg-normal);
+  background-image: linear-gradient(var(--lds-table-row-overlay-bg), var(--lds-table-row-overlay-bg));
+  background-repeat: no-repeat;
+  transition: background-image 0.2s;
+}
+
+.lds-table__th.is-align-left,
+.lds-table__td.is-align-left {
+  text-align: left;
+}
+
+.lds-table__th.is-align-center,
+.lds-table__td.is-align-center {
+  text-align: center;
+}
+
+.lds-table__th.is-align-right,
+.lds-table__td.is-align-right {
+  text-align: right;
+}
+
+.lds-table__th.is-fixed-left,
+.lds-table__td.is-fixed-left {
+  position: sticky;
+  left: 0;
+}
+
+.lds-table__th.is-fixed-right,
+.lds-table__td.is-fixed-right {
+  position: sticky;
+  right: 0;
+}
+
+.lds-table__th.is-fixed-left,
+.lds-table__th.is-fixed-right {
+  z-index: 3;
+}
+
+.lds-table__td.is-fixed-left,
+.lds-table__td.is-fixed-right {
+  z-index: 2;
+}
+
+.lds-table-wrapper.has-fixed-left.is-scrolled-left .lds-table-wrapper__fixed-shadow--left {
+  opacity: 1;
+}
+
+.lds-table-wrapper.has-fixed-right.is-scrolled-right .lds-table-wrapper__fixed-shadow--right {
+  opacity: 1;
 }
 
 /* 商品列样式 */
@@ -1470,7 +1553,7 @@ button.lds-filter {
 /* 金额列样式 */
 .lds-table-cell--amount {
   font: var(--body-regular);
-  font-family: var(--font-number, var(--font-normal));
+  font-family: var(--font-normal);
   color: var(--color-text-primary);
 }
 

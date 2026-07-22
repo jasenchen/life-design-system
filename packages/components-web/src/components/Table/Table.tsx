@@ -3,14 +3,126 @@ import { clsx } from 'clsx';
 import { Tag, type TagProps } from '../Tag/Tag';
 
 export type TableCellAlign = 'left' | 'center' | 'right';
+export type TableFixedColumn = 'left' | 'right';
 
 const getTableAlignClassName = (align?: TableCellAlign) => {
   if (!align) return undefined;
   return `is-align-${align}`;
 };
 
+const getTableFixedClassName = (fixed?: TableFixedColumn) => {
+  if (!fixed) return undefined;
+  return `is-fixed-${fixed}`;
+};
+
 export const TableWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => <div ref={ref} className={clsx('lds-table-wrapper', className)} {...props} />
+  ({ className, onScroll, style, ...props }, ref) => {
+    const scrollerRef = React.useRef<HTMLDivElement>(null);
+    const [{ hasScrolledLeft, hasScrolledRight, hasFixedLeft, hasFixedRight, leftShadowBoundary, rightShadowBoundary }, setScrollState] =
+      React.useState({
+        hasScrolledLeft: false,
+        hasScrolledRight: false,
+        hasFixedLeft: false,
+        hasFixedRight: false,
+        leftShadowBoundary: 0,
+        rightShadowBoundary: 0,
+      });
+
+    const updateScrollState = React.useCallback(() => {
+      const scroller = scrollerRef.current;
+
+      if (!scroller) return;
+
+      const maxScrollLeft = Math.max(scroller.scrollWidth - scroller.clientWidth, 0);
+      const scrollerRect = scroller.getBoundingClientRect();
+      const leftFixedCell = scroller.querySelector<HTMLElement>('.lds-table__thead .is-fixed-left, tbody .is-fixed-left');
+      const rightFixedCell = scroller.querySelector<HTMLElement>('.lds-table__thead .is-fixed-right, tbody .is-fixed-right');
+
+      const nextState = {
+        hasScrolledLeft: scroller.scrollLeft > 1,
+        hasScrolledRight: maxScrollLeft - scroller.scrollLeft > 1,
+        hasFixedLeft: Boolean(leftFixedCell),
+        hasFixedRight: Boolean(rightFixedCell),
+        leftShadowBoundary: leftFixedCell ? Math.round(leftFixedCell.getBoundingClientRect().right - scrollerRect.left) : 0,
+        rightShadowBoundary: rightFixedCell ? Math.round(scrollerRect.right - rightFixedCell.getBoundingClientRect().left) : 0,
+      };
+
+      setScrollState((prevState) => {
+        if (
+          prevState.hasScrolledLeft === nextState.hasScrolledLeft &&
+          prevState.hasScrolledRight === nextState.hasScrolledRight &&
+          prevState.hasFixedLeft === nextState.hasFixedLeft &&
+          prevState.hasFixedRight === nextState.hasFixedRight &&
+          prevState.leftShadowBoundary === nextState.leftShadowBoundary &&
+          prevState.rightShadowBoundary === nextState.rightShadowBoundary
+        ) {
+          return prevState;
+        }
+
+        return nextState;
+      });
+    }, []);
+
+    React.useImperativeHandle(ref, () => scrollerRef.current!, []);
+
+    React.useEffect(() => {
+      const scroller = scrollerRef.current;
+
+      if (!scroller) return;
+
+      updateScrollState();
+
+      const resizeObserver =
+        typeof ResizeObserver !== 'undefined'
+          ? new ResizeObserver(() => {
+              updateScrollState();
+            })
+          : null;
+
+      resizeObserver?.observe(scroller);
+
+      const table = scroller.querySelector('table');
+      if (table) {
+        resizeObserver?.observe(table);
+      }
+
+      return () => {
+        resizeObserver?.disconnect();
+      };
+    }, [updateScrollState]);
+
+    const wrapperStyle = {
+      '--lds-table-fixed-left-shadow-boundary': `${leftShadowBoundary}px`,
+      '--lds-table-fixed-right-shadow-boundary': `${rightShadowBoundary}px`,
+      ...(style as React.CSSProperties | undefined),
+    } as React.CSSProperties;
+
+    return (
+      <div
+        className={clsx(
+          'lds-table-wrapper',
+          hasScrolledLeft && 'is-scrolled-left',
+          hasScrolledRight && 'is-scrolled-right',
+          hasFixedLeft && 'has-fixed-left',
+          hasFixedRight && 'has-fixed-right',
+          className
+        )}
+        style={wrapperStyle}
+      >
+        <div
+          ref={scrollerRef}
+          className="lds-table-wrapper__scroller"
+          onScroll={(event) => {
+            onScroll?.(event);
+            updateScrollState();
+          }}
+          {...props}
+        />
+        <span className="lds-table-wrapper__fixed-shadow lds-table-wrapper__fixed-shadow--left" aria-hidden="true" />
+        <span className="lds-table-wrapper__fixed-shadow lds-table-wrapper__fixed-shadow--right" aria-hidden="true" />
+      </div>
+    );
+  }
 );
 TableWrapper.displayName = 'TableWrapper';
 
@@ -36,17 +148,27 @@ Tr.displayName = 'Tr';
 
 export interface ThProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
   align?: TableCellAlign;
+  fixed?: TableFixedColumn;
 }
-export const Th = React.forwardRef<HTMLTableCellElement, ThProps>(({ className, align, ...props }, ref) => (
-  <th ref={ref} className={clsx('lds-table__th', getTableAlignClassName(align), className)} {...props} />
+export const Th = React.forwardRef<HTMLTableCellElement, ThProps>(({ className, align, fixed, ...props }, ref) => (
+  <th
+    ref={ref}
+    className={clsx('lds-table__th', getTableAlignClassName(align), getTableFixedClassName(fixed), className)}
+    {...props}
+  />
 ));
 Th.displayName = 'Th';
 
 export interface TdProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
   align?: TableCellAlign;
+  fixed?: TableFixedColumn;
 }
-export const Td = React.forwardRef<HTMLTableCellElement, TdProps>(({ className, align, ...props }, ref) => (
-  <td ref={ref} className={clsx('lds-table__td', getTableAlignClassName(align), className)} {...props} />
+export const Td = React.forwardRef<HTMLTableCellElement, TdProps>(({ className, align, fixed, ...props }, ref) => (
+  <td
+    ref={ref}
+    className={clsx('lds-table__td', getTableAlignClassName(align), getTableFixedClassName(fixed), className)}
+    {...props}
+  />
 ));
 Td.displayName = 'Td';
 

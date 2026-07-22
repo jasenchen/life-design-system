@@ -6,9 +6,9 @@
   <title>Life Design System - Components</title>
   <link rel="icon" href="./assets/logo-laike.svg" type="image/svg+xml">
   
-  <link rel="stylesheet" href="./packages/tokens/life-ds-tokens.css?v=tag-1">
-  <link rel="stylesheet" href="./packages/components-web/styles/base.css?v=tag-1">
-  <link rel="stylesheet" href="./packages/components-web/styles/components.css?v=tag-1">
+  <link rel="stylesheet" href="./packages/tokens/life-ds-tokens.css?v=token-bg-2">
+  <link rel="stylesheet" href="./packages/components-web/styles/base.css?v=token-bg-2">
+  <link rel="stylesheet" href="./packages/components-web/styles/components.css?v=token-bg-2">
 
   <!-- React Dependencies via ESM/CDN -->
   <script type="importmap">
@@ -19,8 +19,8 @@
         "react-dom": "https://esm.sh/react-dom@18.3.1",
         "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
         "clsx": "https://esm.sh/clsx@2.1.1",
-        "@life-ds/icons": "./packages/icons/index.js?v=tag-1",
-        "@life-ds/components-web": "./packages/components-web/dist/index.mjs?v=tag-1"
+        "@life-ds/icons": "./packages/icons/index.js?v=token-bg-2",
+        "@life-ds/components-web": "./packages/components-web/dist/index.mjs?v=token-bg-2"
       }
     }
   </script>
@@ -84,7 +84,7 @@
     .theme-toggle {
       cursor: pointer;
       font: var(--body-medium);
-      background: var(--color-bg-popup);
+      background: var(--color-bg-dialog);
       border: 1px solid var(--color-border-normal);
       color: var(--doc-text-main);
       padding: 0 var(--spacing-4x);
@@ -187,7 +187,7 @@
       height: var(--spacing-10x);
       padding: 0 var(--spacing-4x);
       border-radius: var(--radius-m);
-      background: var(--color-bg-popup);
+      background: var(--color-bg-dialog);
       border: 1px solid var(--color-border-normal);
       color: var(--doc-text-main);
       text-decoration: none;
@@ -257,7 +257,7 @@
     }
     .home-entry-card:hover {
       transform: translateY(-2px);
-      background: var(--color-bg-popup);
+      background: var(--color-bg-dialog);
       border-color: var(--color-primary-normal);
     }
     .home-entry-card__meta {
@@ -795,7 +795,7 @@
 </div>
 
 <!-- Icon sprite script -->
-<script type="module" src="./packages/icons/index.js?v=tag-1"></script>
+<script type="module" src="./packages/icons/index.js?v=token-bg-2"></script>
 
 <!-- JS Logic for Dynamic Matrix Rendering -->
 <script>
@@ -2075,7 +2075,7 @@
 
   const roots = new Map();
 
-  window.addEventListener('renderReactButtons', () => {
+  const renderPendingReact = () => {
     // We must defer the react rendering slightly to ensure Babel has loaded the module
     // and the DOM is fully ready.
     setTimeout(() => {
@@ -5378,52 +5378,118 @@
 
         root.render(<UploadInteractiveDemo />);
       } else if (item.type === 'table') {
+        const rows = [
+          {
+            id: '23468723648223',
+            title: '【节假日通用】资生堂烫染护理',
+            tag: '团购',
+            tagVariant: 'default',
+            statusLabel: '售卖中',
+            statusColor: 'green',
+            amount: '￥508.00',
+            sellTime: '2023.08.01 12:00',
+            availableTime: '不限时',
+            storeScope: '上海浦东 12 家门店',
+            inventory: '10,000',
+            redeeming: '500',
+            updateTime: '今天 18:24',
+            actions: [
+              { label: '上架' },
+              { label: '编辑', disabled: true },
+            ],
+          },
+          {
+            id: '89345723648224',
+            title: '【工作日可用】高级洗剪吹套餐',
+            tag: '热销',
+            tagVariant: 'orange',
+            statusLabel: '待上架',
+            statusColor: 'orange',
+            amount: '￥128.00',
+            sellTime: '2023.08.02 14:30',
+            availableTime: '工作日',
+            storeScope: '北京朝阳 8 家门店',
+            inventory: '8,500',
+            redeeming: '240',
+            updateTime: '今天 15:06',
+            actions: [
+              { label: '下架', disabled: true },
+              { label: '删除', danger: true },
+            ],
+          },
+          {
+            id: '10923475839241',
+            title: '【夜场专享】KTV 欢唱 3 小时',
+            tag: '新品',
+            tagVariant: 'red',
+            statusLabel: '审核中',
+            statusColor: 'gray',
+            amount: '￥299.00',
+            sellTime: '2023.08.03 20:00',
+            availableTime: '18:00 后可用',
+            storeScope: '广州天河 16 家门店',
+            inventory: '3,200',
+            redeeming: '88',
+            updateTime: '昨天 21:18',
+            actions: [
+              { label: '查看' },
+              { label: '催审' },
+            ],
+          },
+        ];
+
         root.render(
-          <TableWrapper>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th align="left">商品信息</Th>
-                  <Th align="center">状态</Th>
-                  <Th align="right">价格（元）</Th>
-                  <Th align="left">售卖时间</Th>
-                  <Th align="right">剩余库存</Th>
-                  <Th align="right">待核销</Th>
-                  <Th align="left">操作</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr>
-                  <Td align="left"><TableCellProduct img="./assets/shangpin.png" title="【节假日通用】资生堂烫染护理" tag="团购" tagVariant="default" id="23468723648223" /></Td>
-                  <Td align="center"><TableCellTag color="green">售卖中</TableCellTag></Td>
-                  <Td align="right"><TableCellAmount>￥508.00</TableCellAmount></Td>
-                  <Td align="left">2023.08.01 12:00</Td>
-                  <Td align="right">10,000</Td>
-                  <Td align="right">500</Td>
-                  <Td align="left">
-                    <TableCellOperation>
-                      <TableCellAction>上架</TableCellAction>
-                      <TableCellAction disabled>编辑</TableCellAction>
-                    </TableCellOperation>
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td align="left"><TableCellProduct img="./assets/shangpin.png" title="【工作日可用】高级洗剪吹套餐" tag="热销" tagVariant="orange" id="89345723648224" /></Td>
-                  <Td align="center"><TableCellTag color="orange">待上架</TableCellTag></Td>
-                  <Td align="right"><TableCellAmount>￥128.00</TableCellAmount></Td>
-                  <Td align="left">2023.08.02 14:30</Td>
-                  <Td align="right">8,500</Td>
-                  <Td align="right">240</Td>
-                  <Td align="left">
-                    <TableCellOperation>
-                      <TableCellAction disabled>下架</TableCellAction>
-                      <TableCellAction danger>删除</TableCellAction>
-                    </TableCellOperation>
-                  </Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </TableWrapper>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <span style={{ font: 'var(--caption-regular)', color: 'var(--color-text-secondary)' }}>
+              字段较多时可固定首列和尾列；横向滚动后会自动补上左右投影，帮助区分滚动内容与固定列。
+            </span>
+            <TableWrapper>
+              <Table style={{ minWidth: 1460 }}>
+                <Thead>
+                  <Tr>
+                    <Th align="left" fixed="left" style={{ minWidth: 320 }}>商品信息</Th>
+                    <Th align="center" style={{ minWidth: 120 }}>状态</Th>
+                    <Th align="right" style={{ minWidth: 140 }}>价格（元）</Th>
+                    <Th align="left" style={{ minWidth: 160 }}>售卖时间</Th>
+                    <Th align="left" style={{ minWidth: 140 }}>可用时段</Th>
+                    <Th align="left" style={{ minWidth: 180 }}>适用门店</Th>
+                    <Th align="right" style={{ minWidth: 120 }}>剩余库存</Th>
+                    <Th align="right" style={{ minWidth: 120 }}>待核销</Th>
+                    <Th align="left" style={{ minWidth: 140 }}>最近更新</Th>
+                    <Th align="left" fixed="right" style={{ minWidth: 180 }}>操作</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {rows.map((row) => (
+                    <Tr key={row.id}>
+                      <Td align="left" fixed="left" style={{ minWidth: 320 }}>
+                        <TableCellProduct img="./assets/shangpin.png" title={row.title} tag={row.tag} tagVariant={row.tagVariant} id={row.id} />
+                      </Td>
+                      <Td align="center" style={{ minWidth: 120 }}>
+                        <TableCellTag color={row.statusColor}>{row.statusLabel}</TableCellTag>
+                      </Td>
+                      <Td align="right" style={{ minWidth: 140 }}><TableCellAmount>{row.amount}</TableCellAmount></Td>
+                      <Td align="left" style={{ minWidth: 160 }}>{row.sellTime}</Td>
+                      <Td align="left" style={{ minWidth: 140 }}>{row.availableTime}</Td>
+                      <Td align="left" style={{ minWidth: 180 }}>{row.storeScope}</Td>
+                      <Td align="right" style={{ minWidth: 120 }}>{row.inventory}</Td>
+                      <Td align="right" style={{ minWidth: 120 }}>{row.redeeming}</Td>
+                      <Td align="left" style={{ minWidth: 140 }}>{row.updateTime}</Td>
+                      <Td align="left" fixed="right" style={{ minWidth: 180 }}>
+                        <TableCellOperation>
+                          {row.actions.map((action) => (
+                            <TableCellAction key={action.label} danger={action.danger} disabled={action.disabled}>
+                              {action.label}
+                            </TableCellAction>
+                          ))}
+                        </TableCellOperation>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableWrapper>
+          </div>
         );
       } else if (item.type === 'tag-matrix') {
         const colors = [
@@ -5491,7 +5557,10 @@
       // Clear queue
       window.pendingReactRenders = [];
     }, 50);
-  });
+  };
+
+  window.addEventListener('renderReactButtons', renderPendingReact);
+  renderPendingReact();
 </script>
 
 </body>

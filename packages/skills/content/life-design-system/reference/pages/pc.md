@@ -66,7 +66,7 @@ export function AppLayoutDemo() {
 1. **初始化结构**：始终从 `.app-container` 开始构建页面。
 2. **内容填充**：将具体业务逻辑放入 `.app-content` 中，并根据 [布局模式](#布局模式) 选择合适的布局。
 3. **PageHeader 位置**：`<PageHeader />` 必须放在 `.app-content` 内部，不能放在 `.app-body` 直属层级；因为 `.app-content` 同时承担页面滚动和左右内边距，放到外面会看起来像固定头部，并与内容区左右边距错位。
-4. **页面背景**：典型后台页面的最底层背景默认使用 `var(--color-bg-gray)`，用于承载顶部导航和左侧菜单区域；实现上优先由 `body` / `.app-container` 提供这层灰底。右侧内容主画布 `.app-body` 继续使用 `var(--color-bg-normal)`，以保持白色内容面板语义。吸底操作区、弹层或卡片也仍然按照各自语义继续使用 `bg-normal`、`bg-popup`、`fill-*` 等 token，不要因为页面底层是灰色就统一改灰。
+4. **页面背景**：典型后台页面的最底层背景默认使用 `var(--color-bg-gray)`，用于承载顶部导航和左侧菜单区域；实现上优先由 `body` / `.app-container` 提供这层灰底。右侧内容主画布 `.app-body` 继续使用 `var(--color-bg-normal)`，以保持白色内容面板语义。吸底操作区、弹层、提示层或卡片也仍然按照各自语义继续使用 `bg-normal`、`bg-dialog`、`bg-tips`、`fill-*` 等 token，不要因为页面底层是灰色就统一改灰。
 5. **样式覆盖**：除非用户明确要求，否则不要修改 `base.css` 中核心框架的 `width`、`z-index` 和 `flex` 属性。
 6. **阴影处理**：严格遵循base.css与基础框架示例代码，`.app-body` 的 `z-index` 高于侧边栏和导航栏，以保证 `shadow-large` 投影效果正常显示。
 

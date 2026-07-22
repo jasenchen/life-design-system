@@ -164,7 +164,7 @@
 - 存在多少个表面层级？
 - 设计是否依赖于页面、底页、形状和覆盖层的区分？
 
-阅读 [color.md](color.md)。
+阅读 [colors.md](colors.md)。
 
 ## 第七步：推断文本层级 (Infer Typography Hierarchy)
 

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="./packages/tokens/life-ds-tokens.css?v=token-bg-2">
   <link rel="stylesheet" href="./packages/components-web/styles/base.css?v=token-bg-2">
   <link rel="stylesheet" href="./packages/components-web/styles/components.css?v=token-bg-2">
+  <link rel="stylesheet" href="./packages/components-mobile/styles/components.css?v=mobile-button-1">
 
   <!-- React Dependencies via ESM/CDN -->
   <script type="importmap">
@@ -20,7 +21,8 @@
         "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
         "clsx": "https://esm.sh/clsx@2.1.1",
         "@life-ds/icons": "./packages/icons/index.js?v=token-bg-2",
-        "@life-ds/components-web": "./packages/components-web/dist/index.mjs?v=token-bg-2"
+        "@life-ds/components-web": "./packages/components-web/dist/index.mjs?v=token-bg-2",
+        "@life-ds/components-mobile": "./packages/components-mobile/dist/index.mjs?v=mobile-button-1"
       }
     }
   </script>
@@ -750,7 +752,9 @@
     <div class="doc-logo">
       LIFE DESIGN
     </div>
-    <div class="nav-group">COMPONENTS</div>
+    <div class="nav-group">MOBILE COMPONENTS</div>
+    <a href="#mobile-button" class="nav-item" data-target="mobile-button">Mobile Button</a>
+    <div class="nav-group">PC COMPONENTS</div>
     <a href="#button" class="nav-item active" data-target="button">Button</a>
     <a href="#icon" class="nav-item" data-target="icon">Icon</a>
     <a href="#alert" class="nav-item" data-target="alert">Alert</a>
@@ -806,6 +810,12 @@
     { id: 'large', label: 'XL', meta: '16px · 12/20px · h48' }
   ];
 
+  const MOBILE_BUTTON_SIZES = [
+    { id: 'large', label: '大号 (Large)', meta: '17px / 22px · h48 · 20px Padding' },
+    { id: 'default-size', label: '默认 (Default)', meta: '15px / 22px · h40 · 16px Padding' },
+    { id: 'small', label: '小号 (Small)', meta: '13px / 20px · h32 · 14px Padding' }
+  ];
+
   const SEARCH_SIZES = [
     { id: 'small', label: '小号 (Small)', meta: 'Body Regular · 7/12px · h36' },
     { id: 'default-size', label: '默认 (Default)', meta: 'Body Regular · 9/12px · h40' },
@@ -851,10 +861,50 @@
     { id: 'disabled', label: 'Disabled', dot: 'dot-disabled', props: 'disabled' }
   ];
 
+  const MOBILE_BUTTON_STATES = [
+    { id: 'normal', label: '正常', dot: 'dot-normal', className: '' },
+    { id: 'active', label: '按下', dot: 'dot-active', className: 'is-active' },
+    { id: 'disabled', label: '禁用', dot: 'dot-disabled', className: '', disabled: true }
+  ];
+
   // We'll collect React components to render after DOM updates
   window.pendingReactRenders = [];
 
+  const createMobileButtonVariant = (idPrefix, title, desc, variant, options = {}) => ({
+    title,
+    desc,
+    render: (size, state) => {
+      const id = `mobile-button-${idPrefix}-${size.id}-${state.id}`;
+      window.pendingReactRenders.push({
+        id,
+        type: 'mobile-button',
+        variant,
+        size: size.id,
+        className: state.className,
+        disabled: state.disabled === true,
+        text: options.text,
+        iconName: options.iconName
+      });
+      return `<div id="${id}" style="width: 100%;"></div>`;
+    }
+  });
+
   const COMPONENTS = {
+    'mobile-button': {
+      title: 'Mobile Button (React Component)',
+      sizes: MOBILE_BUTTON_SIZES,
+      states: MOBILE_BUTTON_STATES,
+      desc: '基于 Figma 节点 3:876 的移动端 React Button。触控按下态替代 Hover；当前不包含 loading 状态。',
+      variants: [
+        createMobileButtonVariant('primary', '主要按钮', '最高优先级的主操作，使用胶囊圆角和品牌填充。', 'primary', { text: '按钮名称' }),
+        createMobileButtonVariant('secondary', '次要按钮', '品牌描边的辅助操作，按下时显示浅主色填充。', 'secondary', { text: '按钮名称' }),
+        createMobileButtonVariant('default', '普通按钮', '默认描边操作，适用于同级次要行动。', 'default', { text: '按钮名称' }),
+        createMobileButtonVariant('text', '文字按钮', '无额外填充与内边距的低强调操作。', 'text', { text: '按钮名称' }),
+        createMobileButtonVariant('leading-icon', '带左侧图标', '沿用 Button 的 icon 属性，图标尺寸随按钮尺寸变化。', 'primary', { text: '按钮名称', iconName: 'ic-add-round-line' }),
+        createMobileButtonVariant('icon', '图标按钮', '普通描边图标按钮。需要在业务中提供 aria-label。', 'icon', { iconName: 'ic-add-round-line' }),
+        createMobileButtonVariant('text-icon', '文字图标按钮', 'text 变体只传 icon 时，使用 Figma 的紧凑图标按钮尺寸。', 'text', { iconName: 'ic-add-round-line' })
+      ]
+    },
     button: {
       title: 'Button (React Component)',
       sizes: COMMON_SIZES,
@@ -1899,7 +1949,7 @@
         <p class="component-desc">${comp.desc}</p>
         <div class="component-stats">
           <div class="stat"><div class="stat-num">${comp.variants.length}</div><div class="stat-label">Variants</div></div>
-          ${compId === 'tabs' ? '' : `<div class="stat"><div class="stat-num">${STATES.length}</div><div class="stat-label">States</div></div>`}
+          ${compId === 'tabs' ? '' : `<div class="stat"><div class="stat-num">${(comp.states || STATES).length}</div><div class="stat-label">States</div></div>`}
           <div class="stat"><div class="stat-num">${comp.sizes.length}</div><div class="stat-label">Sizes</div></div>
         </div>
       </div>
@@ -1908,7 +1958,8 @@
     comp.variants.forEach((variant, vIdx) => {
       const isTabs = compId === 'tabs';
       const isFull = comp.layout === 'full';
-      const renderStates = isTabs || isFull ? [STATES[0]] : STATES;
+      const states = comp.states || STATES;
+      const renderStates = isTabs || isFull ? [states[0]] : states;
 
       html += `
         <div class="variant-section">
@@ -1967,7 +2018,7 @@
   // 3. Initialization and Event Listeners
   const layoutEl = document.querySelector('.doc-layout');
   const navItems = document.querySelectorAll('.nav-item');
-  const componentTargets = ['button', 'icon', 'alert', 'card', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'status', 'steps', 'drawer', 'dialog', 'form', 'keyvalue', 'upload', 'table', 'tag', 'pagination'];
+  const componentTargets = ['mobile-button', 'button', 'icon', 'alert', 'card', 'message', 'radio', 'checkbox', 'switch', 'input', 'search', 'select', 'datepicker', 'timepicker', 'textarea', 'filter', 'filtergroup', 'popover', 'tabs', 'navbar', 'menu', 'pageheader', 'status', 'steps', 'drawer', 'dialog', 'form', 'keyvalue', 'upload', 'table', 'tag', 'pagination'];
 
   function updateLayoutForTarget(target) {
     const showSidebar = componentTargets.includes(target);
@@ -2045,13 +2096,6 @@
       updateHistory: false,
     });
   });
-
-  // Also trigger initial render in case it was already button
-  setTimeout(() => {
-    if (['home', 'pages', ...componentTargets].includes(hash) || !hash) {
-      window.dispatchEvent(new CustomEvent('renderReactButtons'));
-    }
-  }, 200);
 </script>
 
 <script type="text/babel" data-type="module">
@@ -2072,8 +2116,14 @@
     Tag,
     Pagination
   } from '@life-ds/components-web';
+  import { Button as MobileButton } from '@life-ds/components-mobile';
 
   const roots = new Map();
+  const MobileSpriteIcon = ({ name }) => (
+    <svg aria-hidden="true" focusable="false">
+      <use href={`#${name}`} />
+    </svg>
+  );
 
   const renderPendingReact = () => {
     // We must defer the react rendering slightly to ensure Babel has loaded the module
@@ -2098,6 +2148,20 @@
           <Button variant={item.variant} size={item.size} className={item.className} disabled={item.disabled} icon={iconElement}>
             {item.text}
           </Button>
+        );
+      } else if (item.type === 'mobile-button') {
+        const iconElement = item.iconName ? <MobileSpriteIcon name={item.iconName} /> : null;
+        root.render(
+          <MobileButton
+            variant={item.variant}
+            size={item.size}
+            className={item.className}
+            disabled={item.disabled}
+            icon={iconElement}
+            aria-label={item.iconName && !item.text ? '添加商品' : undefined}
+          >
+            {item.text}
+          </MobileButton>
         );
       } else if (item.type === 'icon-demo') {
         const spriteIcons = Array.from(document.querySelectorAll('symbol[id^="ic-"]'))

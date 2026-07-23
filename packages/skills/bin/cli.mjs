@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONTENT_DIR = path.join(__dirname, '../content');
+const SHARED_DIR = path.join(CONTENT_DIR, '_shared');
 
 const [,, command, ...args] = process.argv;
 
@@ -142,7 +143,7 @@ function installClaudeSkill(scope = 'project') {
     } else {
       console.log('\n当前为个人级安装，对当前用户的所有 Claude Code 项目生效。');
     }
-    console.log('现在您可以在 Claude Code 中自动使用它，或通过 /life-design-system 手动调用。');
+    console.log('现在您可以在 Claude Code 中自动使用它，或通过 /life-design-system-pc 和 /life-design-system-mobile 手动调用。');
   } catch (error) {
     console.error('❌ 安装 Claude Code 技能失败:', error);
   }
@@ -175,6 +176,10 @@ function installSkillsTo(targetRootDir) {
   }
 
   fs.mkdirSync(targetRootDir, { recursive: true });
+
+  if (fs.existsSync(SHARED_DIR)) {
+    fs.cpSync(SHARED_DIR, path.join(targetRootDir, '_shared'), { recursive: true });
+  }
 
   skills.forEach(({ skillDirName, skillDir }) => {
     const targetDir = path.join(targetRootDir, skillDirName);

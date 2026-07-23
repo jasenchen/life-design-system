@@ -71,10 +71,10 @@ export function App() {
 # 1. 安装技能包
 npm install @life-ds/skills
 
-# 2. 获取特定技能的配置（以 Trae 为例）
-npx life-ds-skills trae-config life-design-system
+# 2. 查看可用技能，并按目标端选择
+npx life-ds-skills list
 ```
-将输出的 JSON 内容复制并填入 Trae 的 `skill-creator` 即可完成注册。
+安装后，PC 桌面端页面使用 `life-design-system-pc`，移动端 H5 / React 页面使用 `life-design-system-mobile`。
 
 ---
 
